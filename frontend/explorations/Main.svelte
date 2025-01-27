@@ -1,44 +1,23 @@
 <script lang="ts">
-    import DeckCard from '../lib/DeckCard.svelte';
+    import Tabs from "./Tabs.svelte";
+    import AllCards from "./AllCards.svelte";
+    import CardSelection from "./CardSelection.svelte";
 
+    let items = [
+        { label: "Card Selection",
+            value: 1000,
+            component: CardSelection
+        },
+        { label: "All Cards",
+            value: 2000,
+            component: AllCards
+        }
+    ];
 </script>
 
-<main>
-    <h1>Cards</h1>
-    <div id="content">
-        <DeckCard key="PRODUCT_TEAM_ADVERGAME" />
-        <DeckCard key="PRODUCT_TEAM_EDUCATION" />
-        <DeckCard key="PRODUCT_TEAM_SOCIAL" />
-        <DeckCard key="PRODUCT_TEAM_MMOG" />
-    </div>
-    <div id="content">
-        <DeckCard key="AGILE_MATURITY_PASSIONATE_DEVELOPER" />
-        <DeckCard key="AGILE_MATURITY_AGILE_PRACTITIONER" />
-        <DeckCard key="AGILE_MATURITY_USER_EXPERIENCE" />
-        <DeckCard key="AGILE_MATURITY_PAIR_PROGRAMMING" />
-        <DeckCard key="AGILE_MATURITY_PRODUCT_VISION" />
-    </div>
-    <div id="content">
-        <DeckCard key="AGILE_VALUE_SIMPLICITY" />
-        <DeckCard key="AGILE_VALUE_TRANSPARENCY" />
-        <DeckCard key="AGILE_VALUE_COURAGE" />
-    </div>
-    <div id="content">
-        <DeckCard key="ACTIVITY_DEVELOPMENT" />
-        <DeckCard key="ACTIVITY_DEPLOYMENT" />
-        <DeckCard key="ACTIVITY_RETROSPECTIVE" />
-        <DeckCard key="ACTIVITY_CONFERENCE" />
-        <DeckCard key="ACTIVITY_COACH" />
-    </div>
-    <div id="content">
-        <DeckCard key="EARNINGS_CARD_1" />
-        <DeckCard key="EARNINGS_CARD_2" />
-        <DeckCard key="EARNINGS_CARD_3" />
-        <DeckCard key="EARNINGS_CARD_4" />
-    </div>
-    <div id="content">
-        <DeckCard key="LEADER_CARD" />
-    </div>
+<main style="zoom: 1">
+    <h1>Agile&Co mock-ups</h1>
+    <Tabs activeTabValue="1000" {items} />
 </main>
 
 <style>
@@ -51,10 +30,4 @@
     h1 {
         margin-bottom: 20px;
     }
-
-    #content {
-        display: flex;
-        justify-content: center;
-    }
-
 </style>

@@ -14,10 +14,6 @@
         { value: 'FROZEN', label: "Frozen" },
     ];
     export let selectedInteraction = 'ACTIVE';
-
-    $: {
-        console.log(`Current interaction: ${selectedInteraction}`);
-    }
 </script>
 
 <style>

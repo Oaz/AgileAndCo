@@ -312,8 +312,10 @@
     };
 
     export let key;
+    let component = undefined;
+    let props = undefined;
+    $: ({ component, props } = componentData[key] || {});
 
-    const {component, props} = componentData[key] || {};
 </script>
 
 {#if component}

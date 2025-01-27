@@ -2,14 +2,19 @@
     import Tabs from "./Tabs.svelte";
     import AllCards from "./AllCards.svelte";
     import CardSelection from "./CardSelection.svelte";
+    import PlayerBoardTester from "./PlayerBoardTester.svelte";
 
     let items = [
+        { label: "Player Board",
+            value: 1,
+            component: PlayerBoardTester
+        },
         { label: "Card Selection",
-            value: 1000,
+            value: 2,
             component: CardSelection
         },
         { label: "All Cards",
-            value: 2000,
+            value: 3,
             component: AllCards
         }
     ];
@@ -17,7 +22,7 @@
 
 <main>
     <h1>Agile&Co mock-ups</h1>
-    <Tabs activeTabValue="1000" {items} />
+    <Tabs activeTabValue="1" {items} />
 </main>
 
 <style>

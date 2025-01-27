@@ -60,6 +60,132 @@
                 gain: _(Text.AGILE_MATURITY_PAIR_PROGRAMMING_GAIN)
             }
         },
+        AGILE_MATURITY_AGILE_ORGANIZER: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_AGILE_ORGANIZER_TITLE),
+                cost: 3, score: "2", activity: "CONFERENCE",
+                description: _(Text.AGILE_MATURITY_AGILE_ORGANIZER_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_AGILE_ORGANIZER_GAIN)
+            }
+        },
+        AGILE_MATURITY_FEEDBACK_SESSIONS: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_FEEDBACK_SESSIONS_TITLE),
+                cost: 3, score: "2", activity: "RETROSPECTIVE",
+                description: _(Text.AGILE_MATURITY_FEEDBACK_SESSIONS_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_FEEDBACK_SESSIONS_GAIN)
+            }
+        },
+        AGILE_MATURITY_CLEAN_CODE: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_CLEAN_CODE_TITLE),
+                cost: 3, score: "2", activity: "DEVELOPMENT",
+                description: _(Text.AGILE_MATURITY_CLEAN_CODE_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_CLEAN_CODE_GAIN)
+            }
+        },
+        AGILE_MATURITY_CONTINUOUS_DELIVERY: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_CONTINUOUS_DELIVERY_TITLE),
+                cost: 3, score: "2", activity: "DEPLOYMENT",
+                description: _(Text.AGILE_MATURITY_CONTINUOUS_DELIVERY_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_CONTINUOUS_DELIVERY_GAIN)
+            }
+        },
+        AGILE_MATURITY_DEVOPS: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_DEVOPS_TITLE),
+                cost: 3, score: "2", activity: "RETROSPECTIVE",
+                description: _(Text.AGILE_MATURITY_DEVOPS_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_DEVOPS_GAIN)
+            }
+        },
+        AGILE_MATURITY_AGILE_HR: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_AGILE_HR_TITLE),
+                cost: 4, score: "2", activity: "LEADER",
+                description: _(Text.AGILE_MATURITY_AGILE_HR_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_AGILE_HR_GAIN)
+            }
+        },
+        AGILE_MATURITY_ENGAGED_USERS: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_ENGAGED_USERS_TITLE),
+                cost: 4, score: "2", activity: "DEPLOYMENT",
+                description: _(Text.AGILE_MATURITY_ENGAGED_USERS_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_ENGAGED_USERS_GAIN)
+            }
+        },
+        AGILE_MATURITY_INTERNAL_COACH: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_INTERNAL_COACH_TITLE),
+                cost: 4, score: "2", activity: "RETROSPECTIVE",
+                description: _(Text.AGILE_MATURITY_INTERNAL_COACH_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_INTERNAL_COACH_GAIN)
+            }
+        },
+        AGILE_MATURITY_DETAILED_PLANNING: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_DETAILED_PLANNING_TITLE),
+                cost: 1, score: "-4", activity: "THEEND",
+                description: _(Text.AGILE_MATURITY_DETAILED_PLANNING_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_NEGATIVE_GAIN)
+            }
+        },
+        AGILE_MATURITY_TEST_TEAM: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_TEST_TEAM_TITLE),
+                cost: 1, score: "-4", activity: "THEEND",
+                description: _(Text.AGILE_MATURITY_TEST_TEAM_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_NEGATIVE_GAIN)
+            }
+        },
+        AGILE_MATURITY_APPLICATION_FRAMEWORK: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_APPLICATION_FRAMEWORK_TITLE),
+                cost: 1, score: "-5", activity: "THEEND",
+                description: _(Text.AGILE_MATURITY_APPLICATION_FRAMEWORK_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_NEGATIVE_GAIN)
+            }
+        },
+        AGILE_MATURITY_AGILE_CERTIFICATION: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_AGILE_CERTIFICATION_TITLE),
+                cost: 1, score: "-5", activity: "THEEND",
+                description: _(Text.AGILE_MATURITY_AGILE_CERTIFICATION_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_NEGATIVE_GAIN)
+            }
+        },
+        AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP_TITLE),
+                cost: 5, score: "*", activity: "THEEND",
+                description: _(Text.AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP_GAIN)
+            }
+        },
+        AGILE_MATURITY_AGILE_SENSEI: {
+            component: AgileMaturityCard,
+            props: {
+                title: _(Text.AGILE_MATURITY_AGILE_SENSEI_TITLE),
+                cost: 5, score: "*", activity: "THEEND",
+                description: _(Text.AGILE_MATURITY_AGILE_SENSEI_DESCRIPTION),
+                gain: _(Text.AGILE_MATURITY_AGILE_SENSEI_GAIN)
+            }
+        },
         AGILE_MATURITY_PRODUCT_VISION: {
             component: AgileMaturityCard,
             props: {
@@ -69,11 +195,32 @@
                 gain: _(Text.AGILE_MATURITY_PRODUCT_VISION_GAIN)
             }
         },
+        AGILE_VALUE_HUMOR: {
+            component: AgileValueCard,
+            props: {
+                title: _(Text.AGILE_VALUE_HUMOR_TITLE),
+                description: _(Text.AGILE_VALUE_HUMOR_DESCRIPTION),
+            }
+        },
+        AGILE_VALUE_FEEDBACK: {
+            component: AgileValueCard,
+            props: {
+                title: _(Text.AGILE_VALUE_FEEDBACK_TITLE),
+                description: _(Text.AGILE_VALUE_FEEDBACK_DESCRIPTION),
+            }
+        },
         AGILE_VALUE_SIMPLICITY: {
             component: AgileValueCard,
             props: {
                 title: _(Text.AGILE_VALUE_SIMPLICITY_TITLE),
                 description: _(Text.AGILE_VALUE_SIMPLICITY_DESCRIPTION),
+            }
+        },
+        AGILE_VALUE_TRUST: {
+            component: AgileValueCard,
+            props: {
+                title: _(Text.AGILE_VALUE_TRUST_TITLE),
+                description: _(Text.AGILE_VALUE_TRUST_DESCRIPTION),
             }
         },
         AGILE_VALUE_TRANSPARENCY: {
@@ -88,6 +235,13 @@
             props: {
                 title: _(Text.AGILE_VALUE_COURAGE_TITLE),
                 description: _(Text.AGILE_VALUE_COURAGE_DESCRIPTION),
+            }
+        },
+        AGILE_VALUE_RESPECT: {
+            component: AgileValueCard,
+            props: {
+                title: _(Text.AGILE_VALUE_RESPECT_TITLE),
+                description: _(Text.AGILE_VALUE_RESPECT_DESCRIPTION),
             }
         },
         ACTIVITY_DEVELOPMENT: {

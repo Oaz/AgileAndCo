@@ -15,7 +15,7 @@
     ];
 </script>
 
-<main style="zoom: 1">
+<main>
     <h1>Agile&Co mock-ups</h1>
     <Tabs activeTabValue="1000" {items} />
 </main>

@@ -3,26 +3,23 @@
     import AllCards from "./AllCards.svelte";
     import CardSelection from "./CardSelection.svelte";
     import PlayerBoardTester from "./PlayerBoardTester.svelte";
+    import ActivityDeployment from "./ActivityDeployment.svelte";
 
     let items = [
-        { label: "Player Board",
-            value: 1,
-            component: PlayerBoardTester
-        },
-        { label: "Card Selection",
-            value: 2,
-            component: CardSelection
-        },
-        { label: "All Cards",
-            value: 3,
-            component: AllCards
-        }
+        // {label: "Game Board", component: GameBoardTester},
+        // {label: "Activity: Retrospective", component: ActivityRetrospective},
+        // {label: "Activity: Development", component: ActivityDevelopment},
+        // {label: "Activity: Conference", component: ActivityConference},
+        {label: "Activity: Deployment", component: ActivityDeployment},
+        {label: "Player Board", component: PlayerBoardTester},
+        {label: "Card Selection", component: CardSelection},
+        {label: "All Cards", component: AllCards}
     ];
 </script>
 
 <main>
     <h1>Agile&Co mock-ups</h1>
-    <Tabs activeTabValue="1" {items} />
+    <Tabs activeTabValue="0" {items}/>
 </main>
 
 <style>

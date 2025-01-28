@@ -1,6 +1,8 @@
 import {getContext, setContext} from 'svelte';
 
 export enum Text {
+    MY_COMPANY,
+    MY_POTENTIAL,
     COST,
     SCORE,
     GAME_LEADER,
@@ -103,6 +105,8 @@ export enum Text {
 }
 
 const texts: Record<Text, string> = {
+    [Text.MY_COMPANY]: 'My Company',
+    [Text.MY_POTENTIAL]: 'My Potential',
     [Text.COST]: 'Cost',
     [Text.SCORE]: 'Score',
     [Text.GAME_LEADER]: 'Game Leader',

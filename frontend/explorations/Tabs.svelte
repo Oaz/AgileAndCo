@@ -1,19 +1,19 @@
 <script>
     export let items = [];
-    export let activeTabValue = 1;
+    export let activeTabValue = 0;
 
     const handleClick = tabValue => () => (activeTabValue = tabValue);
 </script>
 
 <ul>
-    {#each items as item}
-        <li class={activeTabValue === item.value ? 'active' : ''}>
-            <span on:click={handleClick(item.value)}>{item.label}</span>
+    {#each items as item, index}
+        <li class={activeTabValue === index ? 'active' : ''}>
+            <span on:click={handleClick(index)}>{item.label}</span>
         </li>
     {/each}
 </ul>
-{#each items as item}
-    {#if activeTabValue == item.value}
+{#each items as item, index}
+    {#if activeTabValue == index}
         <div class="box">
             <svelte:component this={item.component}/>
         </div>

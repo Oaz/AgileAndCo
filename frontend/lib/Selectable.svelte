@@ -1,7 +1,7 @@
 <script lang="ts">
     export let interaction: 'NEUTRAL' | 'ACTIVE' | 'FROZEN' = 'NEUTRAL';
-    export let hidden = false;
-    export let selected = false;
+    export let hidden : boolean = false;
+    export let selected : boolean = false;
     export let borderSize = "5px";
     export let borderColor = "red";
     export let backColor = "gray";

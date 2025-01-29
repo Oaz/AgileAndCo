@@ -74,6 +74,7 @@
 
 <div>
     <div>
+        Backend data example:
         <select id="combo" bind:value={selectedOption}>
             {#each options as option}
                 <option value={option}>{option.label}</option>
@@ -87,6 +88,10 @@
 
 <style>
     .preview {
-        margin-top: 20px;
+        margin-top: 10px;
+        padding: 40px;
+        border-style: solid;
+        border-width: 2px;
+        border-color: #dddddd;
     }
 </style>

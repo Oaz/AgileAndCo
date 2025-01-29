@@ -3,6 +3,8 @@ import {getContext, setContext} from 'svelte';
 export enum Text {
     MY_COMPANY,
     MY_POTENTIAL,
+    CONFIRM_DEPLOYMENT,
+    CANNOT_DEPLOY,
     COST,
     SCORE,
     GAME_LEADER,
@@ -107,6 +109,8 @@ export enum Text {
 const texts: Record<Text, string> = {
     [Text.MY_COMPANY]: 'My Company',
     [Text.MY_POTENTIAL]: 'My Potential',
+    [Text.CONFIRM_DEPLOYMENT]: 'Confirm deployment of %s product(s)',
+    [Text.CANNOT_DEPLOY]: 'Cannot deploy more than %s product(s)',
     [Text.COST]: 'Cost',
     [Text.SCORE]: 'Score',
     [Text.GAME_LEADER]: 'Game Leader',
@@ -209,11 +213,18 @@ const texts: Record<Text, string> = {
 
 };
 
+function localFormat(template: string, args: string[]) : string {
+    return template.replace(/%s/g, () => args.shift());
+}
+
 export function setTextContext() {
     setContext('texts', texts);
 }
 
-export function _(key: Text): string {
-    // const texts = getContext('texts');
-    return texts[key];
+export function _(templateKey: Text, ...args: string[]): string {
+    // getContext('texts');
+    const template = texts[templateKey];
+    if(args.length === 0)
+        return template;
+    return localFormat(template, args);
 }

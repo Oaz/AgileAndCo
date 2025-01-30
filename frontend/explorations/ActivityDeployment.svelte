@@ -5,7 +5,8 @@
         {
             label: 'Nothing to deploy', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
-                'deployment_max': 1,
+                'select_max': 1,
+                'select_zones': [1],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],
@@ -21,7 +22,8 @@
         {
             label: 'With developed product', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
-                'deployment_max': 1,
+                'select_max': 1,
+                'select_zones': [1],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
                     ['PRODUCT_TEAM_EDUCATION', undefined],
@@ -42,7 +44,8 @@
         {
             label: 'With limit', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
-                'deployment_max': 1,
+                'select_max': 1,
+                'select_zones': [1],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
                     ['PRODUCT_TEAM_EDUCATION', undefined],
@@ -67,7 +70,8 @@
         {
             label: 'With higher limit', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
-                'deployment_max': 2,
+                'select_max': 2,
+                'select_zones': [1],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
                     ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],

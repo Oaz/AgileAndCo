@@ -3,6 +3,8 @@ import {BGA} from "./BGA";
 export enum Text {
     MY_COMPANY,
     MY_POTENTIAL,
+    CONFIRM_DISCARD,
+    CANNOT_DISCARD,
     CONFIRM_DEPLOYMENT,
     CANNOT_DEPLOY,
     COST,
@@ -110,6 +112,8 @@ export enum Text {
 const texts: Record<Text, string> = {
     [Text.MY_COMPANY]: 'My Company',
     [Text.MY_POTENTIAL]: 'My Potential',
+    [Text.CONFIRM_DISCARD]: 'Confirm discarding %s card(s)',
+    [Text.CANNOT_DISCARD]: 'You must discard %s card(s)',
     [Text.CONFIRM_DEPLOYMENT]: 'Confirm deployment of %s product(s)',
     [Text.CANNOT_DEPLOY]: 'Cannot deploy more than %s product(s)',
     [Text.COST]: 'Cost',

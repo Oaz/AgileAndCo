@@ -1,29 +1,16 @@
 <script lang="ts">
-    import {_, Text} from "./texts";
-    import {SelectionGroup} from "./SelectionGroup";
-    import {BGA} from "./BGA";
+    import {Activity} from "./Activities/Activity";
 
-    export let group: SelectionGroup;
-
-    let selection_max: number = 0;
-    $: if(group.datas.deployment_max) selection_max = group.datas.deployment_max;
-
-    let active: boolean
-    $: active = group.selected.length <= selection_max;
-
-    let text: string;
-    $: text = active
-        ? _(Text.CONFIRM_DEPLOYMENT, group.selected.length.toString())
-        : _(Text.CANNOT_DEPLOY, selection_max.toString());
-
-    function action() {
-        BGA.performAction('actDeploy', {selected: group.selected});
-    }
+    export let activity: Activity;
 
 </script>
 
-{#if group.datas.activity}
-    <button on:click={action} class="action {active ? '' : 'inactive'}">{text}</button>
+{#if activity.datas.activity}
+    <button on:click={function (){
+        activity.do_act();
+    }} class="action {activity.can_act ? '' : 'inactive'}">
+        {activity.action_text}
+    </button>
 {/if}
 
 <style>

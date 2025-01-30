@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {_, Text} from "./texts";
+    import {_, Text} from "../texts";
     import Card from './Card.svelte';
     import Logo from "./Logo.svelte";
     import CardFooter from "./CardFooter.svelte";

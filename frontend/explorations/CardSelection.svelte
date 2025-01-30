@@ -1,5 +1,5 @@
 <script lang="ts">
-    import DeckCard from '../lib/DeckCard.svelte';
+    import DeckCard from '../lib/Cards/DeckCard.svelte';
     import SelectableTester from './SelectableTester.svelte';
 
 </script>

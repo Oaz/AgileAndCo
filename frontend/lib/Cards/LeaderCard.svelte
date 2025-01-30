@@ -1,5 +1,5 @@
 <script>
-    import {_, Text} from './texts';
+    import {_, Text} from '../texts';
     import Logo from "./Logo.svelte";
     import Card from "./Card.svelte";
 </script>

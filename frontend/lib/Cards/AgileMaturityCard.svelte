@@ -3,7 +3,7 @@
     import Logo from "./Logo.svelte";
     import CardFooter from "./CardFooter.svelte";
     import CardHeader from "./CardHeader.svelte";
-    import {_, Text} from './texts';
+    import {_, Text} from '../texts';
 
     export let title;
     export let description;

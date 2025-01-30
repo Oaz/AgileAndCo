@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {_, Text} from "./texts";
+    import {_, Text} from "../texts";
     import ProductTeamCard from './ProductTeamCard.svelte';
     import AgileMaturityCard from './AgileMaturityCard.svelte';
     import AgileValueCard from './AgileValueCard.svelte';

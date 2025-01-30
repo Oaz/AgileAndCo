@@ -1,7 +1,7 @@
 <script lang="ts">
     import {Activity} from "./Activities/Activity";
     import Selectable from "./Selectable.svelte";
-    import DeckCard from "./DeckCard.svelte";
+    import DeckCard from "./Cards/DeckCard.svelte";
 
     export let activity: Activity;
     export let zone_id: number;

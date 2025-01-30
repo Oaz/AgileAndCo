@@ -1,5 +1,5 @@
 <script>
-    import {_, Text} from './texts';
+    import {_, Text} from '../texts';
     export let cost;
     export let score;
 </script>

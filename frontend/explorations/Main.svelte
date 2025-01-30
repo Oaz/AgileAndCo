@@ -4,6 +4,7 @@
     import CardSelection from "./CardSelection.svelte";
     import PlayerBoardTester from "./PlayerBoardTester.svelte";
     import ActivityDeployment from "./ActivityDeployment.svelte";
+    import {BGA} from "../lib/BGA";
 
     let items = [
         // {label: "Game Board", component: GameBoardTester},
@@ -15,6 +16,12 @@
         {label: "Card Selection", component: CardSelection},
         {label: "All Cards", component: AllCards}
     ];
+
+
+    BGA.setPerformAction((action, args) => {
+        alert('ACTION ' + action + '\n' + JSON.stringify(args));
+    });
+    BGA.setTranslate(text => text);
 </script>
 
 <main>

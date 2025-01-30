@@ -1,6 +1,7 @@
 <script lang="ts">
     import {_, Text} from "./texts";
     import {SelectionGroup} from "./SelectionGroup";
+    import {BGA} from "./BGA";
 
     export let group: SelectionGroup;
 
@@ -8,17 +9,21 @@
     $: if(group.datas.deployment_max) selection_max = group.datas.deployment_max;
 
     let active: boolean
-    $: active = group.selection_count <= selection_max;
+    $: active = group.selected.length <= selection_max;
 
     let text: string;
     $: text = active
-        ? _(Text.CONFIRM_DEPLOYMENT, group.selection_count.toString())
+        ? _(Text.CONFIRM_DEPLOYMENT, group.selected.length.toString())
         : _(Text.CANNOT_DEPLOY, selection_max.toString());
+
+    function action() {
+        BGA.performAction('actDeploy', {selected: group.selected});
+    }
 
 </script>
 
 {#if group.datas.activity}
-    <button class="action {active ? '' : 'inactive'}">{text}</button>
+    <button on:click={action} class="action {active ? '' : 'inactive'}">{text}</button>
 {/if}
 
 <style>

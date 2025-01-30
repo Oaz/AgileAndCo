@@ -153,6 +153,21 @@ class Game extends \Table
         $this->gamestate->nextState("nextPlayer");
     }
 
+    public function actDeploy(): void
+    {
+        // Retrieve the active player ID.
+        $player_id = (int)$this->getActivePlayerId();
+
+        // Notify all players about the choice to pass.
+        $this->notifyAllPlayers("cardPlayed", clienttranslate('${player_name} deploys'), [
+            "player_id" => $player_id,
+            "player_name" => $this->getActivePlayerName(),
+        ]);
+
+        // at the end of the action, move to the next state
+        $this->gamestate->nextState("nextPlayer");
+    }
+
     public function stNextPlayer(): void {
         $this->gamestate->nextState("endTurn");
     }

@@ -1,4 +1,4 @@
-import {getContext, setContext} from 'svelte';
+import {BGA} from "./BGA";
 
 export enum Text {
     MY_COMPANY,
@@ -12,6 +12,7 @@ export enum Text {
     LEADER_DESCRIPTION2,
     BENEFIT,
     BONUS,
+    EARNINGS,
     ACTIVITY,
     ACTIVITY_DEVELOPMENT_TITLE,
     ACTIVITY_DEVELOPMENT_DESCRIPTION,
@@ -118,6 +119,7 @@ const texts: Record<Text, string> = {
     [Text.LEADER_DESCRIPTION2]: 'Any additional cards are discarded.',
     [Text.BENEFIT]: 'Benefit',
     [Text.BONUS]: 'Bonus',
+    [Text.EARNINGS]: 'Earnings',
     [Text.ACTIVITY]: 'Activity',
     [Text.ACTIVITY_DEVELOPMENT_TITLE]: 'Development',
     [Text.ACTIVITY_DEVELOPMENT_DESCRIPTION]: 'Each player can develop a product',
@@ -217,13 +219,8 @@ function localFormat(template: string, args: string[]) : string {
     return template.replace(/%s/g, () => args.shift());
 }
 
-export function setTextContext() {
-    setContext('texts', texts);
-}
-
 export function _(templateKey: Text, ...args: string[]): string {
-    // getContext('texts');
-    const template = texts[templateKey];
+    const template = BGA.translate(texts[templateKey]);
     if(args.length === 0)
         return template;
     return localFormat(template, args);

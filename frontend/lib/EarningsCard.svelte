@@ -1,5 +1,6 @@
 
 <script>
+    import {_, Text} from "./texts";
     import Logo from "./Logo.svelte";
     import Card from "./Card.svelte";
     import CardHeader from "./CardHeader.svelte";
@@ -61,7 +62,7 @@
 
 
 <Card cardType="earnings">
-    <CardHeader slot="header" cardTypeName="Earnings" />
+    <CardHeader slot="header" cardTypeName={_(Text.EARNINGS)} />
     <div class="earning advergame">
         <Logo key="ADVERGAME" />
         <div class="value">{advergame}</div>

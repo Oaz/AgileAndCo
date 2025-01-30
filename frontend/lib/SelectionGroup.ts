@@ -24,8 +24,12 @@ export class SelectionGroup {
         );
     }
 
-    public get selection_count() : number {
-        return Object.values(this.selection).filter(Boolean).length;
+    public get selected() {
+        return Object.entries(this.cards).filter(
+            ([key, _]) => this.selection[key]
+        ).map(
+            ([_, value]) => value
+        );
     }
 
     public id(group: number, index: number): number {

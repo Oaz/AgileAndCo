@@ -63,7 +63,7 @@
     <CardHeader slot="header" cardTypeName={_(Text.AGILE_MATURITY)} />
     <div class="name">{title}</div>
     <div class="description">{description}</div>
-    <div class="sectionhead">Benefit</div>
+    <div class="sectionhead">{_(Text.BENEFIT)}</div>
     <Logo key={activity} />
     <div class="gain">{gain}</div>
     <CardFooter slot="footer" {cost} {score} />

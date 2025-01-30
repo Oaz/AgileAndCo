@@ -114,7 +114,7 @@ $machinestates = [
         "type" => "multipleactiveplayer",
         "possibleactions" => [
             // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
-            "actDummy",
+            "actDeploy",
         ],
         "transitions" => ["nextPlayer" => 3]
     ],

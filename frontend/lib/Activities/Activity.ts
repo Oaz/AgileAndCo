@@ -61,6 +61,14 @@ export abstract class Activity {
         );
     }
 
+    public selected_in_zone(zone_id:number) {
+        return Object.entries(this.cards).filter(
+            ([key, _]) => this.selection[key] && this.zone_id(key) === zone_id
+        ).map(
+            ([_, value]) => value
+        );
+    }
+
     public id(zone_id: number, index: number): number {
         return zone_id * 100 + index;
     }

@@ -3,6 +3,7 @@
     import AllCards from "./AllCards.svelte";
     import CardSelection from "./CardSelection.svelte";
     import PlayerBoardTester from "./PlayerBoardTester.svelte";
+    import ActivityDevelopment from "./ActivityDevelopment.svelte";
     import ActivityDeployment from "./ActivityDeployment.svelte";
     import ActivityConference from "./ActivityConference.svelte";
     import {BGA} from "../lib/BGA";
@@ -10,7 +11,7 @@
     let items = [
         // {label: "Game Board", component: GameBoardTester},
         // {label: "Activity: Retrospective", component: ActivityRetrospective},
-        // {label: "Activity: Development", component: ActivityDevelopment},
+        {label: "Activity: Development", component: ActivityDevelopment},
         {label: "Activity: Conference", component: ActivityConference},
         {label: "Activity: Deployment", component: ActivityDeployment},
         {label: "Player Board", component: PlayerBoardTester},

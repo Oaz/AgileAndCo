@@ -1,6 +1,7 @@
 <script lang="ts">
     import {_, Text} from "./texts";
     import {Activity, NoActivity} from "./Activities/Activity";
+    import {DevelopmentActivity} from "./Activities/DevelopmentActivity";
     import {DeploymentActivity} from "./Activities/DeploymentActivity";
     import {ConferenceActivity} from "./Activities/ConferenceActivity";
     import SelectableCardInActivity from "./SelectableCardInActivity.svelte";
@@ -9,6 +10,7 @@
     export let datas;
 
     const activities = {
+        ACTIVITY_DEVELOPMENT: DevelopmentActivity,
         ACTIVITY_DEPLOYMENT: DeploymentActivity,
         ACTIVITY_CONFERENCE: ConferenceActivity,
     }

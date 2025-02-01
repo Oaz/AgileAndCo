@@ -1,10 +1,10 @@
 import {mount} from 'svelte';
-import DeckCard from "./DeckCard.svelte";
+import PlayerBoard from "./PlayerBoard.svelte";
 
-export function createDeckCard(target, key) {
+export function createPlayerBoard(target, key) {
     try {
-        return mount(DeckCard, {target: target, props: {key: key},});
+        return mount(PlayerBoard, {target: target, props: {key: key},});
     } catch (error) {
-        console.error('Error initializing DeckCard:', error);
+        console.error('Error initializing PlayerBoard:', error);
     }
 }

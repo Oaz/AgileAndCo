@@ -39,6 +39,7 @@
     .selectable {
         display: inline-block;
         cursor: not-allowed;
+        user-select: none;
         position: relative;
         padding: 2px;
         border-style: solid;

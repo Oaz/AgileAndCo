@@ -6,8 +6,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite --config config/vite.config.ts",
-    "build": "vite build --config config/vite.config.ts && npm run copy-backend && npm run copy-frontend",
+    "build:mockups": "vite build --config config/vite.config.ts && npm run copy-mockups",
+    "build:integration": "BUILD_TARGET=integration vite build --config config/vite.config.ts && npm run copy-backend && npm run copy-frontend",
     "check": "svelte-check --tsconfig ./config/tsconfig.json",
+    "copy-mockups": "copyfiles -u 2 'frontend/explorations/index.html' local/mockups",
     "copy-backend": "copyfiles -u 1 'backend/**/*' remote",
     "copy-frontend": "copyfiles -u 1 'frontend/agileandco.js' remote"
   },

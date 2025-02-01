@@ -20,9 +20,12 @@ export class DevelopmentActivity extends Activity {
     }
 
     public get action_text(): string {
+        const max_product = this.selection_max /2;
         return this.can_act
             ? _(Text.CONFIRM_DEVELOPMENT, this.selected_teams.length.toString())
-            : _(Text.CANNOT_DEVELOP);
+            : (this.selected_teams.length > max_product
+                ? _(Text.CANNOT_DEVELOP_MAX_PRODUCT, max_product.toString())
+                : _(Text.CANNOT_DEVELOP));
     }
 
     public do_act()  : void {

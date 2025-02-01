@@ -80,6 +80,28 @@
                 ],
             }
         },
+        {
+            label: 'Cannot develop before previous deployment', data: {
+                'activity': 'ACTIVITY_DEVELOPMENT',
+                'select_max': 4,
+                'select_zones': [0, 3],
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', undefined],
+                    ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
+                ],
+                'company': [
+                    'AGILE_MATURITY_DEVOPS',
+                    'AGILE_MATURITY_CLEAN_CODE',
+                ],
+                'potential': [
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_TRANSPARENCY',
+                ],
+            }
+        },
     ];
 
     let selectedOption = options[0];

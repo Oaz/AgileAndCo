@@ -21,8 +21,8 @@ export abstract class Activity {
         this.selection = {};
         this.interaction = {};
         this.cards = {
-            ...Object.fromEntries(datas.teams.map((value, index) => [this.id(0, index), value])),
-            ...Object.fromEntries(datas.teams.map((value, index) => [this.id(1, index), value])),
+            ...Object.fromEntries(datas.teams.map((value, index) => [this.id(0, index), value[0]])),
+            ...Object.fromEntries(datas.teams.map((value, index) => [this.id(1, index), value[1]])),
             ...Object.fromEntries(datas.company.map((value, index) => [this.id(2, index), value])),
             ...Object.fromEntries(datas.potential.map((value, index) => [this.id(3, index), value])),
             ...Object.fromEntries(datas.drawn.map((value, index) => [this.id(4, index), value])),
@@ -56,16 +56,12 @@ export abstract class Activity {
     public get selected() {
         return Object.entries(this.cards).filter(
             ([key, _]) => this.selection[key]
-        ).map(
-            ([_, value]) => value
         );
     }
 
     public selected_in_zone(zone_id:number) {
         return Object.entries(this.cards).filter(
             ([key, _]) => this.selection[key] && this.zone_id(key) === zone_id
-        ).map(
-            ([_, value]) => value
         );
     }
 

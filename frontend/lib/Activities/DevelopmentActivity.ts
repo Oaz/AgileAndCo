@@ -5,6 +5,11 @@ import {BGA} from "../BGA";
 export class DevelopmentActivity extends Activity {
     constructor(datas) {
         super(datas);
+        for (let i=0; i<datas.teams.length; i++) {
+            if(this.cards[this.id(1, i)] !== undefined) {
+                this.interaction[this.id(0, i)] = 'FROZEN';
+            }
+        }
     }
 
     public get selected_teams() {

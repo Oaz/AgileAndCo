@@ -5,9 +5,6 @@
         {
             label: 'Nominal case', data: {
                 'activity': 'ACTIVITY_CONFERENCE',
-                'select_min': 1,
-                'select_max': 1,
-                'select_zones': [4],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],
@@ -25,11 +22,9 @@
             }
         },
         {
-            label: 'Activity lead', data: {
+            label: 'Activity initiator', data: {
                 'activity': 'ACTIVITY_CONFERENCE',
-                'select_min': 4,
-                'select_max': 4,
-                'select_zones': [4],
+                'initiate': true,
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],
@@ -52,9 +47,6 @@
         {
             label: 'Practitioner can discard from potential', data: {
                 'activity': 'ACTIVITY_CONFERENCE',
-                'select_min': 1,
-                'select_max': 1,
-                'select_zones': [3,4],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],
@@ -75,9 +67,6 @@
         {
             label: 'Organizer keep one extra card', data: {
                 'activity': 'ACTIVITY_CONFERENCE',
-                'select_min': 0,
-                'select_max': 0,
-                'select_zones': [4],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],
@@ -96,11 +85,9 @@
             }
         },
         {
-            label: 'Practitioner+Organizer+Activity lead', data: {
+            label: 'Practitioner+Organizer+Activity initiator', data: {
                 'activity': 'ACTIVITY_CONFERENCE',
-                'select_min': 3,
-                'select_max': 3,
-                'select_zones': [3,4],
+                'initiate': true,
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],

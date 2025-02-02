@@ -39,10 +39,10 @@ export abstract class Activity {
         if (datas.select_max !== undefined)
             this.selection_max = datas.select_max;
         if (datas.select_zones !== undefined)
-            this.define_interactions(datas.select_zones, _ => true);
+            this.define_interactions(datas.select_zones);
     }
 
-    public define_interactions(zones: number[], condition: (key: string) => boolean) {
+    public define_interactions(zones: number[], condition: (key: string) => boolean = _ => true) {
         this.interaction = Object.fromEntries(
             Object.entries(this.cards).map(
                 ([key, _]) => [

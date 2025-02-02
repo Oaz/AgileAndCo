@@ -5,6 +5,12 @@ import {BGA} from "../BGA";
 export class ConferenceActivity extends Activity {
     constructor(datas) {
         super(datas);
+        this.selection_min = datas.initiate ? 4 : 1;
+        if(datas.company.includes('AGILE_MATURITY_AGILE_ORGANIZER'))
+            this.selection_min -= 1;
+        this.selection_max = this.selection_min;
+        let zones = datas.company.includes('AGILE_MATURITY_AGILE_PRACTITIONER') ? [3,4] : [4];
+        this.define_interactions(zones);
     }
 
     public get action_text(): string {

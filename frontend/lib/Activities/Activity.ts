@@ -1,48 +1,60 @@
+import {cardsData} from "../Cards/CardsData";
+
 export type Interaction = 'NEUTRAL' | 'ACTIVE' | 'FROZEN';
 
 export abstract class Activity {
 
     public selection: Record<number, boolean>;
     public interaction: Record<number, Interaction>;
+    public details: Record<number, any>;
     public cards: any;
     public datas: any;
-    public readonly selection_min : number = 0;
-    public readonly selection_max : number = Number.MAX_SAFE_INTEGER;
+    public readonly selection_min: number = 0;
+    public readonly selection_max: number = Number.MAX_SAFE_INTEGER;
 
     constructor(datas) {
-        if(!datas.drawn)
+        if (!datas.drawn)
             datas.drawn = [];
-        let cannot_select : Interaction = 'FROZEN';
-        if(!datas.select_zones) {
+        let cannot_select: Interaction = 'FROZEN';
+        if (!datas.select_zones) {
             datas.select_zones = [];
             cannot_select = 'NEUTRAL';
         }
         this.datas = datas;
         this.selection = {};
         this.interaction = {};
-        this.cards = {
+        const removeUndefined = (obj: Record<string, any>) =>
+            Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== undefined));
+        this.cards = removeUndefined({
             ...Object.fromEntries(datas.teams.map((value, index) => [this.id(0, index), value[0]])),
             ...Object.fromEntries(datas.teams.map((value, index) => [this.id(1, index), value[1]])),
             ...Object.fromEntries(datas.company.map((value, index) => [this.id(2, index), value])),
             ...Object.fromEntries(datas.potential.map((value, index) => [this.id(3, index), value])),
             ...Object.fromEntries(datas.drawn.map((value, index) => [this.id(4, index), value])),
-        };
+        });
+        const cardDetails = cardsData();
+        this.details = Object.fromEntries(
+            Object.entries(this.cards).map(
+                ([key, value]) => [key, cardDetails[value.toString()].props]
+            )
+        );
+        // console.log(this.details);
+        if (datas.select_min !== undefined)
+            this.selection_min = datas.select_min;
+        if (datas.select_max !== undefined)
+            this.selection_max = datas.select_max;
+        this.define_interactions(datas.select_zones, _ => true);
+    }
+
+    public define_interactions(zones: number[], condition: (key:string) => boolean) {
         this.interaction = Object.fromEntries(
             Object.entries(this.cards).map(
                 ([key, _]) => [
                     key,
-                    datas.select_zones.includes(this.zone_id(key)) ? 'ACTIVE' : cannot_select
+                    zones.includes(this.zone_id(key)) && condition(key) ? 'ACTIVE' : 'FROZEN'
                 ]
             )
         );
-
-        if(datas.select_min !== undefined)
-            this.selection_min = datas.select_min;
-        if(datas.select_max !== undefined)
-            this.selection_max = datas.select_max;
-    }
-
-    public update_details(card_id:number, details:any) {
     }
 
     public get can_act() {
@@ -50,11 +62,11 @@ export abstract class Activity {
         return this.selection_min <= selection_count && selection_count <= this.selection_max;
     }
 
-    public abstract get action_text() : string;
+    public abstract get action_text(): string;
 
-    public abstract do_act() : void;
+    public abstract do_act(): void;
 
-    public abstract get drawn_card_zone_title() : string;
+    public abstract get drawn_card_zone_title(): string;
 
     public get selected() {
         return Object.entries(this.cards).filter(
@@ -62,7 +74,7 @@ export abstract class Activity {
         );
     }
 
-    public selected_in_zone(zone_id:number) {
+    public selected_in_zone(zone_id: number) {
         return Object.entries(this.cards).filter(
             ([key, _]) => this.selection[key] && this.zone_id(key) === zone_id
         );
@@ -81,13 +93,21 @@ export abstract class Activity {
 export class NoActivity extends Activity {
     constructor(datas) {
         super(datas);
+        this.interaction = Object.fromEntries(
+            Object.entries(this.cards).map(
+                ([key, _]) => [key, 'NEUTRAL']
+            )
+        );
     }
+
     public get action_text(): string {
         return '';
     }
+
     public get drawn_card_zone_title(): string {
         return '';
     }
+
     public do_act(): void {
     }
 }

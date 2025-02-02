@@ -13,13 +13,10 @@
     export let hidden: boolean = false;
     export let card_key: string;
 
-    let details;
-    $: activity.update_details(card_id, details);
-
 </script>
 
 <Selectable {hidden}
             bind:interaction={activity.interaction[card_id]}
             bind:selected={activity.selection[card_id]}>
-    <DeckCard key={card_key} bind:details={details}/>
+    <DeckCard key={card_key} />
 </Selectable>

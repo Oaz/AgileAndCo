@@ -5,14 +5,10 @@ import {BGA} from "../BGA";
 export class RetrospectiveActivityChooseImprovement extends Activity {
     constructor(datas) {
         super(datas);
-    }
-
-    public update_details(card_id: number, details: any) {
-        if (details === undefined)
-            return;
-        if(!this.datas.select_zones.includes(this.zone_id(card_id.toString())))
-            return;
-        this.interaction[card_id] = details.cost <= this.datas.affordable_cost ? 'ACTIVE' : 'FROZEN';
+        this.define_interactions(
+            datas.select_zones,
+            key => this.details[key].cost <= this.datas.affordable_cost
+        );
     }
 
     public get action_text(): string {

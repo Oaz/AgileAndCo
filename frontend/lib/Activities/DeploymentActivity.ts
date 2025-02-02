@@ -4,7 +4,7 @@ import {BGA} from "../BGA";
 
 export class DeploymentActivity extends Activity {
     constructor(datas) {
-        super(datas);
+        super(datas, 'ACTIVITY_DEPLOYMENT');
         this.selection_min = 0;
         this.selection_max = datas.initiate ? 2 : 1;
         if(datas.company.includes('AGILE_MATURITY_CONTINUOUS_DELIVERY'))

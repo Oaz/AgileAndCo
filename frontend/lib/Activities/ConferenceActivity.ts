@@ -4,7 +4,7 @@ import {BGA} from "../BGA";
 
 export class ConferenceActivity extends Activity {
     constructor(datas) {
-        super(datas);
+        super(datas, 'ACTIVITY_CONFERENCE');
         this.selection_min = datas.initiate ? 4 : 1;
         if(datas.company.includes('AGILE_MATURITY_AGILE_ORGANIZER'))
             this.selection_min -= 1;

@@ -4,6 +4,7 @@ export type Interaction = 'NEUTRAL' | 'ACTIVE' | 'FROZEN';
 
 export abstract class Activity {
 
+    public card_key: string;
     public selection: Record<number, boolean>;
     public interaction: Record<number, Interaction>;
     public details: Record<number, any>;
@@ -12,7 +13,8 @@ export abstract class Activity {
     public selection_min: number = 0;
     public selection_max: number = Number.MAX_SAFE_INTEGER;
 
-    constructor(datas) {
+    constructor(datas, card_key: string) {
+        this.card_key = card_key;
         if (!datas.drawn)
             datas.drawn = [];
         this.datas = datas;
@@ -90,7 +92,7 @@ export abstract class Activity {
 
 export class NoActivity extends Activity {
     constructor(datas) {
-        super(datas);
+        super(datas, undefined);
         this.interaction = Object.fromEntries(
             Object.entries(this.cards).map(
                 ([key, _]) => [key, 'NEUTRAL']

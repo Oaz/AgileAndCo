@@ -4,7 +4,7 @@ import {BGA} from "../BGA";
 
 export class RetrospectiveActivityChooseImprovement extends Activity {
     constructor(datas) {
-        super(datas);
+        super(datas, 'ACTIVITY_RETROSPECTIVE');
         this.selection_min = 0;
         this.selection_max = 1;
         const affordable_cost = datas.potential.length - 1;

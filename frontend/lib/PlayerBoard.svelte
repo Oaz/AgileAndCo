@@ -14,7 +14,7 @@
         ACTIVITY_DEVELOPMENT: DevelopmentActivity,
         ACTIVITY_DEPLOYMENT: DeploymentActivity,
         ACTIVITY_CONFERENCE: ConferenceActivity,
-        ACTIVITY_RETROSPECTIVE_CHOOSE : RetrospectiveActivityChooseImprovement,
+        ACTIVITY_RETROSPECTIVE_CHOOSE: RetrospectiveActivityChooseImprovement,
     }
 
     let activity: Activity;
@@ -26,7 +26,9 @@
 
 {#key datas}
     <div class="board">
-        <ActivityAction bind:activity={activity}/>
+        <div class="header">
+            <ActivityAction bind:activity={activity}/>
+        </div>
         <div class="row">
             <div class="row-title">{_(Text.MY_COMPANY)}</div>
             <div class="company">

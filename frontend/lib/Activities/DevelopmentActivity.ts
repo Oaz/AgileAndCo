@@ -4,7 +4,7 @@ import {BGA} from "../BGA";
 
 export class DevelopmentActivity extends Activity {
     constructor(datas) {
-        super(datas);
+        super(datas, 'ACTIVITY_DEVELOPMENT');
         this.selection_min = 0;
         let available = datas.initiate ? 2 : 1;
         if(datas.company.includes('AGILE_MATURITY_CLEAN_CODE'))

@@ -22,8 +22,8 @@ export class RetrospectiveActivityChoice extends RetrospectiveActivity {
 
     public get action_text(): string {
         return this.can_act
-            ? _(Text.CONFIRM_CHOOSE_IMPROVEMENT, this.selected.length.toString())
-            : _(Text.CANNOT_CHOOSE_IMPROVEMENT);
+            ? _(Text.CONFIRM_CHOICE, this.selected.length.toString())
+            : _(Text.CANNOT_CHOICE);
     }
 
     public do_act(): void {

@@ -16,15 +16,23 @@ export class RetrospectiveActivityPayment extends RetrospectiveActivity {
 
     private readonly price:number;
 
+    public get undeployed() {
+        return this.selected_in_zone(1).length;
+    }
+    public get other() {
+        return this.selected_in_zone(3).length;
+    }
+
     public get can_act() {
-        const selection_count = this.selected.length;
-        return this.price === selection_count;
+        const payment = 2*this.undeployed+this.other;
+        return payment === this.price
+            || (payment === this.price+1 && this.undeployed > 1);
     }
 
     public get action_text(): string {
         return this.can_act
-            ? _(Text.CONFIRM_DISCARD, this.price.toString())
-            : _(Text.CANNOT_DISCARD, this.price.toString());
+            ? _(Text.CONFIRM_PAYMENT)
+            : _(Text.CANNOT_PAYMENT);
     }
 
     public do_act(): void {

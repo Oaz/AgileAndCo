@@ -139,6 +139,26 @@
                 ],
             }
         },
+        {
+            label: 'Pay improvement with undeployed products', data: {
+                'activity': 'ACTIVITY_RETROSPECTIVE_PAYMENT',
+                'choice': 301,
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', 'PRODUCT_TEAM_MMOG'],
+                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_CONTINUOUS_DELIVERY'],
+                ],
+                'company': [
+                    'AGILE_MATURITY_AGILE_ORGANIZER',
+                    'AGILE_MATURITY_DEVOPS',
+                    'AGILE_MATURITY_PASSIONATE_DEVELOPER',
+                ],
+                'potential': [
+                    'AGILE_MATURITY_PRODUCT_VISION',
+                    'PRODUCT_TEAM_MMOG',
+                ],
+            }
+        },
+
     ];
 
     let selectedOption = options[0];

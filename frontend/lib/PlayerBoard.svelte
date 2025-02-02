@@ -7,7 +7,7 @@
     import {RetrospectiveActivityChoice} from "./Activities/RetrospectiveActivityChoice";
     import {RetrospectiveActivityPayment} from "./Activities/RetrospectiveActivityPayment";
     import SelectableCardInActivity from "./SelectableCardInActivity.svelte";
-    import ActivityAction from "./ActivityAction.svelte";
+    import ActionButton from "./ActionButton.svelte";
 
     export let datas;
 
@@ -29,7 +29,7 @@
 {#key datas}
     <div class="board">
         <div class="header">
-            <ActivityAction bind:activity={activity}/>
+            <ActionButton bind:action={activity}/>
         </div>
         <div class="row">
             <div class="row-title">{_(Text.MY_COMPANY)}</div>

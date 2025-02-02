@@ -1,15 +1,15 @@
 <script lang="ts">
-    import {Activity} from "./Activities/Activity";
+    import {Action} from "./Action";
 
-    export let activity: Activity;
+    export let action: Action;
 
 </script>
 
-{#if activity.datas.activity}
+{#if action.enabled}
     <button on:click={function (){
-        activity.do_act();
-    }} class="action {activity.can_act ? '' : 'inactive'}">
-        {activity.action_text}
+        action.do_act();
+    }} class="action {action.can_act ? '' : 'inactive'}">
+        {action.action_text}
     </button>
 {/if}
 

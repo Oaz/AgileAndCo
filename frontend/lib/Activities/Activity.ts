@@ -1,8 +1,9 @@
+import {Action} from "../Action";
 import {cardsData} from "../Cards/CardsData";
 
 export type Interaction = 'NEUTRAL' | 'ACTIVE' | 'FROZEN';
 
-export abstract class Activity {
+export abstract class Activity extends Action {
 
     public card_key: string;
     public selection: Record<number, boolean>;
@@ -13,7 +14,8 @@ export abstract class Activity {
     public selection_min: number = 0;
     public selection_max: number = Number.MAX_SAFE_INTEGER;
 
-    constructor(datas, card_key: string) {
+    protected constructor(datas, card_key: string) {
+        super(datas.activity);
         this.card_key = card_key;
         if (!datas.drawn)
             datas.drawn = [];
@@ -55,10 +57,6 @@ export abstract class Activity {
         const selection_count = this.selected.length;
         return this.selection_min <= selection_count && selection_count <= this.selection_max;
     }
-
-    public abstract get action_text(): string;
-
-    public abstract do_act(): void;
 
     public get drawn_card_zone_title(): string {
         return '';

@@ -5,10 +5,6 @@
         {
             label: 'Choose improvement', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
-                'select_min': 0,
-                'select_max': 1,
-                'select_zones': [3],
-                'affordable_cost' : 2,
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],
@@ -25,10 +21,6 @@
         {
             label: 'Some improvements are too expensive', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
-                'select_min': 0,
-                'select_max': 1,
-                'select_zones': [3],
-                'affordable_cost' : 3,
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],

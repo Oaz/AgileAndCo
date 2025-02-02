@@ -5,9 +5,12 @@ import {BGA} from "../BGA";
 export class RetrospectiveActivityChooseImprovement extends Activity {
     constructor(datas) {
         super(datas);
+        this.selection_min = 0;
+        this.selection_max = 1;
+        const affordable_cost = datas.potential.length - 1;
         this.define_interactions(
-            datas.select_zones,
-            key => this.details[key].cost <= this.datas.affordable_cost
+            [3],
+            key => this.details[key].cost <= affordable_cost
         );
     }
 

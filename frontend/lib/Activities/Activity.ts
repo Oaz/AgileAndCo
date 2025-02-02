@@ -9,17 +9,12 @@ export abstract class Activity {
     public details: Record<number, any>;
     public cards: any;
     public datas: any;
-    public readonly selection_min: number = 0;
-    public readonly selection_max: number = Number.MAX_SAFE_INTEGER;
+    public selection_min: number = 0;
+    public selection_max: number = Number.MAX_SAFE_INTEGER;
 
     constructor(datas) {
         if (!datas.drawn)
             datas.drawn = [];
-        let cannot_select: Interaction = 'FROZEN';
-        if (!datas.select_zones) {
-            datas.select_zones = [];
-            cannot_select = 'NEUTRAL';
-        }
         this.datas = datas;
         this.selection = {};
         this.interaction = {};
@@ -43,10 +38,11 @@ export abstract class Activity {
             this.selection_min = datas.select_min;
         if (datas.select_max !== undefined)
             this.selection_max = datas.select_max;
-        this.define_interactions(datas.select_zones, _ => true);
+        if (datas.select_zones !== undefined)
+            this.define_interactions(datas.select_zones, _ => true);
     }
 
-    public define_interactions(zones: number[], condition: (key:string) => boolean) {
+    public define_interactions(zones: number[], condition: (key: string) => boolean) {
         this.interaction = Object.fromEntries(
             Object.entries(this.cards).map(
                 ([key, _]) => [

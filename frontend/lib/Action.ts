@@ -1,3 +1,5 @@
+export type Interaction = 'NEUTRAL' | 'ACTIVE' | 'FROZEN';
+
 export abstract class Action {
     protected constructor(enabled:boolean) {
         this.enabled = enabled

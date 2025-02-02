@@ -1,7 +1,5 @@
-import {Action} from "../Action";
+import {Action, Interaction} from "../Action";
 import {cardsData} from "../Cards/CardsData";
-
-export type Interaction = 'NEUTRAL' | 'ACTIVE' | 'FROZEN';
 
 export abstract class Activity extends Action {
 

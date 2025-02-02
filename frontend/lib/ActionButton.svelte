@@ -16,6 +16,7 @@
 <style>
     .action {
         font-size: 18pt;
+        margin: 5px;
     }
 
     .inactive {

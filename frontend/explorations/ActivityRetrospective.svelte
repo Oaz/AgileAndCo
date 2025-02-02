@@ -36,6 +36,24 @@
             }
         },
         {
+            label: 'Initiator pays one less', data: {
+                'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
+                'initiate': true,
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                ],
+                'company': [
+                    'AGILE_MATURITY_AGILE_ORGANIZER',
+                ],
+                'potential': [
+                    'AGILE_MATURITY_PRODUCT_VISION',
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_CONTINUOUS_DELIVERY',
+                ],
+            }
+        },
+        {
             label: 'Internal coach pays one less for improvements', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'teams': [
@@ -46,7 +64,7 @@
                     'AGILE_MATURITY_INTERNAL_COACH',
                 ],
                 'potential': [
-                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_MATURITY_PRODUCT_VISION',
                     'AGILE_VALUE_FEEDBACK',
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_CONTINUOUS_DELIVERY',
@@ -64,7 +82,7 @@
                     'AGILE_MATURITY_PASSIONATE_DEVELOPER',
                 ],
                 'potential': [
-                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_MATURITY_PRODUCT_VISION',
                     'AGILE_VALUE_FEEDBACK',
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_CONTINUOUS_DELIVERY',

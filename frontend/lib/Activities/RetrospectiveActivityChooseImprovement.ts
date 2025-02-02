@@ -8,6 +8,8 @@ export class RetrospectiveActivityChooseImprovement extends Activity {
         this.selection_min = 0;
         this.selection_max = 1;
         let affordable_cost = datas.potential.length - 1;
+        if(datas.initiate)
+            affordable_cost += 1;
         if(datas.company.includes('AGILE_MATURITY_DEVOPS'))
             affordable_cost += 2 * this.cards_in_zone(1).length;
         const improvementBonus = datas.company.includes('AGILE_MATURITY_INTERNAL_COACH') ? 1 : 0;

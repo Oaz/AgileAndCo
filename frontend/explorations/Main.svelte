@@ -2,6 +2,7 @@
     import Tabs from "./Tabs.svelte";
     import AllCards from "./AllCards.svelte";
     import CardSelection from "./CardSelection.svelte";
+    import OtherPlayerBoardTester from "./OtherPlayerBoardTester.svelte";
     import PlayerBoardTester from "./PlayerBoardTester.svelte";
     import ActivityDevelopment from "./ActivityDevelopment.svelte";
     import ActivityDeployment from "./ActivityDeployment.svelte";
@@ -16,6 +17,7 @@
         {label: "Activity: Conference", component: ActivityConference},
         {label: "Activity: Deployment", component: ActivityDeployment},
         {label: "Player Board", component: PlayerBoardTester},
+        {label: "Other Player Boards", component: OtherPlayerBoardTester},
         {label: "Card Selection", component: CardSelection},
         {label: "All Cards", component: AllCards}
     ];

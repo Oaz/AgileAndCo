@@ -1,15 +1,21 @@
-import {Activity, Interaction} from "./Activity";
+import {Activity} from "./Activity";
 import {_, Text} from "../texts";
 import {BGA} from "../BGA";
 
 export class DevelopmentActivity extends Activity {
     constructor(datas) {
         super(datas);
-        for (let i=0; i<datas.teams.length; i++) {
-            if(this.cards[this.id(1, i)] !== undefined) {
-                this.interaction[this.id(0, i)] = 'FROZEN';
-            }
-        }
+        this.selection_min = 0;
+        let available = datas.initiate ? 2 : 1;
+        if(datas.company.includes('AGILE_MATURITY_CLEAN_CODE'))
+            available += 1;
+        this.selection_max = available * 2;
+        this.define_interactions(
+            [0,3],
+            key =>
+                this.zone_id(key) == 3
+                || this.cards[this.id(1, this.index_in_zone(key))] === undefined
+        );
     }
 
     public get selected_teams() {

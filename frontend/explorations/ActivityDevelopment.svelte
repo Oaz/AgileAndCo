@@ -5,8 +5,6 @@
         {
             label: 'One team', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
-                'select_max': 2,
-                'select_zones': [0, 3],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined]
                 ],
@@ -22,8 +20,6 @@
         {
             label: 'Two teams but only one can develop', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
-                'select_max': 2,
-                'select_zones': [0, 3],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined],
                     ['PRODUCT_TEAM_EDUCATION', undefined],
@@ -41,10 +37,28 @@
             }
         },
         {
-            label: 'Two teams & can develop 2 products', data: {
+            label: 'Initiator can develop additional product', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
-                'select_max': 4,
-                'select_zones': [0, 3],
+                'initiate': true,
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', undefined],
+                    ['PRODUCT_TEAM_EDUCATION', undefined],
+                ],
+                'company': [
+                    'AGILE_MATURITY_DEVOPS',
+                ],
+                'potential': [
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_TRANSPARENCY',
+                ],
+            }
+        },
+        {
+            label: 'Clean code can develop additional product', data: {
+                'activity': 'ACTIVITY_DEVELOPMENT',
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined],
                     ['PRODUCT_TEAM_EDUCATION', undefined],
@@ -65,8 +79,6 @@
         {
             label: 'Could develop 2 products but miss potential', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
-                'select_max': 4,
-                'select_zones': [0, 3],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined],
                     ['PRODUCT_TEAM_EDUCATION', undefined],
@@ -83,8 +95,6 @@
         {
             label: 'Cannot develop before previous deployment', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
-                'select_max': 4,
-                'select_zones': [0, 3],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', undefined],
                     ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],

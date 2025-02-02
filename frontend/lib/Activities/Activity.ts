@@ -84,6 +84,10 @@ export abstract class Activity {
         return Math.floor(parseInt(key, 10) / 100);
     }
 
+    public index_in_zone(key: string): number {
+        return parseInt(key, 10) % 100;
+    }
+
 }
 
 export class NoActivity extends Activity {

@@ -30,7 +30,10 @@ export abstract class Activity {
         const cardDetails = cardsData();
         this.details = Object.fromEntries(
             Object.entries(this.cards).map(
-                ([key, value]) => [key, cardDetails[value.toString()].props]
+                ([key, value]) => [key, {
+                    ...cardDetails[value.toString()].props,
+                    ...{kind: cardDetails[value.toString()].kind}
+                }]
             )
         );
     }

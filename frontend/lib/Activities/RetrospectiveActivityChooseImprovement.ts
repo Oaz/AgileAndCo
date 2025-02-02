@@ -8,9 +8,19 @@ export class RetrospectiveActivityChooseImprovement extends Activity {
         this.selection_min = 0;
         this.selection_max = 1;
         const affordable_cost = datas.potential.length - 1;
+        const improvementBonus = datas.company.includes('AGILE_MATURITY_INTERNAL_COACH') ? 1 : 0;
+        const teamBonus = datas.company.includes('AGILE_MATURITY_PASSIONATE_DEVELOPER') ? 1 : 0;
         this.define_interactions(
             [3],
-            key => this.details[key].cost <= affordable_cost
+            key => {
+                const details = this.details[key];
+                let cost = details.cost;
+                if(details.kind === 'AGILE_MATURITY' || details.kind === 'AGILE_VALUE')
+                    cost -= improvementBonus;
+                if(details.kind === 'PRODUCT_TEAM')
+                    cost -= teamBonus;
+                return cost <= affordable_cost;
+            }
         );
     }
 

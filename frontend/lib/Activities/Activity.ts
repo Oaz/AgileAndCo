@@ -42,6 +42,9 @@ export abstract class Activity {
             this.selection_max = datas.select_max;
     }
 
+    public update_details(card_id:number, details:any) {
+    }
+
     public get can_act() {
         const selection_count = this.selected.length;
         return this.selection_min <= selection_count && selection_count <= this.selection_max;

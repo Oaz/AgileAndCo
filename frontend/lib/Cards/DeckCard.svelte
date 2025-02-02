@@ -199,6 +199,7 @@
             component: AgileValueCard,
             props: {
                 title: _(Text.AGILE_VALUE_HUMOR_TITLE),
+                cost: 4,
                 description: _(Text.AGILE_VALUE_HUMOR_DESCRIPTION),
             }
         },
@@ -206,6 +207,7 @@
             component: AgileValueCard,
             props: {
                 title: _(Text.AGILE_VALUE_FEEDBACK_TITLE),
+                cost: 4,
                 description: _(Text.AGILE_VALUE_FEEDBACK_DESCRIPTION),
             }
         },
@@ -213,6 +215,7 @@
             component: AgileValueCard,
             props: {
                 title: _(Text.AGILE_VALUE_SIMPLICITY_TITLE),
+                cost: 4,
                 description: _(Text.AGILE_VALUE_SIMPLICITY_DESCRIPTION),
             }
         },
@@ -220,6 +223,7 @@
             component: AgileValueCard,
             props: {
                 title: _(Text.AGILE_VALUE_TRUST_TITLE),
+                cost: 4,
                 description: _(Text.AGILE_VALUE_TRUST_DESCRIPTION),
             }
         },
@@ -227,6 +231,7 @@
             component: AgileValueCard,
             props: {
                 title: _(Text.AGILE_VALUE_TRANSPARENCY_TITLE),
+                cost: 4,
                 description: _(Text.AGILE_VALUE_TRANSPARENCY_DESCRIPTION),
             }
         },
@@ -234,6 +239,7 @@
             component: AgileValueCard,
             props: {
                 title: _(Text.AGILE_VALUE_COURAGE_TITLE),
+                cost: 4,
                 description: _(Text.AGILE_VALUE_COURAGE_DESCRIPTION),
             }
         },
@@ -241,6 +247,7 @@
             component: AgileValueCard,
             props: {
                 title: _(Text.AGILE_VALUE_RESPECT_TITLE),
+                cost: 4,
                 description: _(Text.AGILE_VALUE_RESPECT_DESCRIPTION),
             }
         },
@@ -312,9 +319,13 @@
     };
 
     export let key;
+    export let details;
     let component = undefined;
     let props = undefined;
-    $: ({ component, props } = componentData[key] || {});
+    $: {
+        ({ component, props } = componentData[key] || {});
+        details = props;
+    }
 
 </script>
 

@@ -1,4 +1,4 @@
-import {Activity, Interaction} from "./Activity";
+import {Activity} from "./Activity";
 import {_, Text} from "../texts";
 import {BGA} from "../BGA";
 

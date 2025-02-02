@@ -1,4 +1,4 @@
-import {Activity, Interaction} from "./Activity";
+import {Activity} from "./Activity";
 import {_, Text} from "../texts";
 import {BGA} from "../BGA";
 
@@ -21,10 +21,5 @@ export class DeploymentActivity extends Activity {
     public do_act()  : void {
         BGA.performAction('actDeploy', {selected: this.selected});
     }
-
-    public get drawn_card_zone_title(): string {
-        return '';
-    }
-
 }
 

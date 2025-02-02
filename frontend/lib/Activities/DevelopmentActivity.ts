@@ -42,10 +42,5 @@ export class DevelopmentActivity extends Activity {
     public do_act()  : void {
         BGA.performAction('actDevelop', {teams: this.selected_teams, products: this.selected_potential});
     }
-
-    public get drawn_card_zone_title(): string {
-        return '';
-    }
-
 }
 

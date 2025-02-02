@@ -33,13 +33,6 @@ export abstract class Activity {
                 ([key, value]) => [key, cardDetails[value.toString()].props]
             )
         );
-        // console.log(this.details);
-        if (datas.select_min !== undefined)
-            this.selection_min = datas.select_min;
-        if (datas.select_max !== undefined)
-            this.selection_max = datas.select_max;
-        if (datas.select_zones !== undefined)
-            this.define_interactions(datas.select_zones);
     }
 
     public define_interactions(zones: number[], condition: (key: string) => boolean = _ => true) {
@@ -62,7 +55,9 @@ export abstract class Activity {
 
     public abstract do_act(): void;
 
-    public abstract get drawn_card_zone_title(): string;
+    public get drawn_card_zone_title(): string {
+        return '';
+    }
 
     public get selected() {
         return Object.entries(this.cards).filter(

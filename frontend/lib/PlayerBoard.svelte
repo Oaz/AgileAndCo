@@ -4,7 +4,8 @@
     import {DevelopmentActivity} from "./Activities/DevelopmentActivity";
     import {DeploymentActivity} from "./Activities/DeploymentActivity";
     import {ConferenceActivity} from "./Activities/ConferenceActivity";
-    import {RetrospectiveActivityChooseImprovement} from "./Activities/RetrospectiveActivityChooseImprovement";
+    import {RetrospectiveActivityChoice} from "./Activities/RetrospectiveActivityChoice";
+    import {RetrospectiveActivityPayment} from "./Activities/RetrospectiveActivityPayment";
     import SelectableCardInActivity from "./SelectableCardInActivity.svelte";
     import ActivityAction from "./ActivityAction.svelte";
 
@@ -14,7 +15,8 @@
         ACTIVITY_DEVELOPMENT: DevelopmentActivity,
         ACTIVITY_DEPLOYMENT: DeploymentActivity,
         ACTIVITY_CONFERENCE: ConferenceActivity,
-        ACTIVITY_RETROSPECTIVE_CHOOSE: RetrospectiveActivityChooseImprovement,
+        ACTIVITY_RETROSPECTIVE_CHOOSE: RetrospectiveActivityChoice,
+        ACTIVITY_RETROSPECTIVE_PAYMENT: RetrospectiveActivityPayment,
     }
 
     let activity: Activity;

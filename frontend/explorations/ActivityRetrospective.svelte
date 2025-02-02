@@ -19,6 +19,23 @@
             }
         },
         {
+            label: 'Pay improvement', data: {
+                'activity': 'ACTIVITY_RETROSPECTIVE_PAYMENT',
+                'choice': 302,
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                ],
+                'company': [
+                    'AGILE_MATURITY_AGILE_ORGANIZER',
+                ],
+                'potential': [
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_MATURITY_PASSIONATE_DEVELOPER',
+                    'AGILE_MATURITY_USER_EXPERIENCE',
+                ],
+            }
+        },
+        {
             label: 'Some improvements are too expensive', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'teams': [

@@ -22,8 +22,6 @@
         {
             label: 'With developed product', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
-                'select_max': 1,
-                'select_zones': [1],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
                     ['PRODUCT_TEAM_EDUCATION', undefined],
@@ -42,10 +40,8 @@
             }
         },
         {
-            label: 'With limit', data: {
+            label: 'Cannot deploy all', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
-                'select_max': 1,
-                'select_zones': [1],
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
                     ['PRODUCT_TEAM_EDUCATION', undefined],
@@ -68,10 +64,30 @@
             }
         },
         {
-            label: 'With higher limit', data: {
+            label: 'initiator can deploy 2', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
-                'select_max': 2,
-                'select_zones': [1],
+                'initiate': true,
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
+                    ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
+                    ['PRODUCT_TEAM_MMOG', 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'],
+                ],
+                'company': [
+                    'AGILE_MATURITY_DEVOPS',
+                    'AGILE_MATURITY_CLEAN_CODE',
+                ],
+                'potential': [
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_TRANSPARENCY',
+                ],
+            }
+        },
+        {
+            label: 'continuous delivery deploy additional product', data: {
+                'activity': 'ACTIVITY_DEPLOYMENT',
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
                     ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
@@ -81,9 +97,29 @@
                     'AGILE_MATURITY_DEVOPS',
                     'AGILE_MATURITY_CLEAN_CODE',
                     'AGILE_MATURITY_CONTINUOUS_DELIVERY',
-                    'AGILE_VALUE_SIMPLICITY',
-                    'AGILE_VALUE_COURAGE',
-                    'AGILE_MATURITY_AGILE_HR',
+                ],
+                'potential': [
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_TRANSPARENCY',
+                ],
+            }
+        },
+        {
+            label: 'initiator + continuous delivery can deploy 3', data: {
+                'activity': 'ACTIVITY_DEPLOYMENT',
+                'initiate': true,
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
+                    ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
+                    ['PRODUCT_TEAM_MMOG', 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'],
+                ],
+                'company': [
+                    'AGILE_MATURITY_DEVOPS',
+                    'AGILE_MATURITY_CLEAN_CODE',
+                    'AGILE_MATURITY_CONTINUOUS_DELIVERY',
                 ],
                 'potential': [
                     'AGILE_VALUE_FEEDBACK',

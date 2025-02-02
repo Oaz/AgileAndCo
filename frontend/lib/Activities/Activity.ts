@@ -70,6 +70,12 @@ export abstract class Activity {
         );
     }
 
+    public cards_in_zone(zone_id: number) {
+        return Object.entries(this.cards).filter(
+            ([key, _]) => this.zone_id(key) === zone_id
+        );
+    }
+
     public selected_in_zone(zone_id: number) {
         return Object.entries(this.cards).filter(
             ([key, _]) => this.selection[key] && this.zone_id(key) === zone_id

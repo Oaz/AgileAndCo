@@ -7,7 +7,9 @@ export class RetrospectiveActivityChooseImprovement extends Activity {
         super(datas, 'ACTIVITY_RETROSPECTIVE');
         this.selection_min = 0;
         this.selection_max = 1;
-        const affordable_cost = datas.potential.length - 1;
+        let affordable_cost = datas.potential.length - 1;
+        if(datas.company.includes('AGILE_MATURITY_DEVOPS'))
+            affordable_cost += 2 * this.cards_in_zone(1).length;
         const improvementBonus = datas.company.includes('AGILE_MATURITY_INTERNAL_COACH') ? 1 : 0;
         const teamBonus = datas.company.includes('AGILE_MATURITY_PASSIONATE_DEVELOPER') ? 1 : 0;
         this.define_interactions(

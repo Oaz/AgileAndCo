@@ -71,6 +71,39 @@
                 ],
             }
         },
+        {
+            label: 'Devops can use non deployed products', data: {
+                'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', 'PRODUCT_TEAM_MMOG']
+                ],
+                'company': [
+                    'AGILE_MATURITY_AGILE_ORGANIZER',
+                    'AGILE_MATURITY_DEVOPS',
+                ],
+                'potential': [
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_CONTINUOUS_DELIVERY',
+                ],
+            }
+        },
+        {
+            label: 'Devops can use all non deployed products', data: {
+                'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
+                'teams': [
+                    ['PRODUCT_TEAM_ADVERGAME', 'PRODUCT_TEAM_MMOG'],
+                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_CONTINUOUS_DELIVERY'],
+                ],
+                'company': [
+                    'AGILE_MATURITY_AGILE_ORGANIZER',
+                    'AGILE_MATURITY_DEVOPS',
+                ],
+                'potential': [
+                    'AGILE_MATURITY_PRODUCT_VISION',
+                    'PRODUCT_TEAM_MMOG',
+                ],
+            }
+        },
     ];
 
     let selectedOption = options[0];

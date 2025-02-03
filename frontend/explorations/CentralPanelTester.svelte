@@ -54,6 +54,19 @@
                 'earnings': ['EARNINGS_CARD_2', false],
             }
         },
+        {
+            label: 'Other player selects next activity', data: {
+                'selection': false,
+                'activities': [
+                    ['ACTIVITY_CONFERENCE', false, false],
+                    ['ACTIVITY_DEVELOPMENT', true, false],
+                    ['ACTIVITY_DEPLOYMENT', true, false],
+                    ['ACTIVITY_RETROSPECTIVE', false, false],
+                    ['ACTIVITY_COACH', false, false],
+                ],
+                'earnings': ['EARNINGS_CARD_1', true],
+            }
+        },
     ];
 
     let selectedOption = options[0];

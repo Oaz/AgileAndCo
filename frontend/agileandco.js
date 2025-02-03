@@ -15,6 +15,8 @@
  *
  */
 
+import {createGameBoard, initBgaIntegration} from "./lib/integration.js";
+
 define([
     "dojo", "dojo/_base/declare",
     "ebg/core/gamegui",
@@ -48,13 +50,19 @@ function (dojo, declare, gamegui, counter, frontend) {
         setup: async function (gamedatas) {
             console.log("Starting game setup");
 
+            frontend.initBgaIntegration(
+                (action, args) => this.bgaPerformAction(action, args),
+                (text) => _(text)
+            )
+
+            console.log(gamedatas);
+
             const gamePlayAreaContainer = document.createElement('div');
             document
                 .getElementById('game_play_area')
                 .insertAdjacentElement('beforeend', gamePlayAreaContainer);
-            this.gamePlayAreaComponent = frontend.initGamePlayArea(gamePlayAreaContainer, {
-                gamedatas,
-                bgaPerformAction: (action, args) => this.bgaPerformAction(action, args)
+            this.gamePlayAreaComponent = frontend.createGameBoard(gamePlayAreaContainer, {
+                gamedatas
             });
 
             /*
@@ -84,10 +92,10 @@ function (dojo, declare, gamegui, counter, frontend) {
         //
         onEnteringState: async function (stateName, args) {
             console.log('Entering state: ' + stateName, args);
-            await this.gamePlayAreaComponent.enterState(stateName, args);
-            for (const player_id in this.playerPanels) {
-                await this.playerPanels[player_id].enterState(stateName, args);
-            }
+            // await this.gamePlayAreaComponent.enterState(stateName, args);
+            // for (const player_id in this.playerPanels) {
+            //     await this.playerPanels[player_id].enterState(stateName, args);
+            // }
         },
 
         // onLeavingState: this method is called each time we are leaving a game state.
@@ -124,11 +132,11 @@ function (dojo, declare, gamegui, counter, frontend) {
         // TODO: from this point and below, you can write your game notifications handling methods
 
         notif_activityChoice: async function (args) {
-            await this.gamePlayAreaComponent.activityChoice(args);
+            await this.gamePlayAreaComponent.update(args);
         },
 
         notif_coachGivesPotential: async function (args) {
-            await this.gamePlayAreaComponent.coachGivesPotential(args, this.bgaAnimationsActive());
+            await this.gamePlayAreaComponent.update(args);
         },
 
         notif_newScores: async function (args) {

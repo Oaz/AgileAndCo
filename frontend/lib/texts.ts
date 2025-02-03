@@ -122,7 +122,7 @@ const texts: Record<Text, string> = {
     [Text.MY_COMPANY]: 'My Company',
     [Text.MY_POTENTIAL]: 'My Potential',
     [Text.CONFIRM_ACTIVITY_SELECTION]: 'Confirm activity selection',
-    [Text.CANNOT_ACTIVITY_SELECTION]: 'You must selected one activity',
+    [Text.CANNOT_ACTIVITY_SELECTION]: 'You must select one activity',
     [Text.CONFIRM_DISCARD]: 'Confirm discarding %s card(s)',
     [Text.CANNOT_DISCARD]: 'You must discard %s card(s)',
     [Text.CONFIRM_DEVELOPMENT]: 'Confirm development of %s product(s)',

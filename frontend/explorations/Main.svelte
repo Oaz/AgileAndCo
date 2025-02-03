@@ -9,10 +9,11 @@
     import ActivityConference from "./ActivityConference.svelte";
     import ActivityRetrospective from "./ActivityRetrospective.svelte";
     import CentralPanelTester from "./CentralPanelTester.svelte";
+    import GameBoardTester from "./GameBoardTester.svelte";
     import {BGA} from "../lib/BGA";
 
     let items = [
-        // {label: "Game Board", component: GameBoardTester},
+        {label: "Game Board", component: GameBoardTester},
         {label: "Central Panel", component: CentralPanelTester},
         {label: "Activity: Retrospective", component: ActivityRetrospective},
         {label: "Activity: Development", component: ActivityDevelopment},

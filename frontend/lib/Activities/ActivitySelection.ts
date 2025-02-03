@@ -11,10 +11,12 @@ export class ActivitySelection extends Action {
     constructor(datas) {
         super(datas.selection);
         this.data = datas;
-        this.selection = {};
+        this.selection = datas.activities.map(
+            (value, index) => value[2]
+        );
         this.interaction = datas.activities.map(
             (value, index) =>
-                this.enabled ? (value[1] ? 'FROZEN' : 'ACTIVE') : 'NEUTRAL'
+                this.enabled ? (value[1] ? 'FROZEN' : 'ACTIVE') : 'FROZEN'
         );
     }
 

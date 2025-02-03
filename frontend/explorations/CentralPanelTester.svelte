@@ -15,6 +15,45 @@
                 'earnings': ['EARNINGS_CARD_1', true],
             }
         },
+        {
+            label: 'While the activity is played', data: {
+                'selection': false,
+                'activities': [
+                    ['ACTIVITY_CONFERENCE', false, false],
+                    ['ACTIVITY_DEVELOPMENT', false, true],
+                    ['ACTIVITY_DEPLOYMENT', false, false],
+                    ['ACTIVITY_RETROSPECTIVE', false, false],
+                    ['ACTIVITY_COACH', false, false],
+                ],
+                'earnings': ['EARNINGS_CARD_1', true],
+            }
+        },
+        {
+            label: 'Select next activity', data: {
+                'selection': true,
+                'activities': [
+                    ['ACTIVITY_CONFERENCE', false, false],
+                    ['ACTIVITY_DEVELOPMENT', true, false],
+                    ['ACTIVITY_DEPLOYMENT', false, false],
+                    ['ACTIVITY_RETROSPECTIVE', false, false],
+                    ['ACTIVITY_COACH', false, false],
+                ],
+                'earnings': ['EARNINGS_CARD_1', true],
+            }
+        },
+        {
+            label: 'Deployment activity is played with earnings', data: {
+                'selection': false,
+                'activities': [
+                    ['ACTIVITY_CONFERENCE', false, false],
+                    ['ACTIVITY_DEVELOPMENT', true, false],
+                    ['ACTIVITY_DEPLOYMENT', false, true],
+                    ['ACTIVITY_RETROSPECTIVE', false, false],
+                    ['ACTIVITY_COACH', false, false],
+                ],
+                'earnings': ['EARNINGS_CARD_2', false],
+            }
+        },
     ];
 
     let selectedOption = options[0];

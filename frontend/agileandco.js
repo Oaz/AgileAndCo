@@ -94,8 +94,10 @@ function (dojo, declare, gamegui, counter, frontend) {
         onEnteringState: async function (stateName, args) {
             console.log('Entering state: ' + stateName, args);
             window.hh = args;
-            await this.gamePlayAreaComponent.update_public(args.args.public);
-            await this.gamePlayAreaComponent.update_private(args.args._private);
+            if(args.args) {
+                await this.gamePlayAreaComponent.update_public(args.args.public);
+                await this.gamePlayAreaComponent.update_private(args.args._private);
+            }
             // await this.gamePlayAreaComponent.enterState(stateName, args);
             // for (const player_id in this.playerPanels) {
             //     await this.playerPanels[player_id].enterState(stateName, args);
@@ -134,6 +136,10 @@ function (dojo, declare, gamegui, counter, frontend) {
         },
 
         // TODO: from this point and below, you can write your game notifications handling methods
+
+        notif_message: async function (args) {
+            console.log('message',args);
+        },
 
         notif_activityChoice: async function (args) {
             console.log('XXXX notif_activityChoice');

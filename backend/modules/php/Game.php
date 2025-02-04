@@ -140,29 +140,20 @@ class Game extends \Table
         return $this->details->getGameState();
     }
 
+    public function stNextPlayer(): void
+    {
+        $this->activeNextPlayer();
+        $this->gamestate->nextState("nextActivity");
+    }
+
     public function actChooseActivity(string $activity_id): void
     {
-        $player_id = (int)$this->getActivePlayerId();
-
-        $this->notifyAllPlayers("activityChoice", clienttranslate('${player_name} chooses activity ${activity_id}'), [
-            "player_id" => $player_id,
-            "player_name" => $this->getActivePlayerName(),
-            "activity_id" => $activity_id,
-        ]);
-
-        $this->gamestate->nextState("activityCoach");
+        $this->gamestate->nextState($this->details->chooseActivity($activity_id));
     }
 
     public function stCoachGivesPotential(): void
     {
-        $player_id = (int)$this->getActivePlayerId();
-
-        $this->notifyAllPlayers("coachGivesPotential", clienttranslate('Coach gives potential to ${player_name}'), [
-            "player_id" => $player_id,
-            "player_name" => $this->getActivePlayerName(),
-        ]);
-
-        $this->gamestate->nextState("nextPlayer");
+        $this->gamestate->nextState($this->details->doCoach());
     }
 
     public function actDeploy(): void
@@ -178,11 +169,6 @@ class Game extends \Table
 
         // at the end of the action, move to the next state
         $this->gamestate->nextState("nextPlayer");
-    }
-
-    public function stNextPlayer(): void
-    {
-        $this->gamestate->nextState("endTurn");
     }
 
     public function stEndTurn(): void

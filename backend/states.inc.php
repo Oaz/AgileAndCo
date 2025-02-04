@@ -71,7 +71,6 @@ $machinestates = [
         "type" => "activeplayer",
         "args" => "argGameState",
         "possibleactions" => [
-            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "actChooseActivity",
         ],
         "transitions" => [

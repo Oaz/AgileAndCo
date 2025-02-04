@@ -36,6 +36,6 @@ export class ActivitySelection extends Action {
     }
 
     public do_act(): void {
-        BGA.performAction('actActivitySelection', {selected: this.selected[0][0]});
+        BGA.performAction('actChooseActivity', {activity_id: this.selected[0][0]});
     }
 }

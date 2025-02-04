@@ -20,6 +20,11 @@ export default defineConfig(({ command }) => {
         build: {
             outDir: path.resolve(__dirname, isBuildMockups ? '../local/mockups' : '../remote'),
             minify: false,
+            lib: {
+                entry: path.resolve(__dirname, '../frontend/lib/integration.js'),
+                fileName: (format) => `modules/frontend.js`,
+                formats: ['amd'],
+            },
             rollupOptions: {
                 input: isBuildMockups
                     ? path.resolve(__dirname, '../frontend/explorations/main.ts')

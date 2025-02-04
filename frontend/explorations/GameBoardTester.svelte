@@ -1,21 +1,47 @@
-<script>
+<script lang="ts">
     import GameBoard from '../lib/GameBoard.svelte';
+    import {onMount} from "svelte";
 
     const options = [
             {
                 label: 'Start of game', data: {
-                    'central': {
-                        'selection': true,
-                        'activities': [
-                            ['ACTIVITY_CONFERENCE', false, false],
-                            ['ACTIVITY_DEVELOPMENT', false, false],
-                            ['ACTIVITY_DEPLOYMENT', false, false],
-                            ['ACTIVITY_RETROSPECTIVE', false, false],
-                            ['ACTIVITY_COACH', false, false],
-                        ],
-                        'earnings': ['EARNINGS_CARD_1', true],
+                    'public': {
+                        'central': {
+                            'selection': true,
+                            'activities': [
+                                ['ACTIVITY_CONFERENCE', false, false],
+                                ['ACTIVITY_DEVELOPMENT', false, false],
+                                ['ACTIVITY_DEPLOYMENT', false, false],
+                                ['ACTIVITY_RETROSPECTIVE', false, false],
+                                ['ACTIVITY_COACH', false, false],
+                            ],
+                            'earnings': ['EARNINGS_CARD_1', true],
+                        },
+                        'players': {
+                            1: {
+                                'name': 'Player 1',
+                                'teams': [
+                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                ],
+                                'company': [],
+                            },
+                            2: {
+                                'name': 'Player 2',
+                                'teams': [
+                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                ],
+                                'company': [],
+                            },
+                            3: {
+                                'name': 'Player 3',
+                                'teams': [
+                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                ],
+                                'company': [],
+                            },
+                        }
                     },
-                    'myself': {
+                    '_private': {
                         'teams': [
                             ['PRODUCT_TEAM_ADVERGAME', undefined]
                         ],
@@ -27,45 +53,48 @@
                             'AGILE_MATURITY_DEVOPS',
                         ],
                     },
-                    'others': [
-                        {
-                            'name': 'Player 1',
-                            'teams': [
-                                ['PRODUCT_TEAM_ADVERGAME', undefined]
-                            ],
-                            'company': [],
-                        },
-                        {
-                            'name': 'Player 2',
-                            'teams': [
-                                ['PRODUCT_TEAM_ADVERGAME', undefined]
-                            ],
-                            'company': [],
-                        },
-                        {
-                            'name': 'Player 3',
-                            'teams': [
-                                ['PRODUCT_TEAM_ADVERGAME', undefined]
-                            ],
-                            'company': [],
-                        },
-                    ]
+
                 }
             },
             {
                 label: 'You selected conference', data: {
-                    'central': {
-                        'selection': false,
-                        'activities': [
-                            ['ACTIVITY_CONFERENCE', false, true],
-                            ['ACTIVITY_DEVELOPMENT', false, false],
-                            ['ACTIVITY_DEPLOYMENT', false, false],
-                            ['ACTIVITY_RETROSPECTIVE', false, false],
-                            ['ACTIVITY_COACH', false, false],
-                        ],
-                        'earnings': ['EARNINGS_CARD_1', true],
+                    'public': {
+                        'central': {
+                            'selection': false,
+                            'activities': [
+                                ['ACTIVITY_CONFERENCE', false, true],
+                                ['ACTIVITY_DEVELOPMENT', false, false],
+                                ['ACTIVITY_DEPLOYMENT', false, false],
+                                ['ACTIVITY_RETROSPECTIVE', false, false],
+                                ['ACTIVITY_COACH', false, false],
+                            ],
+                            'earnings': ['EARNINGS_CARD_1', true],
+                        },
+                        'players': {
+                            1: {
+                                'name': 'Player 1',
+                                'teams': [
+                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                ],
+                                'company': [],
+                            },
+                            2: {
+                                'name': 'Player 2',
+                                'teams': [
+                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                ],
+                                'company': [],
+                            },
+                            3: {
+                                'name': 'Player 3',
+                                'teams': [
+                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                ],
+                                'company': [],
+                            },
+                        }
                     },
-                    'myself': {
+                    '_private': {
                         'activity': 'ACTIVITY_CONFERENCE',
                         'initiate': true,
                         'teams': [
@@ -86,35 +115,21 @@
                             'AGILE_MATURITY_AGILE_CERTIFICATION',
                         ],
                     },
-                    'others': [
-                        {
-                            'name': 'Player 1',
-                            'teams': [
-                                ['PRODUCT_TEAM_ADVERGAME', undefined]
-                            ],
-                            'company': [],
-                        },
-                        {
-                            'name': 'Player 2',
-                            'teams': [
-                                ['PRODUCT_TEAM_ADVERGAME', undefined]
-                            ],
-                            'company': [],
-                        },
-                        {
-                            'name': 'Player 3',
-                            'teams': [
-                                ['PRODUCT_TEAM_ADVERGAME', undefined]
-                            ],
-                            'company': [],
-                        },
-                    ]
+
                 }
             },
         ]
     ;
 
     let selectedOption = options[0];
+    let board: GameBoard;
+
+    $ : {
+        if (board !== undefined) {
+            board.update_public(selectedOption.data.public);
+            board.update_private(selectedOption.data._private);
+        }
+    }
 </script>
 
 <div>
@@ -127,7 +142,7 @@
         </select>
     </div>
     <div class="preview">
-        <GameBoard datas={selectedOption.data}/>
+        <GameBoard player_id={2} bind:this={board}/>
     </div>
 </div>
 

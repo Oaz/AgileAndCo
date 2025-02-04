@@ -15,8 +15,6 @@
  *
  */
 
-import {createGameBoard, initBgaIntegration} from "./lib/integration.js";
-
 define([
     "dojo", "dojo/_base/declare",
     "ebg/core/gamegui",
@@ -49,20 +47,23 @@ function (dojo, declare, gamegui, counter, frontend) {
 
         setup: async function (gamedatas) {
             console.log("Starting game setup");
+            window.gg = this;
+            window.ff = frontend;
 
             frontend.initBgaIntegration(
                 (action, args) => this.bgaPerformAction(action, args),
                 (text) => _(text)
             )
 
-            console.log(gamedatas);
-
             const gamePlayAreaContainer = document.createElement('div');
             document
                 .getElementById('game_play_area')
                 .insertAdjacentElement('beforeend', gamePlayAreaContainer);
+            const read_only = this.isSpectator || typeof g_replayFrom != 'undefined' || g_archive_mode;
             this.gamePlayAreaComponent = frontend.createGameBoard(gamePlayAreaContainer, {
-                gamedatas
+                gamedatas,
+                read_only,
+                player_id: this.player_id,
             });
 
             /*
@@ -92,6 +93,9 @@ function (dojo, declare, gamegui, counter, frontend) {
         //
         onEnteringState: async function (stateName, args) {
             console.log('Entering state: ' + stateName, args);
+            window.hh = args;
+            await this.gamePlayAreaComponent.update_public(args.args.public);
+            await this.gamePlayAreaComponent.update_private(args.args._private);
             // await this.gamePlayAreaComponent.enterState(stateName, args);
             // for (const player_id in this.playerPanels) {
             //     await this.playerPanels[player_id].enterState(stateName, args);
@@ -132,18 +136,19 @@ function (dojo, declare, gamegui, counter, frontend) {
         // TODO: from this point and below, you can write your game notifications handling methods
 
         notif_activityChoice: async function (args) {
-            await this.gamePlayAreaComponent.update(args);
+            console.log('XXXX notif_activityChoice');
+            // await this.gamePlayAreaComponent.update(args);
         },
 
         notif_coachGivesPotential: async function (args) {
-            await this.gamePlayAreaComponent.update(args);
+            // await this.gamePlayAreaComponent.update(args);
         },
 
         notif_newScores: async function (args) {
-            await this.gamePlayAreaComponent.newScores(args);
-            for (const player_id in args.scores) {
-                this.scoreCtrl[player_id].toValue(args.scores[player_id]);
-            }
+            // await this.gamePlayAreaComponent.newScores(args);
+            // for (const player_id in args.scores) {
+            //     this.scoreCtrl[player_id].toValue(args.scores[player_id]);
+            // }
         },
    });             
 });

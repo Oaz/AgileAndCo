@@ -9,7 +9,7 @@ export function initBgaIntegration(performAction, translate) {
 
 export function createGameBoard(target, info) {
     try {
-        return mount(GameBoard, {target: target, props: {},});
+        return mount(GameBoard, {target: target, props: info,});
     } catch (error) {
         console.error('Error initializing GameBoard:', error);
     }

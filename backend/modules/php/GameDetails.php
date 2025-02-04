@@ -14,15 +14,6 @@ class GameDetails
         $this->cards->init( "card" );
     }
 
-    public function getData($location) : mixed
-    {
-        return $this->cards->getCardsInLocation($location);
-    }
-    public function getAll($type) : mixed
-    {
-        return $this->cards->getCardsOfType($type);
-    }
-
     public function initGame($players) : void
     {
         $this->cards->createCards( CardsData::$instances, 'deck' );
@@ -46,9 +37,42 @@ class GameDetails
         }
     }
 
+    public function getData($location) : mixed
+    {
+        return $this->cards->getCardsInLocation($location);
+    }
+    public function getAll($type) : mixed
+    {
+        return $this->cards->getCardsOfType($type);
+    }
+
+    public function listCards($location, $locationArg) : array
+    {
+        return array_map(function ($card) {
+            $card_type = $card['type'];
+            $card_name = CardsData::$groups[$card_type][$card['type_arg']];
+            return $card_type.'_'.$card_name;
+        }, $this->cards->getCardsInLocation($location, $locationArg));
+    }
+
     public function getGameState(): array
     {
         $players = $this->game->loadPlayersBasicInfos();
+        $playerGames = array_map(function ($player) {
+            return [
+                'name' => $player['player_name'],
+                'teams' => [
+                    ['PRODUCT_TEAM_ADVERGAME']
+                ],
+                'company' => array_values($this->listCards('company',$player['player_id'])),
+                'potential' => array_values($this->listCards('hand',$player['player_id'])),
+            ];
+        }, $players);
+        $publicPlayerGames = array_map(function ($player) {
+            $playerCopy = array_map(function($item) { return $item; }, $player);
+            unset($playerCopy['potential']);
+            return $playerCopy;
+        }, $playerGames);
         return [
             'public' => [
                 'active_player' => $this->game->getActivePlayerId(),
@@ -63,15 +87,7 @@ class GameDetails
                     ],
                     'earnings' => ['EARNINGS_CARD_1', true],
                 ],
-                'players' => array_map(function ($player) {
-                    return [
-                        'name' => $player['player_name'],
-                        'teams' => [
-                            ['PRODUCT_TEAM_ADVERGAME']
-                        ],
-                        'company' => [],
-                    ];
-                }, $players),
+                'players' => $publicPlayerGames,
                 'misc' => [
                     'players' => $players,
                     'act_type' => $this->getAll('ACTIVITY'),
@@ -82,20 +98,7 @@ class GameDetails
                     'deck' => $this->getData('deck'),
                 ]
             ],
-            '_private' => array_map(function ($v) {
-                return [
-                    'teams' => [
-                        ['PRODUCT_TEAM_ADVERGAME']
-                    ],
-                    'company' => [],
-                    'potential' => [
-                        'AGILE_MATURITY_AGILE_PRACTITIONER',
-                        'AGILE_VALUE_FEEDBACK',
-                        'PRODUCT_TEAM_MMOG',
-                        'AGILE_MATURITY_DEVOPS',
-                    ],
-                ];
-            }, $players),
+            '_private' => $playerGames,
         ];
     }
 }

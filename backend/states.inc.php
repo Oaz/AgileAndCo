@@ -116,10 +116,9 @@ $machinestates = [
 
     30 => [
         "name" => "deploymentActivity",
-        "description" => clienttranslate('Not implemented yet - ${actplayer} deployment'),
-        "descriptionmyturn" => clienttranslate('Not implemented yet - ${you} deployment'),
+        "description" => clienttranslate('Deployment is ongoing'),
+        "descriptionmyturn" => clienttranslate('Which product do you want to deploy?'),
         "type" => "multipleactiveplayer",
-        "action" => "stMakeEveryoneActive",
         "args" => "argGameState",
         "possibleactions" => [
             "actDeploy",

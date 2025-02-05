@@ -66,15 +66,16 @@ class GameDetails
         }, $keys);
     }
 
-    private function getPlayerTeams($playerId) {
+    private function getPlayerTeams($playerId)
+    {
         $teams = [];
         $index = 0;
-        while(true) {
-            $teamCards = array_values($this->listCards('teams', $playerId*100+$index));
-            if(count($teamCards) == 0)
+        while (true) {
+            $teamCards = array_values($this->listCards('teams', $playerId * 100 + $index));
+            if (count($teamCards) == 0)
                 return $teams;
             $teamCardName = $teamCards[0];
-            $productCards = array_values($this->listCards('products', $playerId*100+$index));
+            $productCards = array_values($this->listCards('products', $playerId * 100 + $index));
             $productCardName = count($productCards) == 0 ? false : $productCards[0];
             $teams[] = [$teamCardName, $productCardName];
             $index++;
@@ -87,11 +88,11 @@ class GameDetails
 
         $players = $this->game->loadPlayersBasicInfos();
         $activePlayers = $this->game->gamestate->getActivePlayerList();
-        $playerGames = array_map(function ($player) use($ongoingActivity, $activityInitiator, $activePlayers) {
+        $playerGames = array_map(function ($player) use ($ongoingActivity, $activityInitiator, $activePlayers) {
             $player_id = $player['player_id'];
             return [
                 'name' => $player['player_name'],
-                'activity' =>  in_array($player_id, $activePlayers) ? $ongoingActivity : '',
+                'activity' => in_array($player_id, $activePlayers) ? $ongoingActivity : '',
                 'initiate' => $activityInitiator == $player_id,
                 'teams' => $this->getPlayerTeams($player_id),
                 'company' => array_values($this->listCards('company', $player['player_id'])),
@@ -108,7 +109,7 @@ class GameDetails
             return $playerCopy;
         }, $playerGames);
 
-        $activities = $this->pairsToDictionary(array_map(function ($activityCard) use($ongoingActivity) {
+        $activities = $this->pairsToDictionary(array_map(function ($activityCard) use ($ongoingActivity) {
             $locArg = $activityCard['location_arg'];
             $index = $locArg % 100;
             $activityName = CardsData::getActivities()[$index];
@@ -119,7 +120,7 @@ class GameDetails
 
         return [
             'public' => [
-                'active_player' => $ongoingActivity=='' ? $this->game->getActivePlayerId() : 0,
+                'active_player' => $ongoingActivity == '' ? $this->game->getActivePlayerId() : 0,
                 'central' => [
                     'selection' => false,
                     'activities' => $this->orderedArrayValues($activities),
@@ -157,11 +158,11 @@ class GameDetails
         $activityCard = array_values($selection)[0];
 
         $transition = match ($activity) {
-            'ACTIVITY_CONFERENCE' => ['activityConference',false],
-            'ACTIVITY_DEVELOPMENT' => ['activityDevelopment',true],
-            'ACTIVITY_DEPLOYMENT' => ['activityDeployment',true],
-            'ACTIVITY_RETROSPECTIVE' => ['activityRetrospective',true],
-            'ACTIVITY_COACH' => ['activityCoach',false],
+            'ACTIVITY_CONFERENCE' => ['activityConference', false],
+            'ACTIVITY_DEVELOPMENT' => ['activityDevelopment', true],
+            'ACTIVITY_DEPLOYMENT' => ['activityDeployment', true],
+            'ACTIVITY_RETROSPECTIVE' => ['activityRetrospective', true],
+            'ACTIVITY_COACH' => ['activityCoach', false],
             default => throw new \BgaUserException('Invalid activity choice'),
         };
 
@@ -212,17 +213,19 @@ class GameDetails
         return "nextActivity";
     }
 
-    private function listCards($location, $location_arg=null) {
+    private function listCards($location, $location_arg = null)
+    {
         return array_map(function ($card) {
             return $this->getCardName($card);
         }, $this->cards->getCardsInLocation($location, $location_arg));
     }
 
-    private function getCardName($card) {
-        return CardsData::getFullName($card['type'],$card['type_arg']);
+    private function getCardName($card)
+    {
+        return CardsData::getFullName($card['type'], $card['type_arg']);
     }
 
-    public function completeConference($player_id, $cards) : bool
+    public function completeConference($player_id, $cards): bool
     {
         $players = $this->game->loadPlayersBasicInfos();
         $hand = $this->listCards('hand', $player_id);
@@ -235,7 +238,7 @@ class GameDetails
             };
             $cardName = $card[1];
             $cardId = array_search($cardName, $cardGroup);
-            if(!$cardId)
+            if (!$cardId)
                 throw new \BgaUserException('Invalid discard choice');
             unset($cardGroup[$cardId]);
             $this->cards->playCard($cardId);
@@ -245,31 +248,36 @@ class GameDetails
                 "cardName" => $cardName,
             ]);
         }
-        $this->cards->moveAllCardsInLocation( 'drawn', 'hand', $player_id, $player_id );
+        $this->cards->moveAllCardsInLocation('drawn', 'hand', $player_id, $player_id);
         return true;
     }
 
-    public function completeDevelopment($player_id, $teams, $products) : bool
+    public function completeDevelopment($player_id, $teams, $products): bool
     {
         $players = $this->game->loadPlayersBasicInfos();
         $inputs = array_map(null, $teams, $products);
         $hand = $this->listCards('hand', $player_id);
         foreach ($inputs as $input) {
-            $team=$input[0];
+            $team = $input[0];
             $teamIndex = $team[0] % 100;
-            $product=$input[1];
+            $product = $input[1];
             $productCardId = array_search($product[1], $hand);
             unset($hand[$productCardId]);
-            if(!$productCardId)
+            if (!$productCardId)
                 throw new \BgaUserException('Invalid product choice');
             $this->broadcast('DEBUG: ${player_name} develop in team ${teamCard} with potential ${productName}', [
                 "player_name" => $players[$player_id]['player_name'],
                 "teamCard" => $team[1],
                 "productName" => $product[1],
             ]);
-            $this->cards->moveCard( $productCardId, 'products', $player_id*100+$teamIndex );
+            $this->cards->moveCard($productCardId, 'products', $player_id * 100 + $teamIndex);
         }
         return true;
+    }
+
+    public function completeDeployment($player_id, $cards): bool
+    {
+        return false;
     }
 
     public function updateState($player_id): void

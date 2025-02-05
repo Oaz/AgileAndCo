@@ -160,6 +160,15 @@ class Game extends \Table
         }
     }
 
+    public function actDeploy(string $cards): void
+    {
+        $player_id = $this->getCurrentPlayerId();
+        if ($this->details->completeDeployment($player_id, json_decode($cards, true))) {
+            $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
+            $this->details->updateState($player_id);
+        }
+    }
+
     public function actChooseActivity(string $activity_id): void
     {
         list($transitionName, $setMultiplayer) = $this->details->chooseActivity($activity_id);
@@ -171,21 +180,6 @@ class Game extends \Table
     public function stCoachGivesPotential(): void
     {
         $this->gamestate->nextState($this->details->doCoach());
-    }
-
-    public function actDeploy(): void
-    {
-        // Retrieve the active player ID.
-        $player_id = (int)$this->getActivePlayerId();
-
-        // Notify all players about the choice to pass.
-        $this->notifyAllPlayers("cardPlayed", clienttranslate('${player_name} deploys'), [
-            "player_id" => $player_id,
-            "player_name" => $this->getActivePlayerName(),
-        ]);
-
-        // at the end of the action, move to the next state
-        $this->gamestate->nextState("nextPlayer");
     }
 
     public function stEndTurn(): void

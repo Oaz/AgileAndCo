@@ -19,7 +19,7 @@ export class DeploymentActivity extends Activity {
     }
 
     public do_act()  : void {
-        BGA.performAction('actDeploy', {selected: this.selected});
+        BGA.performAction('actDeploy', {cards: JSON.stringify(this.selected)});
     }
 }
 

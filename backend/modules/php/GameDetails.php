@@ -13,6 +13,7 @@ class GameDetails
         $this->game = $game;
         $this->cards = $cards;
         $this->cards->init("card");
+        $this->cards->autoreshuffle = true;
         $this->ongoingActivity = new GlobalVariable($game, 'ONGOING_ACTIVITY');
     }
 
@@ -79,11 +80,12 @@ class GameDetails
         list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
 
         $players = $this->game->loadPlayersBasicInfos();
-        $playerGames = array_map(function ($player) use($ongoingActivity, $activityInitiator) {
+        $activePlayers = $this->game->gamestate->getActivePlayerList();
+        $playerGames = array_map(function ($player) use($ongoingActivity, $activityInitiator, $activePlayers) {
+            $player_id = $player['player_id'];
             return [
-                'activity' => $ongoingActivity,
-                'initiate' => $activityInitiator == $player['player_id'],
-                'name' => $player['player_name'],
+                'activity' =>  in_array($player_id, $activePlayers) ? $ongoingActivity : '',
+                'initiate' => $activityInitiator == $player_id,
                 'teams' => [
                     ['PRODUCT_TEAM_ADVERGAME']
                 ],
@@ -200,18 +202,46 @@ class GameDetails
         return "nextActivity";
     }
 
-    public function discard($player_id, $cards) : bool
-    {
-        $players = $this->game->loadPlayersBasicInfos();
-
-        $this->broadcast('Discard ${player_name} (${player_id}): ${cards}', [
-            "player_id" => $player_id,
-            "player_name" => $players[$player_id]['player_name'],
-            "cards" => print_r($cards, true),
-        ]);
-
-        return false;
+    private function getCardsFullNames($location, $location_arg=null) {
+        return array_map(function ($card) {
+            return CardsData::getFullName($card['type'],$card['type_arg']);
+        }, $this->cards->getCardsInLocation($location, $location_arg));
     }
 
+    public function completeConference($player_id, $cards) : bool
+    {
+        $players = $this->game->loadPlayersBasicInfos();
+        $hand = $this->getCardsFullNames('hand', $player_id);
+        $drawn = $this->getCardsFullNames('drawn', $player_id);
+        foreach ($cards as $card) {
+            $cardGroup = match (intdiv($card[0], 100)) {
+                3 => $hand,
+                4 => $drawn,
+                default => throw new \BgaUserException('Invalid discard choice'),
+            };
+            $cardName = $card[1];
+            $cardId = array_search($cardName, $cardGroup);
+            if(!$cardId)
+                throw new \BgaUserException('Invalid discard choice');
+            unset($cardGroup[$cardId]);
+            $this->cards->playCard($cardId);
+//            $this->broadcast('Discard ${player_name} (${player_id}): CARD name ${cardName} id ${cardId}', [
+//                "player_id" => $player_id,
+//                "player_name" => $players[$player_id]['player_name'],
+//                "cardId" => $cardId,
+//                "cardName" => $cardName,
+//            ]);
+        }
+        $this->cards->moveAllCardsInLocation( 'drawn', 'hand', $player_id, $player_id );
+        return true;
+    }
 
+    public function updateState($player_id): void
+    {
+        $gameState = $this->getGameState();
+        $this->game->notifyPlayer($player_id, 'updateState', '', [
+            'public' => $gameState['public'],
+            '_private' => $gameState['_private'][$player_id],
+        ]);
+    }
 }

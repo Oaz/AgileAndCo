@@ -26,6 +26,11 @@ class CardsData
         ],
     ];
 
+    public static function getFullName($groupName,$index): string
+    {
+       return $groupName . '_' . CardsData::$groups[$groupName][$index];
+    }
+
     public static function getActivities(): array
     {
         return array_map(function ($a) {

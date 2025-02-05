@@ -142,11 +142,13 @@ class Game extends \Table
         $this->gamestate->nextState();
     }
 
-//    public function actDiscard(#[JsonParam(associative: null)] mixed $cards): void
-    public function actDiscard(string $cards): void
+    public function actConference(string $cards): void
     {
-        if($this->details->discard($this->getCurrentPlayerId(),$array = json_decode($cards, true)))
-            $this->gamestate->nextState();
+        $player_id = $this->getCurrentPlayerId();
+        if ($this->details->completeConference($player_id, json_decode($cards, true))) {
+            $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
+            $this->details->updateState($player_id);
+        }
     }
 
     public function actChooseActivity(string $activity_id): void

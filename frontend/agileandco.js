@@ -141,6 +141,12 @@ function (dojo, declare, gamegui, counter, frontend) {
             console.log('message',args);
         },
 
+        notif_updateState: async function (args) {
+            console.log('updateState',args);
+            await this.gamePlayAreaComponent.update_public(args.public);
+            await this.gamePlayAreaComponent.update_private(args._private);
+        },
+
         notif_activityChoice: async function (args) {
             console.log('XXXX notif_activityChoice');
             // await this.gamePlayAreaComponent.update(args);

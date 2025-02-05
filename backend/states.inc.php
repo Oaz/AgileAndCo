@@ -97,7 +97,7 @@ $machinestates = [
         "type" => "multipleactiveplayer",
         "args" => "argGameState",
         "possibleactions" => [
-            "actDiscard",
+            "actConference",
         ],
         "transitions" => ["nextPlayer" => 3]
     ],

@@ -151,9 +151,21 @@ class Game extends \Table
         }
     }
 
+    public function actDevelop(string $teams, string $products): void
+    {
+        $player_id = $this->getCurrentPlayerId();
+        if ($this->details->completeDevelopment($player_id, json_decode($teams, true), json_decode($products, true))) {
+            $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
+            $this->details->updateState($player_id);
+        }
+    }
+
     public function actChooseActivity(string $activity_id): void
     {
-        $this->gamestate->nextState($this->details->chooseActivity($activity_id));
+        list($transitionName, $setMultiplayer) = $this->details->chooseActivity($activity_id);
+        if($setMultiplayer)
+            $this->gamestate->setAllPlayersMultiactive();
+        $this->gamestate->nextState($transitionName);
     }
 
     public function stCoachGivesPotential(): void

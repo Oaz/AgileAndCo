@@ -104,13 +104,11 @@ $machinestates = [
 
     20 => [
         "name" => "developmentActivity",
-        "description" => clienttranslate('Not implemented yet - ${actplayer} development'),
-        "descriptionmyturn" => clienttranslate('Not implemented yet - ${you} development'),
+        "description" => clienttranslate('Development is ongoing'),
+        "descriptionmyturn" => clienttranslate('Which product do you want to develop?'),
         "type" => "multipleactiveplayer",
-        "action" => "stDevelopment",
         "args" => "argGameState",
         "possibleactions" => [
-            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "actDevelop",
         ],
         "transitions" => ["nextPlayer" => 3]
@@ -121,10 +119,9 @@ $machinestates = [
         "description" => clienttranslate('Not implemented yet - ${actplayer} deployment'),
         "descriptionmyturn" => clienttranslate('Not implemented yet - ${you} deployment'),
         "type" => "multipleactiveplayer",
-        "action" => "stDeployment",
+        "action" => "stMakeEveryoneActive",
         "args" => "argGameState",
         "possibleactions" => [
-            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "actDeploy",
         ],
         "transitions" => ["nextPlayer" => 3]

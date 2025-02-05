@@ -5,7 +5,7 @@
         {
             label: 'Initial state', data: {
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    ['PRODUCT_TEAM_ADVERGAME', false]
                 ],
                 'company': [],
                 'potential': [
@@ -20,7 +20,7 @@
             label: 'With developed product', data: {
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_EDUCATION', undefined],
+                    ['PRODUCT_TEAM_EDUCATION', false],
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -39,7 +39,7 @@
             label: 'With a lot of cards', data: {
                 'teams': [
                     ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_EDUCATION', undefined],
+                    ['PRODUCT_TEAM_EDUCATION', false],
                     ['PRODUCT_TEAM_MMOG', 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'],
                 ],
                 'company': [

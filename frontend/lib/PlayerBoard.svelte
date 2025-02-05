@@ -58,7 +58,7 @@
                 {/each}
             </div>
         </div>
-        {#if datas.drawn}
+        {#if datas.drawn.length > 0}
             <div class="row">
                 <div class="row-title">{activity.drawn_card_zone_title}</div>
                 <div class="drawn">

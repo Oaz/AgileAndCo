@@ -20,7 +20,7 @@ export class ConferenceActivity extends Activity {
     }
 
     public do_act()  : void {
-        BGA.performAction('actDiscard', {selected: this.selected});
+        BGA.performAction('actDiscard', {cards: JSON.stringify(this.selected)});
     }
 
     public get drawn_card_zone_title(): string {

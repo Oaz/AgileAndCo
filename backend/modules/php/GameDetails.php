@@ -6,12 +6,14 @@ class GameDetails
 {
     private mixed $cards;
     private mixed $game;
+    private GlobalVariable $ongoingActivity;
 
     public function __construct($cards, $game)
     {
         $this->game = $game;
         $this->cards = $cards;
         $this->cards->init("card");
+        $this->ongoingActivity = new GlobalVariable($game, 'ONGOING_ACTIVITY');
     }
 
     public function initGame($players): void
@@ -28,6 +30,7 @@ class GameDetails
         foreach ($players as $player_id => $player) {
             $this->cards->pickCards(4, 'deck', $player_id);
         }
+        $this->ongoingActivity->write(['', 0]);
     }
 
     private function deckify($type, $deckName)
@@ -73,15 +76,20 @@ class GameDetails
 
     public function getGameState(): array
     {
+        list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
+
         $players = $this->game->loadPlayersBasicInfos();
-        $playerGames = array_map(function ($player) {
+        $playerGames = array_map(function ($player) use($ongoingActivity, $activityInitiator) {
             return [
+                'activity' => $ongoingActivity,
+                'initiate' => $activityInitiator == $player['player_id'],
                 'name' => $player['player_name'],
                 'teams' => [
                     ['PRODUCT_TEAM_ADVERGAME']
                 ],
                 'company' => array_values($this->listCards('company', $player['player_id'])),
                 'potential' => array_values($this->listCards('hand', $player['player_id'])),
+                'drawn' => array_values($this->listCards('drawn', $player['player_id'])),
             ];
         }, $players);
         $publicPlayerGames = array_map(function ($player) {
@@ -89,19 +97,23 @@ class GameDetails
                 return $item;
             }, $player);
             unset($playerCopy['potential']);
+            unset($playerCopy['drawn']);
             return $playerCopy;
         }, $playerGames);
 
-        $activities = $this->pairsToDictionary(array_map(function ($activityCard) {
+        $activities = $this->pairsToDictionary(array_map(function ($activityCard) use($ongoingActivity) {
             $locArg = $activityCard['location_arg'];
             $index = $locArg % 100;
-            $hidden = intdiv($locArg, 100) == 1;
-            return [$index, [CardsData::getActivities()[$index], $hidden, false]];
+            $activityName = CardsData::getActivities()[$index];
+            $selected = $ongoingActivity == $activityName;
+            $hidden = !$selected && intdiv($locArg, 100) == 1;
+            return [$index, [$activityName, $hidden, $selected]];
         }, $this->cards->getCardsInLocation('activities')));
+
 
         return [
             'public' => [
-                'active_player' => $this->game->getActivePlayerId(),
+                'active_player' => $ongoingActivity=='' ? $this->game->getActivePlayerId() : 0,
                 'central' => [
                     'selection' => false,
                     'activities' => $this->orderedArrayValues($activities),
@@ -113,9 +125,11 @@ class GameDetails
                     'act_type' => $this->getAll('ACTIVITY'),
                     'activities' => $this->getData('activities'),
                     'earnings' => $this->getData('earnings'),
-                    'pteams' => $this->getData('teams'),
+                    'teams' => $this->getData('teams'),
                     'hand' => $this->getData('hand'),
+                    'drawn' => $this->getData('drawn'),
                     'deck' => $this->getData('deck'),
+                    'yolo' => $playerGames,
                 ]
             ],
             '_private' => $playerGames,
@@ -142,6 +156,8 @@ class GameDetails
         $this->cards->moveCard($activityCard['id'], 'activities', 100 + $activityLocId);
 
         $player_id = (int)$this->game->getActivePlayerId();
+        $this->ongoingActivity->write([$activity, $player_id]);
+
         $this->broadcast('${player_name} chooses activity ${activity}', [
             "player_id" => $player_id,
             "player_name" => $this->game->getActivePlayerName(),
@@ -153,6 +169,17 @@ class GameDetails
     public function broadcast(string $message, array $args = []): void
     {
         $this->game->notifyAllPlayers("message", clienttranslate($message), $args);
+    }
+
+    public function doConference(): void
+    {
+        $this->broadcast('Tous à la conf!');
+        list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
+        $players = $this->game->loadPlayersBasicInfos();
+        foreach ($players as $player_id => $player) {
+            $n = $activityInitiator == $player_id ? 5 : 2;
+            $this->cards->pickCardsForLocation($n, 'deck', 'drawn', $player_id);
+        }
     }
 
     public function doCoach(): string
@@ -167,10 +194,23 @@ class GameDetails
         return "nextPlayer";
     }
 
-    public function gotToNextPLayer(): string
+    public function gotToNextPlayer(): string
     {
-        $this->game->activeNextPlayer();
+        $this->ongoingActivity->write(['', 0]);
         return "nextActivity";
+    }
+
+    public function discard($player_id, $cards) : bool
+    {
+        $players = $this->game->loadPlayersBasicInfos();
+
+        $this->broadcast('Discard ${player_name} (${player_id}): ${cards}', [
+            "player_id" => $player_id,
+            "player_name" => $players[$player_id]['player_name'],
+            "cards" => print_r($cards, true),
+        ]);
+
+        return false;
     }
 
 

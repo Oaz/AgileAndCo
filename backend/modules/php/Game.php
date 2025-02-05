@@ -22,7 +22,6 @@ require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
 class Game extends \Table
 {
-    private static array $CARD_TYPES;
     private mixed $details;
 
     /**
@@ -45,16 +44,6 @@ class Game extends \Table
             "my_first_game_variant" => 100,
             "my_second_game_variant" => 101,
         ]);
-
-        self::$CARD_TYPES = [
-            1 => [
-                "card_name" => clienttranslate('Troll'), // ...
-            ],
-            2 => [
-                "card_name" => clienttranslate('Goblin'), // ...
-            ],
-            // ...
-        ];
 
         $this->details = new GameDetails(
             $this->getNew("module.common.deck"),
@@ -143,7 +132,21 @@ class Game extends \Table
     public function stNextPlayer(): void
     {
         $this->activeNextPlayer();
-        $this->gamestate->nextState("nextActivity");
+        $this->gamestate->nextState($this->details->gotToNextPlayer());
+    }
+
+    public function stConference(): void
+    {
+        $this->details->doConference();
+        $this->gamestate->setAllPlayersMultiactive();
+        $this->gamestate->nextState();
+    }
+
+//    public function actDiscard(#[JsonParam(associative: null)] mixed $cards): void
+    public function actDiscard(string $cards): void
+    {
+        if($this->details->discard($this->getCurrentPlayerId(),$array = json_decode($cards, true)))
+            $this->gamestate->nextState();
     }
 
     public function actChooseActivity(string $activity_id): void
@@ -274,62 +277,4 @@ class Game extends \Table
         throw new \feException("Zombie mode not supported at this game state: \"{$state_name}\".");
     }
 
-
-    public function actPlayCard(int $card_id): void
-    {
-        // Retrieve the active player ID.
-        $player_id = (int)$this->getActivePlayerId();
-
-        // check input values
-        $args = $this->argPlayerTurn();
-        $playableCardsIds = $args['playableCardsIds'];
-        if (!in_array($card_id, $playableCardsIds)) {
-            throw new \BgaUserException('Invalid card choice');
-        }
-
-        // Add your game logic to play a card here.
-        $card_name = self::$CARD_TYPES[$card_id]['card_name'];
-
-        // Notify all players about the card played.
-        $this->notifyAllPlayers("cardPlayed", clienttranslate('${player_name} plays ${card_name}'), [
-            "player_id" => $player_id,
-            "player_name" => $this->getActivePlayerName(),
-            "card_name" => $card_name,
-            "card_id" => $card_id,
-            "i18n" => ['card_name'],
-        ]);
-
-        // at the end of the action, move to the next state
-        $this->gamestate->nextState("playCard");
-    }
-
-    public function actPass(): void
-    {
-        // Retrieve the active player ID.
-        $player_id = (int)$this->getActivePlayerId();
-
-        // Notify all players about the choice to pass.
-        $this->notifyAllPlayers("cardPlayed", clienttranslate('${player_name} passes'), [
-            "player_id" => $player_id,
-            "player_name" => $this->getActivePlayerName(),
-        ]);
-
-        // at the end of the action, move to the next state
-        $this->gamestate->nextState("pass");
-    }
-
-    public function stNextPlayer0(): void
-    {
-        // Retrieve the active player ID.
-        $player_id = (int)$this->getActivePlayerId();
-
-        // Give some extra time to the active player when he completed an action
-        $this->giveExtraTime($player_id);
-
-        $this->activeNextPlayer();
-
-        // Go to another gamestate
-        // Here, we would detect if the game is over, and in this case use "endGame" transition instead
-        $this->gamestate->nextState("nextPlayer");
-    }
 }

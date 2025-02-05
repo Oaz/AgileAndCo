@@ -83,14 +83,20 @@ $machinestates = [
     ],
 
     10 => [
-        "name" => "conferenceActivity",
-        "description" => clienttranslate('Not implemented yet - ${actplayer} conference'),
-        "descriptionmyturn" => clienttranslate('Not implemented yet - ${you} conference'),
-        "type" => "multipleactiveplayer",
+        "name" => "prepareConferenceActivity",
+        "description" => '',
+        "type" => "game",
         "action" => "stConference",
+        "transitions" => ["" => 11]
+    ],
+
+    11 => [
+        "name" => "conferenceActivity",
+        "description" => clienttranslate('Conference is ongoing'),
+        "descriptionmyturn" => clienttranslate('What is your takeaway of the conference?'),
+        "type" => "multipleactiveplayer",
         "args" => "argGameState",
         "possibleactions" => [
-            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "actDiscard",
         ],
         "transitions" => ["nextPlayer" => 3]

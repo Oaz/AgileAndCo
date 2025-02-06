@@ -26,14 +26,14 @@ class CardsData
         ],
     ];
 
-    public static function getFullName($groupName,$index): string
+    public static function getFullName($groupName, $index): string
     {
-       return $groupName . '_' . CardsData::$groups[$groupName][$index];
+        return $groupName . '_' . CardsData::$groups[$groupName][$index];
     }
 
     public static function getAll($groupName): array
     {
-        return array_map(function ($a) use($groupName) {
+        return array_map(function ($a) use ($groupName) {
             return $groupName . '_' . $a;
         }, CardsData::$groups[$groupName]);
     }
@@ -79,6 +79,10 @@ class CardsData
         'AGILE_VALUE_TRANSPARENCY' => ['cost' => 4,],
         'AGILE_VALUE_COURAGE' => ['cost' => 4,],
         'AGILE_VALUE_RESPECT' => ['cost' => 4,],
+        'EARNINGS_CARD_1' => ['ADVERGAME' => 2, 'EDUCATION' => 2, 'SOCIAL' => 3, 'MMOG' => 3],
+        'EARNINGS_CARD_2' => ['ADVERGAME' => 2, 'EDUCATION' => 2, 'SOCIAL' => 3, 'MMOG' => 4],
+        'EARNINGS_CARD_3' => ['ADVERGAME' => 2, 'EDUCATION' => 3, 'SOCIAL' => 3, 'MMOG' => 4],
+        'EARNINGS_CARD_4' => ['ADVERGAME' => 2, 'EDUCATION' => 3, 'SOCIAL' => 4, 'MMOG' => 4]
     ];
     public static mixed $instances = [
         ['type' => 'PRODUCT_TEAM', 'type_arg' => 0, 'nbr' => 10],

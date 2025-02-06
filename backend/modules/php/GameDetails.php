@@ -145,6 +145,7 @@ class GameDetails
             'activities' => $this->getData('activities'),
             'earnings' => $this->getData('earnings'),
             'teams' => $this->getData('teams'),
+            'products' => $this->getData('products'),
             'hand' => $this->getData('hand'),
             'discard' => $this->getData('discard'),
             'drawn' => $this->getData('drawn'),
@@ -268,7 +269,7 @@ class GameDetails
             $productCardId = array_search($product[1], $hand);
             unset($hand[$productCardId]);
             if (!$productCardId)
-                throw new \BgaUserException('Invalid product choice');
+                throw new \BgaUserException('Invalid development');
             $this->broadcast('DEBUG: ${player_name} develop in team ${teamCard} with potential ${productName}', [
                 "player_name" => $players[$player_id]['player_name'],
                 "teamCard" => $team[1],
@@ -285,9 +286,34 @@ class GameDetails
         $this->currentEarnings->write($index);
     }
 
+    private function getSingleCardAt($location, $location_arg) {
+        return array_values($this->cards->getCardsInLocation($location, $location_arg))[0];
+    }
 
     public function completeDeployment($player_id, $cards): bool
     {
+        $players = $this->game->loadPlayersBasicInfos();
+        $earningCard = CardsData::getAll('EARNINGS')[$this->currentEarnings->read()];
+        $earnings = CardsData::$details[$earningCard];
+        foreach ($cards as $card) {
+            $cardName = $card[1];
+            $index = $card[0] % 100;
+            $product = $this->getSingleCardAt('products', $player_id*100+$index);
+            if($cardName != $this->getCardName($product))
+                throw new \BgaUserException('Invalid deployment');
+            $cardId = $product['id'];
+            $team = $this->getSingleCardAt('teams', $player_id*100+$index);
+            $teamType = CardsData::$groups[$team['type']][$team['type_arg']];
+            $earning = $earnings[$teamType];
+            $this->broadcast('DEBUG: ${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', [
+                "player_name" => $players[$player_id]['player_name'],
+                "cardName" => $cardName,
+                "cardId" => $cardId,
+                "teamType" => $teamType,
+                "earning" => $earning,
+            ]);
+        }
+
         return false;
     }
 

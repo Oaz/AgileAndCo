@@ -305,6 +305,7 @@ class GameDetails
             $team = $this->getSingleCardAt('teams', $player_id*100+$index);
             $teamType = CardsData::$groups[$team['type']][$team['type_arg']];
             $earning = $earnings[$teamType];
+            $this->cards->pickCards($earning, 'deck', $player_id);
             $this->broadcast('DEBUG: ${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', [
                 "player_name" => $players[$player_id]['player_name'],
                 "cardName" => $cardName,
@@ -313,8 +314,7 @@ class GameDetails
                 "earning" => $earning,
             ]);
         }
-
-        return false;
+        return true;
     }
 
     public function updateState($player_id): void

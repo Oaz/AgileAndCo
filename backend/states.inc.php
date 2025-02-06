@@ -103,6 +103,14 @@ $machinestates = [
     ],
 
     20 => [
+        "name" => "prepareDevelopmentActivity",
+        "description" => '',
+        "type" => "game",
+        "action" => "stDevelopment",
+        "transitions" => ["" => 21]
+    ],
+
+    21 => [
         "name" => "developmentActivity",
         "description" => clienttranslate('Development is ongoing'),
         "descriptionmyturn" => clienttranslate('Which product do you want to develop?'),
@@ -115,6 +123,14 @@ $machinestates = [
     ],
 
     30 => [
+        "name" => "prepareDevelopmentActivity",
+        "description" => '',
+        "type" => "game",
+        "action" => "stDeployment",
+        "transitions" => ["" => 31]
+    ],
+
+    31 => [
         "name" => "deploymentActivity",
         "description" => clienttranslate('Deployment is ongoing'),
         "descriptionmyturn" => clienttranslate('Which product do you want to deploy?'),

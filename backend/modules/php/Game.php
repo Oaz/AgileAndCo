@@ -137,7 +137,7 @@ class Game extends \Table
 
     public function stConference(): void
     {
-        $this->details->doConference();
+        $this->details->prepareConference();
         $this->gamestate->setAllPlayersMultiactive();
         $this->gamestate->nextState();
     }
@@ -151,6 +151,12 @@ class Game extends \Table
         }
     }
 
+    public function stDevelopment(): void
+    {
+        $this->gamestate->setAllPlayersMultiactive();
+        $this->gamestate->nextState();
+    }
+
     public function actDevelop(string $teams, string $products): void
     {
         $player_id = $this->getCurrentPlayerId();
@@ -158,6 +164,13 @@ class Game extends \Table
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
             $this->details->updateState($player_id);
         }
+    }
+
+    public function stDeployment(): void
+    {
+        $this->details->prepareDeployment();
+        $this->gamestate->setAllPlayersMultiactive();
+        $this->gamestate->nextState();
     }
 
     public function actDeploy(string $cards): void
@@ -171,9 +184,7 @@ class Game extends \Table
 
     public function actChooseActivity(string $activity_id): void
     {
-        list($transitionName, $setMultiplayer) = $this->details->chooseActivity($activity_id);
-        if($setMultiplayer)
-            $this->gamestate->setAllPlayersMultiactive();
+        $transitionName = $this->details->chooseActivity($activity_id);
         $this->gamestate->nextState($transitionName);
     }
 

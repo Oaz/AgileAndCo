@@ -7,6 +7,7 @@ class GameDetails
     private mixed $cards;
     private mixed $game;
     private GlobalVariable $ongoingActivity;
+    private GlobalVariable $currentEarnings;
 
     public function __construct($cards, $game)
     {
@@ -15,6 +16,7 @@ class GameDetails
         $this->cards->init("card");
         $this->cards->autoreshuffle = true;
         $this->ongoingActivity = new GlobalVariable($game, 'ONGOING_ACTIVITY');
+        $this->currentEarnings = new GlobalVariable($game, 'CURRENT_EARNINGS');
     }
 
     public function initGame($players): void
@@ -32,6 +34,7 @@ class GameDetails
             $this->cards->pickCards(4, 'deck', $player_id);
         }
         $this->ongoingActivity->write(['', 0]);
+        $this->currentEarnings->write(0);
     }
 
     private function deckify($type, $deckName)
@@ -118,13 +121,14 @@ class GameDetails
             return [$index, [$activityName, $hidden, $selected]];
         }, $this->cards->getCardsInLocation('activities')));
 
+        $earnings = CardsData::getAll('EARNINGS')[$this->currentEarnings->read()];
         return [
             'public' => [
                 'active_player' => $ongoingActivity == '' ? $this->game->getActivePlayerId() : 0,
                 'central' => [
                     'selection' => false,
                     'activities' => $this->orderedArrayValues($activities),
-                    'earnings' => ['EARNINGS_CARD_1', true],
+                    'earnings' => [$earnings, $ongoingActivity != 'ACTIVITY_DEPLOYMENT'],
                 ],
                 'players' => $publicPlayerGames,
                 'debug' => $this->getDebugInfos($players, $playerGames)
@@ -149,7 +153,7 @@ class GameDetails
         ];
     }
 
-    public function chooseActivity(string $activity): array
+    public function chooseActivity(string $activity): string
     {
         $activityLocId = CardsData::getActivityIndex($activity);
         $selection = $this->cards->getCardsInLocation('activities', $activityLocId);
@@ -158,11 +162,11 @@ class GameDetails
         $activityCard = array_values($selection)[0];
 
         $transition = match ($activity) {
-            'ACTIVITY_CONFERENCE' => ['activityConference', false],
-            'ACTIVITY_DEVELOPMENT' => ['activityDevelopment', true],
-            'ACTIVITY_DEPLOYMENT' => ['activityDeployment', true],
-            'ACTIVITY_RETROSPECTIVE' => ['activityRetrospective', true],
-            'ACTIVITY_COACH' => ['activityCoach', false],
+            'ACTIVITY_CONFERENCE' => 'activityConference',
+            'ACTIVITY_DEVELOPMENT' => 'activityDevelopment',
+            'ACTIVITY_DEPLOYMENT' => 'activityDeployment',
+            'ACTIVITY_RETROSPECTIVE' => 'activityRetrospective',
+            'ACTIVITY_COACH' => 'activityCoach',
             default => throw new \BgaUserException('Invalid activity choice'),
         };
 
@@ -184,7 +188,7 @@ class GameDetails
         $this->game->notifyAllPlayers("message", clienttranslate($message), $args);
     }
 
-    public function doConference(): void
+    public function prepareConference(): void
     {
         $this->broadcast('Tous à la conf!');
         list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
@@ -274,6 +278,13 @@ class GameDetails
         }
         return true;
     }
+
+    public function prepareDeployment(): void
+    {
+        $index = rand(0, count(CardsData::getAll('EARNINGS')) - 1);
+        $this->currentEarnings->write($index);
+    }
+
 
     public function completeDeployment($player_id, $cards): bool
     {

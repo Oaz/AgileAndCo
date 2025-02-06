@@ -31,11 +31,16 @@ class CardsData
        return $groupName . '_' . CardsData::$groups[$groupName][$index];
     }
 
+    public static function getAll($groupName): array
+    {
+        return array_map(function ($a) use($groupName) {
+            return $groupName . '_' . $a;
+        }, CardsData::$groups[$groupName]);
+    }
+
     public static function getActivities(): array
     {
-        return array_map(function ($a) {
-            return 'ACTIVITY_' . $a;
-        }, CardsData::$groups['ACTIVITY']);
+        return CardsData::getAll('ACTIVITY');
     }
 
     public static function getActivityIndex($activityName): int

@@ -144,14 +144,12 @@ $machinestates = [
 
     40 => [
         "name" => "retrospectiveActivity",
-        "description" => clienttranslate('All players are in retrospective'),
-        "descriptionmyturn" => clienttranslate('Not implemented yet - ${you} retrospective'),
+        "description" => clienttranslate('Retrospective is ongoing'),
+        "descriptionmyturn" => clienttranslate('How will you improve your company?'),
         "type" => "multipleactiveplayer",
         "initialprivate" => 41,
-        "action" => "stStartRetrospective",
+        "action" => "stRetrospective",
         "args" => "argGameState",
-        "possibleactions" => [
-        ],
         "transitions" => ["nextPlayer" => 3]
     ],
 
@@ -159,10 +157,8 @@ $machinestates = [
         "name" => "retrospectiveActivityChoice",
         "descriptionmyturn" => clienttranslate('${you} can select an improvement'),
         "type" => "private",
-        "action" => "stRetrospectiveChoice",
-        "args" => "argRetrospectiveChoice",
+        "args" => "argGamePrivateState",
         "possibleactions" => [
-            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "actRetrospectiveChoice",
         ],
         "transitions" => ["payment" => 42]
@@ -172,10 +168,8 @@ $machinestates = [
         "name" => "retrospectiveActivityPayment",
         "descriptionmyturn" => clienttranslate('${you} must pay for improvement'),
         "type" => "private",
-        "action" => "stRetrospectivePayment",
-        "args" => "argRetrospectivePayment",
+        "args" => "argGamePrivateState",
         "possibleactions" => [
-            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "actRetrospectivePayment",
         ],
         "transitions" => []

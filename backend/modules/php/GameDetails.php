@@ -317,13 +317,25 @@ class GameDetails
         return true;
     }
 
-    public function updateState($player_id): void
+    public function chooseForRetrospective($player_id, $card): bool
+    {
+        $cardName = $card[1];
+        $index = $card[0] % 100;
+        return false;
+    }
+
+    public function getGamePrivateState($player_id): mixed
     {
         $gameState = $this->getGameState();
-        $this->game->notifyPlayer($player_id, 'updateState', '', [
+        return [
             'public' => $gameState['public'],
             '_private' => $gameState['_private'][$player_id],
-        ]);
+        ];
+    }
+
+    public function updateState($player_id): void
+    {
+        $this->game->notifyPlayer($player_id, 'updateState', '', $this->getGamePrivateState($player_id));
     }
 
 }

@@ -27,7 +27,7 @@ export class RetrospectiveActivityChoice extends RetrospectiveActivity {
     }
 
     public do_act(): void {
-        BGA.performAction('actRetrospectiveChoice', {selected: this.selected});
+        BGA.performAction('actRetrospectiveChoice', {card: JSON.stringify(this.selected[0])});
     }
 }
 

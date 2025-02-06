@@ -129,10 +129,22 @@ class Game extends \Table
         return $this->details->getGameState();
     }
 
+    public function argGamePrivateState(): array
+    {
+        $player_id = $this->getCurrentPlayerId();
+        return $this->details->getGamePrivateState($player_id);
+    }
+
     public function stNextPlayer(): void
     {
         $this->activeNextPlayer();
         $this->gamestate->nextState($this->details->gotToNextPlayer());
+    }
+
+    public function actChooseActivity(string $activity_id): void
+    {
+        $transitionName = $this->details->chooseActivity($activity_id);
+        $this->gamestate->nextState($transitionName);
     }
 
     public function stConference(): void
@@ -181,11 +193,19 @@ class Game extends \Table
             $this->details->updateState($player_id);
         }
     }
-
-    public function actChooseActivity(string $activity_id): void
+    public function stRetrospective(): void
     {
-        $transitionName = $this->details->chooseActivity($activity_id);
-        $this->gamestate->nextState($transitionName);
+        $this->gamestate->setAllPlayersMultiactive();
+        $this->gamestate->initializePrivateStateForAllActivePlayers();
+    }
+
+    public function actRetrospectiveChoice(string $card): void
+    {
+        $player_id = $this->getCurrentPlayerId();
+        if ($this->details->chooseForRetrospective($player_id, json_decode($card, true))) {
+            $this->gamestate->nextPrivateState($player_id, "payment");
+            $this->details->updateState($player_id);
+        }
     }
 
     public function stCoachGivesPotential(): void

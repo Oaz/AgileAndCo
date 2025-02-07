@@ -45,10 +45,8 @@ class Game extends \Table
             "my_second_game_variant" => 101,
         ]);
 
-        $this->details = new GameDetails(
-            $this->getNew("module.common.deck"),
-            $this
-        );
+        $deckAdapter = new DeckAdapter($this->getNew("module.common.deck"));
+        $this->details = new GameDetails($deckAdapter, $this);
     }
 
     public function getGameProgression()
@@ -192,6 +190,7 @@ class Game extends \Table
             $this->details->updateState($player_id);
         }
     }
+
     public function stRetrospective(): void
     {
         $this->gamestate->setAllPlayersMultiactive();

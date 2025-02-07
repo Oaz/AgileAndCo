@@ -15,6 +15,8 @@ export abstract class RetrospectiveActivity extends Activity {
             cost -=  1;
         if(details.kind === 'PRODUCT_TEAM' && this.datas.company.includes('AGILE_MATURITY_PASSIONATE_DEVELOPER'))
             cost -= 1;
+        if(this.datas.initiate)
+            cost -= 1;
         return cost;
     }
 }

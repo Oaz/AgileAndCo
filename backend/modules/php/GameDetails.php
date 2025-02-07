@@ -93,13 +93,25 @@ class GameDetails
         $activePlayers = $this->game->gamestate->getActivePlayerList();
         $playerGames = array_map(function ($player) use ($ongoingActivity, $activityInitiator, $activePlayers) {
             $player_id = $player['player_id'];
+            $currentActivity = in_array($player_id, $activePlayers) ? $ongoingActivity : '';
+            if($currentActivity == 'ACTIVITY_RETROSPECTIVE')
+                $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
+            $choice = false;
+            $potential = array_values($this->listCards('hand', $player['player_id']));
+            $selectedInRetrospective = array_values($this->listCards('retrospective', $player['player_id']));
+            if(count($selectedInRetrospective) > 0) {
+                $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
+                $choice = 300+count($potential);
+                $potential[] = $selectedInRetrospective[0];
+            }
             return [
                 'name' => $player['player_name'],
-                'activity' => in_array($player_id, $activePlayers) ? $ongoingActivity : '',
+                'activity' => $currentActivity,
+                'choice' => $choice,
                 'initiate' => $activityInitiator == $player_id,
                 'teams' => $this->getPlayerTeams($player_id),
                 'company' => array_values($this->listCards('company', $player['player_id'])),
-                'potential' => array_values($this->listCards('hand', $player['player_id'])),
+                'potential' => $potential,
                 'drawn' => array_values($this->listCards('drawn', $player['player_id'])),
             ];
         }, $players);
@@ -270,12 +282,12 @@ class GameDetails
             unset($hand[$productCardId]);
             if (!$productCardId)
                 throw new \BgaUserException('Invalid development');
+            $this->cards->moveCard($productCardId, 'products', $player_id * 100 + $teamIndex);
             $this->broadcast('DEBUG: ${player_name} develop in team ${teamCard} with potential ${productName}', [
                 "player_name" => $players[$player_id]['player_name'],
                 "teamCard" => $team[1],
                 "productName" => $product[1],
             ]);
-            $this->cards->moveCard($productCardId, 'products', $player_id * 100 + $teamIndex);
         }
         return true;
     }
@@ -319,9 +331,19 @@ class GameDetails
 
     public function chooseForRetrospective($player_id, $card): bool
     {
+        $players = $this->game->loadPlayersBasicInfos();
+        $hand = $this->listCards('hand', $player_id);
         $cardName = $card[1];
-        $index = $card[0] % 100;
-        return false;
+        $cardId = array_search($cardName, $hand);
+        if (!$cardId)
+            throw new \BgaUserException('Invalid retrospective choice');
+        $this->cards->moveCard($cardId, 'retrospective', $player_id);
+        $this->broadcast('DEBUG: ${player_name} choose ${cardName} (${cardId}) during retrospective', [
+            "player_name" => $players[$player_id]['player_name'],
+            "cardName" => $cardName,
+            "cardId" => $cardId,
+        ]);
+        return true;
     }
 
     public function getGamePrivateState($player_id): mixed

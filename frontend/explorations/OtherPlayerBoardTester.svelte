@@ -5,15 +5,22 @@
         {
             'name': 'Player 1',
             'teams': [
-                ['PRODUCT_TEAM_ADVERGAME', undefined]
+                'PRODUCT_TEAM_ADVERGAME',
+            ],
+            'products': [
+                false,
             ],
             'company': [],
         },
         {
             'name': 'Player 2',
             'teams': [
-                ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                ['PRODUCT_TEAM_EDUCATION', undefined],
+                'PRODUCT_TEAM_ADVERGAME',
+                'PRODUCT_TEAM_EDUCATION',
+            ],
+            'products': [
+                'AGILE_MATURITY_AGILE_CERTIFICATION',
+                false,
             ],
             'company': [
                 'AGILE_MATURITY_DEVOPS',
@@ -23,9 +30,14 @@
         {
             'name': 'Player 3',
             'teams': [
-                ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                ['PRODUCT_TEAM_EDUCATION', undefined],
-                ['PRODUCT_TEAM_MMOG', 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'],
+                'PRODUCT_TEAM_ADVERGAME',
+                'PRODUCT_TEAM_EDUCATION',
+                'PRODUCT_TEAM_MMOG',
+            ],
+            'products': [
+                'AGILE_MATURITY_AGILE_CERTIFICATION',
+                false,
+                'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP',
             ],
             'company': [
                 'AGILE_MATURITY_DEVOPS',

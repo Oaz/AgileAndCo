@@ -6,7 +6,10 @@
             label: 'Choose improvement', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -23,7 +26,10 @@
                 'activity': 'ACTIVITY_RETROSPECTIVE_PAYMENT',
                 'choice': 302,
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -39,7 +45,10 @@
             label: 'Some improvements are too expensive', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -57,7 +66,10 @@
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'initiate': true,
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -74,7 +86,10 @@
             label: 'Internal coach pays one less for improvements', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -92,7 +107,10 @@
             label: 'Passionate developer pays one less for teams', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -110,7 +128,10 @@
             label: 'Devops can use non deployed products', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', 'PRODUCT_TEAM_MMOG']
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    'PRODUCT_TEAM_MMOG',
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -126,8 +147,12 @@
             label: 'Devops can use all non deployed products', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_CHOOSE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', 'PRODUCT_TEAM_MMOG'],
-                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_CONTINUOUS_DELIVERY'],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_CONTINUOUS_DELIVERY',
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -144,8 +169,12 @@
                 'activity': 'ACTIVITY_RETROSPECTIVE_PAYMENT',
                 'choice': 301,
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', 'PRODUCT_TEAM_MMOG'],
-                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_CONTINUOUS_DELIVERY'],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_CONTINUOUS_DELIVERY',
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',

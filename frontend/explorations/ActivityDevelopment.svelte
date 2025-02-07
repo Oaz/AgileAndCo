@@ -6,7 +6,10 @@
             label: 'One team', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [],
                 'potential': [
@@ -21,8 +24,12 @@
             label: 'Two teams but only one can develop', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined],
-                    ['PRODUCT_TEAM_EDUCATION', undefined],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                ],
+                'products': [
+                    false,
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -41,8 +48,12 @@
                 'activity': 'ACTIVITY_DEVELOPMENT',
                 'initiate': true,
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined],
-                    ['PRODUCT_TEAM_EDUCATION', undefined],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                ],
+                'products': [
+                    false,
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -60,8 +71,12 @@
             label: 'Clean code can develop additional product', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined],
-                    ['PRODUCT_TEAM_EDUCATION', undefined],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                ],
+                'products': [
+                    false,
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -80,8 +95,12 @@
             label: 'Could develop 2 products but miss potential', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined],
-                    ['PRODUCT_TEAM_EDUCATION', undefined],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                ],
+                'products': [
+                    false,
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -96,8 +115,12 @@
             label: 'Cannot develop before previous deployment', data: {
                 'activity': 'ACTIVITY_DEVELOPMENT',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined],
-                    ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                ],
+                'products': [
+                    false,
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',

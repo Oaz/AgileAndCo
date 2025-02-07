@@ -42,14 +42,22 @@ class DeckAdapter implements IDeckAdapter
     public function getCardsInLocation(string $location, ?int $index = null, ?int $playerId = null): array
     {
         if ($playerId !== null && $index === null) {
-            $allCards = $this->deck->getCardsInLocation($location);
+            $allCards = $this->assignIndexAndPlayerIdFields($this->deck->getCardsInLocation($location));
             $playerCards = array_filter($allCards, function ($card) use ($playerId) {
-                return intdiv($card['location_arg'], 100) === $playerId;
+                return $card['player_id'] === $playerId;
             });
             return $playerCards;
         }
         $locationArg = $this->calculateLocationArg($index, $playerId);
-        return $this->deck->getCardsInLocation($location, $locationArg);
+        return $this->assignIndexAndPlayerIdFields($this->deck->getCardsInLocation($location, $locationArg));
+    }
+
+    private function assignIndexAndPlayerIdFields($cards) {
+        return array_map(function ($card) {
+            $card['player_id'] = intdiv($card['location_arg'], 100);
+            $card['index'] = $card['location_arg'] % 100;
+            return $card;
+        }, $cards);
     }
 
     public function shuffle(string $location): void

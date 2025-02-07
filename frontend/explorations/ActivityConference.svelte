@@ -6,7 +6,10 @@
             label: 'Nominal case', data: {
                 'activity': 'ACTIVITY_CONFERENCE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [],
                 'potential': [
@@ -26,7 +29,10 @@
                 'activity': 'ACTIVITY_CONFERENCE',
                 'initiate': true,
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [],
                 'potential': [
@@ -48,7 +54,10 @@
             label: 'Practitioner can discard from potential', data: {
                 'activity': 'ACTIVITY_CONFERENCE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_PRACTITIONER',
@@ -68,7 +77,10 @@
             label: 'Organizer keep one extra card', data: {
                 'activity': 'ACTIVITY_CONFERENCE',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_ORGANIZER',
@@ -89,7 +101,10 @@
                 'activity': 'ACTIVITY_CONFERENCE',
                 'initiate': true,
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_AGILE_PRACTITIONER',

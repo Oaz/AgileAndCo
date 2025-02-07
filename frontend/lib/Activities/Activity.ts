@@ -23,8 +23,8 @@ export abstract class Activity extends Action {
         const removeUndefined = (obj: Record<string, any>) =>
             Object.fromEntries(Object.entries(obj).filter(([_, v]) => !!v));
         this.cards = removeUndefined({
-            ...Object.fromEntries(datas.teams.map((value, index) => [this.id(0, index), value[0]])),
-            ...Object.fromEntries(datas.teams.map((value, index) => [this.id(1, index), value[1]])),
+            ...Object.fromEntries(datas.teams.map((value, index) => [this.id(0, index), value])),
+            ...Object.fromEntries(datas.products.map((value, index) => [this.id(1, index), value])),
             ...Object.fromEntries(datas.company.map((value, index) => [this.id(2, index), value])),
             ...Object.fromEntries(datas.potential.map((value, index) => [this.id(3, index), value])),
             ...Object.fromEntries(datas.conference.map((value, index) => [this.id(4, index), value])),

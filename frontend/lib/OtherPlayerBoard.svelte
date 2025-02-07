@@ -11,9 +11,9 @@
         <div class="company">
             <div class="teams">
                 {#each datas.teams as team, index}
-                    <ReadOnlyCard key={team[0]}/>
-                    {#if team[1]}
-                        <ReadOnlyCard key={team[1]} hidden={true}/>
+                    <ReadOnlyCard key={team}/>
+                    {#if datas.products[index]}
+                        <ReadOnlyCard key={datas.products[index]} hidden={true}/>
                     {/if}
                 {/each}
             </div>

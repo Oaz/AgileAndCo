@@ -36,9 +36,9 @@
             <div class="company">
                 <div class="teams">
                     {#each datas.teams as team, index}
-                        <SelectableCardInActivity bind:activity={activity} zone_id={0} {index} card_key={team[0]}/>
-                        {#if team[1]}
-                            <SelectableCardInActivity bind:activity={activity} zone_id={1} {index} card_key={team[1]}
+                        <SelectableCardInActivity bind:activity={activity} zone_id={0} {index} card_key={team}/>
+                        {#if datas.products[index]}
+                            <SelectableCardInActivity bind:activity={activity} zone_id={1} {index} card_key={datas.products[index]}
                                                       hidden={true}/>
                         {/if}
                     {/each}

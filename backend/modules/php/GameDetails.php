@@ -49,20 +49,18 @@ class GameDetails
         }, $keys);
     }
 
-    private function getPlayerTeams($playerId)
+    private function getCardsInLocationSortedByIndexes(string $location, ?int $playerId = null) : array
     {
-        $teams = [];
-        $index = 0;
-        while (true) {
-            $teamCards = array_values($this->listCards('teams', $index, $playerId));
-            if (count($teamCards) == 0)
-                return $teams;
-            $teamCardName = $teamCards[0];
-            $productCards = array_values($this->listCards('products', $index,$playerId));
-            $productCardName = count($productCards) == 0 ? false : $productCards[0];
-            $teams[] = [$teamCardName, $productCardName];
-            $index++;
+        $cards = $this->cards->getCardsInLocation($location, playerId: $playerId);
+        usort($cards, fn($a, $b) => $a['index'] - $b['index']);
+        $result = [];
+        foreach ($cards as $card) {
+            while (count($result) < $card['index']) {
+                $result[] = false;
+            }
+            $result[] = $this->getCardName($card);
         }
+        return $result;
     }
 
     public function getGameState(): array
@@ -89,7 +87,8 @@ class GameDetails
                 'activity' => $currentActivity,
                 'choice' => $choice,
                 'initiate' => $activityInitiator == $player_id,
-                'teams' => $this->getPlayerTeams($player_id),
+                'teams' => $this->getCardsInLocationSortedByIndexes('teams', $player_id),
+                'products' => $this->getCardsInLocationSortedByIndexes('products', $player_id),
                 'company' => array_values($this->listCards('company', playerId: $player['player_id'])),
                 'potential' => $potential,
                 'conference' => array_values($this->listCards('conference', playerId: $player['player_id'])),

@@ -8,7 +8,10 @@
                 'select_max': 1,
                 'select_zones': [1],
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false
                 ],
                 'company': [],
                 'potential': [
@@ -23,8 +26,12 @@
             label: 'With developed product', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_EDUCATION', undefined],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                ],
+                'products': [
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    false,
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -43,9 +50,14 @@
             label: 'Cannot deploy all', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_EDUCATION', undefined],
-                    ['PRODUCT_TEAM_MMOG', 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                    'PRODUCT_TEAM_MMOG',
+                ],
+                'products': [
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    false,
+                    'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP',
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -68,9 +80,14 @@
                 'activity': 'ACTIVITY_DEPLOYMENT',
                 'initiate': true,
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_MMOG', 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                    'PRODUCT_TEAM_MMOG',
+                ],
+                'products': [
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP',
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -89,9 +106,14 @@
             label: 'continuous delivery deploy additional product', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_MMOG', 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                    'PRODUCT_TEAM_MMOG',
+                ],
+                'products': [
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP',
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',
@@ -112,9 +134,14 @@
                 'activity': 'ACTIVITY_DEPLOYMENT',
                 'initiate': true,
                 'teams': [
-                    ['PRODUCT_TEAM_ADVERGAME', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_EDUCATION', 'AGILE_MATURITY_AGILE_CERTIFICATION'],
-                    ['PRODUCT_TEAM_MMOG', 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'],
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                    'PRODUCT_TEAM_MMOG',
+                ],
+                'products': [
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP',
                 ],
                 'company': [
                     'AGILE_MATURITY_DEVOPS',

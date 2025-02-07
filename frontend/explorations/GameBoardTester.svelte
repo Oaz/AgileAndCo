@@ -21,21 +21,30 @@
                             1: {
                                 'name': 'Player 1',
                                 'teams': [
-                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                    'PRODUCT_TEAM_ADVERGAME',
+                                ],
+                                'products': [
+                                    false,
                                 ],
                                 'company': [],
                             },
                             2: {
                                 'name': 'Player 2',
                                 'teams': [
-                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                    'PRODUCT_TEAM_ADVERGAME',
+                                ],
+                                'products': [
+                                    false,
                                 ],
                                 'company': [],
                             },
                             3: {
                                 'name': 'Player 3',
                                 'teams': [
-                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                    'PRODUCT_TEAM_ADVERGAME',
+                                ],
+                                'products': [
+                                    false,
                                 ],
                                 'company': [],
                             },
@@ -43,7 +52,10 @@
                     },
                     '_private': {
                         'teams': [
-                            ['PRODUCT_TEAM_ADVERGAME', undefined]
+                            'PRODUCT_TEAM_ADVERGAME',
+                        ],
+                        'products': [
+                            false,
                         ],
                         'company': [],
                         'potential': [
@@ -74,21 +86,30 @@
                             1: {
                                 'name': 'Player 1',
                                 'teams': [
-                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                    'PRODUCT_TEAM_ADVERGAME',
+                                ],
+                                'products': [
+                                    false,
                                 ],
                                 'company': [],
                             },
                             2: {
                                 'name': 'Player 2',
                                 'teams': [
-                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                    'PRODUCT_TEAM_ADVERGAME',
+                                ],
+                                'products': [
+                                    false,
                                 ],
                                 'company': [],
                             },
                             3: {
                                 'name': 'Player 3',
                                 'teams': [
-                                    ['PRODUCT_TEAM_ADVERGAME', undefined]
+                                    'PRODUCT_TEAM_ADVERGAME',
+                                ],
+                                'products': [
+                                    false,
                                 ],
                                 'company': [],
                             },
@@ -98,7 +119,10 @@
                         'activity': 'ACTIVITY_CONFERENCE',
                         'initiate': true,
                         'teams': [
-                            ['PRODUCT_TEAM_ADVERGAME', undefined]
+                            'PRODUCT_TEAM_ADVERGAME',
+                        ],
+                        'products': [
+                            false,
                         ],
                         'company': [],
                         'potential': [
@@ -107,7 +131,7 @@
                             'PRODUCT_TEAM_MMOG',
                             'AGILE_MATURITY_DEVOPS',
                         ],
-                        'drawn': [
+                        'conference': [
                             'PRODUCT_TEAM_SOCIAL',
                             'AGILE_MATURITY_INTERNAL_COACH',
                             'AGILE_MATURITY_CLEAN_CODE',

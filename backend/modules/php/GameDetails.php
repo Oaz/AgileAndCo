@@ -346,6 +346,31 @@ class GameDetails
         return true;
     }
 
+    public function payForRetrospective($player_id, $cards): bool
+    {
+        $players = $this->game->loadPlayersBasicInfos();
+        $hand = $this->listCards('hand', $player_id);
+        foreach ($cards as $card) {
+            $cardGroup = match (intdiv($card[0], 100)) {
+                3 => $hand,
+                default => throw new \BgaUserException('Invalid payment choice'),
+            };
+            $cardName = $card[1];
+            $cardId = array_search($cardName, $cardGroup);
+            if (!$cardId)
+                throw new \BgaUserException('Invalid payment choice');
+            unset($cardGroup[$cardId]);
+            $this->cards->playCard($cardId);
+            $this->broadcast('DEBUG: ${player_name} pays with ${cardName} id ${cardId}', [
+                "player_name" => $players[$player_id]['player_name'],
+                "cardId" => $cardId,
+                "cardName" => $cardName,
+            ]);
+        }
+        $this->cards->moveAllCardsInLocation('retrospective', 'company', $player_id, $player_id);
+        return true;
+    }
+
     public function getGamePrivateState($player_id): mixed
     {
         $gameState = $this->getGameState();

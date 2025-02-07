@@ -36,7 +36,7 @@ export class RetrospectiveActivityPayment extends RetrospectiveActivity {
     }
 
     public do_act(): void {
-        BGA.performAction('actRetrospectivePayment', {selected: this.selected});
+        BGA.performAction('actRetrospectivePayment', {cards: JSON.stringify(this.selected)});
     }
 }
 

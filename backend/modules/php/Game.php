@@ -129,9 +129,8 @@ class Game extends \Table
         return $this->details->getGameState();
     }
 
-    public function argGamePrivateState(): array
+    public function argGamePrivateState($player_id): array
     {
-        $player_id = $this->getCurrentPlayerId();
         return $this->details->getGamePrivateState($player_id);
     }
 
@@ -204,6 +203,16 @@ class Game extends \Table
         $player_id = $this->getCurrentPlayerId();
         if ($this->details->chooseForRetrospective($player_id, json_decode($card, true))) {
             $this->gamestate->nextPrivateState($player_id, "payment");
+            $this->details->updateState($player_id);
+        }
+    }
+
+    public function actRetrospectivePayment(string $cards): void
+    {
+        $player_id = $this->getCurrentPlayerId();
+        if ($this->details->payForRetrospective($player_id, json_decode($cards, true))) {
+            $this->gamestate->unsetPrivateState($player_id);
+            $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
             $this->details->updateState($player_id);
         }
     }

@@ -15,7 +15,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_DEVOPS',
                 ],
-                'drawn': [
+                'conference': [
                     'PRODUCT_TEAM_SOCIAL',
                     'AGILE_MATURITY_INTERNAL_COACH',
                 ],
@@ -35,7 +35,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_DEVOPS',
                 ],
-                'drawn': [
+                'conference': [
                     'PRODUCT_TEAM_SOCIAL',
                     'AGILE_MATURITY_INTERNAL_COACH',
                     'AGILE_MATURITY_CLEAN_CODE',
@@ -58,7 +58,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_DEVOPS',
                 ],
-                'drawn': [
+                'conference': [
                     'PRODUCT_TEAM_SOCIAL',
                     'AGILE_MATURITY_INTERNAL_COACH',
                 ],
@@ -78,7 +78,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_DEVOPS',
                 ],
-                'drawn': [
+                'conference': [
                     'PRODUCT_TEAM_SOCIAL',
                     'AGILE_MATURITY_INTERNAL_COACH',
                 ],
@@ -100,7 +100,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_DEVOPS',
                 ],
-                'drawn': [
+                'conference': [
                     'PRODUCT_TEAM_SOCIAL',
                     'AGILE_MATURITY_INTERNAL_COACH',
                     'AGILE_VALUE_SIMPLICITY',

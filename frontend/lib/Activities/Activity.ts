@@ -15,8 +15,8 @@ export abstract class Activity extends Action {
     protected constructor(datas, card_key: string) {
         super(datas.activity);
         this.card_key = card_key;
-        if (!datas.drawn)
-            datas.drawn = [];
+        if (!datas.conference)
+            datas.conference = [];
         this.datas = datas;
         this.selection = {};
         this.interaction = {};
@@ -27,7 +27,7 @@ export abstract class Activity extends Action {
             ...Object.fromEntries(datas.teams.map((value, index) => [this.id(1, index), value[1]])),
             ...Object.fromEntries(datas.company.map((value, index) => [this.id(2, index), value])),
             ...Object.fromEntries(datas.potential.map((value, index) => [this.id(3, index), value])),
-            ...Object.fromEntries(datas.drawn.map((value, index) => [this.id(4, index), value])),
+            ...Object.fromEntries(datas.conference.map((value, index) => [this.id(4, index), value])),
         });
         const cardDetails = cardsData();
         this.details = Object.fromEntries(
@@ -54,10 +54,6 @@ export abstract class Activity extends Action {
     public get can_act() {
         const selection_count = this.selected.length;
         return this.selection_min <= selection_count && selection_count <= this.selection_max;
-    }
-
-    public get drawn_card_zone_title(): string {
-        return '';
     }
 
     public get selected() {
@@ -103,10 +99,6 @@ export class NoActivity extends Activity {
     }
 
     public get action_text(): string {
-        return '';
-    }
-
-    public get drawn_card_zone_title(): string {
         return '';
     }
 

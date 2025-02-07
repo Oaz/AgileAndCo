@@ -29,7 +29,7 @@ class GameDetails
         }
         $this->cards->shuffle('deck');
         foreach ($players as $player_id => $player) {
-            $this->cards->pickCardsForLocation(4, 'deck', 'hand', $player_id);
+            $this->cards->pickCardsForLocation(4, 'deck', 'potential', $player_id);
         }
         $this->ongoingActivity->write(['', 0]);
         $this->currentEarnings->write(0);
@@ -77,7 +77,7 @@ class GameDetails
             if($currentActivity == 'ACTIVITY_RETROSPECTIVE')
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
             $choice = false;
-            $potential = array_values($this->listCards('hand', playerId: $player['player_id']));
+            $potential = array_values($this->listCards('potential', playerId: $player['player_id']));
             $selectedInRetrospective = array_values($this->listCards('retrospective', playerId: $player['player_id']));
             if(count($selectedInRetrospective) > 0) {
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
@@ -92,7 +92,7 @@ class GameDetails
                 'teams' => $this->getPlayerTeams($player_id),
                 'company' => array_values($this->listCards('company', playerId: $player['player_id'])),
                 'potential' => $potential,
-                'drawn' => array_values($this->listCards('drawn', playerId: $player['player_id'])),
+                'conference' => array_values($this->listCards('conference', playerId: $player['player_id'])),
             ];
         }, $players);
         $publicPlayerGames = array_map(function ($player) {
@@ -100,7 +100,7 @@ class GameDetails
                 return $item;
             }, $player);
             unset($playerCopy['potential']);
-            unset($playerCopy['drawn']);
+            unset($playerCopy['conference']);
             return $playerCopy;
         }, $playerGames);
 
@@ -138,9 +138,9 @@ class GameDetails
             'earnings' => $this->cards->getCardsInLocation('earnings'),
             'teams' => $this->cards->getCardsInLocation('teams'),
             'products' => $this->cards->getCardsInLocation('products'),
-            'hand' => $this->cards->getCardsInLocation('hand'),
+            'potential' => $this->cards->getCardsInLocation('potential'),
             'discard' => $this->cards->getCardsInLocation('discard'),
-            'drawn' => $this->cards->getCardsInLocation('drawn'),
+            'conference' => $this->cards->getCardsInLocation('conference'),
             'deck' => $this->cards->getCardsInLocation('deck'),
             'yolo' => $playerGames,
         ];
@@ -188,14 +188,14 @@ class GameDetails
         $players = $this->game->loadPlayersBasicInfos();
         foreach ($players as $player_id => $player) {
             $n = $activityInitiator == $player_id ? 5 : 2;
-            $this->cards->pickCardsForLocation($n, 'deck', 'drawn', $player_id);
+            $this->cards->pickCardsForLocation($n, 'deck', 'conference', $player_id);
         }
     }
 
     public function doCoach(): string
     {
         $player_id = (int)$this->game->getActivePlayerId();
-        $this->cards->pickCardsForLocation(1, 'deck', 'hand', $player_id);
+        $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
 
         $this->broadcast('Coach gives potential to ${player_name}', [
             "player_id" => $player_id,
@@ -225,12 +225,12 @@ class GameDetails
     public function completeConference($player_id, $cards): bool
     {
         $players = $this->game->loadPlayersBasicInfos();
-        $hand = $this->listCards('hand', playerId: $player_id);
-        $drawn = $this->listCards('drawn', playerId: $player_id);
+        $potential = $this->listCards('potential', playerId: $player_id);
+        $conference = $this->listCards('conference', playerId: $player_id);
         foreach ($cards as $card) {
             $cardGroup = match (intdiv($card[0], 100)) {
-                3 => $hand,
-                4 => $drawn,
+                3 => $potential,
+                4 => $conference,
                 default => throw new \BgaUserException('Invalid discard choice'),
             };
             $cardName = $card[1];
@@ -245,7 +245,7 @@ class GameDetails
                 "cardName" => $cardName,
             ]);
         }
-        $this->cards->moveAllCardsInLocation('drawn', 'hand', playerId: $player_id);
+        $this->cards->moveAllCardsInLocation('conference', 'potential', playerId: $player_id);
         return true;
     }
 
@@ -253,13 +253,13 @@ class GameDetails
     {
         $players = $this->game->loadPlayersBasicInfos();
         $inputs = array_map(null, $teams, $products);
-        $hand = $this->listCards('hand', playerId: $player_id);
+        $potential = $this->listCards('potential', playerId: $player_id);
         foreach ($inputs as $input) {
             $team = $input[0];
             $teamIndex = $team[0] % 100;
             $product = $input[1];
-            $productCardId = array_search($product[1], $hand);
-            unset($hand[$productCardId]);
+            $productCardId = array_search($product[1], $potential);
+            unset($potential[$productCardId]);
             if (!$productCardId)
                 throw new \BgaUserException('Invalid development');
             $this->cards->moveCard($productCardId, 'products', $teamIndex, $player_id);
@@ -297,7 +297,7 @@ class GameDetails
             $team = $this->getSingleCard('teams', $index, $player_id);
             $teamType = CardsData::$groups[$team['type']][$team['type_arg']];
             $earning = $earnings[$teamType];
-            $this->cards->pickCardsForLocation($earning, 'deck', 'hand', $player_id);
+            $this->cards->pickCardsForLocation($earning, 'deck', 'potential', $player_id);
             $this->broadcast('DEBUG: ${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', [
                 "player_name" => $players[$player_id]['player_name'],
                 "cardName" => $cardName,
@@ -312,9 +312,9 @@ class GameDetails
     public function chooseForRetrospective($player_id, $card): bool
     {
         $players = $this->game->loadPlayersBasicInfos();
-        $hand = $this->listCards('hand', playerId: $player_id);
+        $potential = $this->listCards('potential', playerId: $player_id);
         $cardName = $card[1];
-        $cardId = array_search($cardName, $hand);
+        $cardId = array_search($cardName, $potential);
         if (!$cardId)
             throw new \BgaUserException('Invalid retrospective choice');
         $this->cards->moveCard($cardId, 'retrospective', playerId:$player_id);
@@ -329,10 +329,10 @@ class GameDetails
     public function payForRetrospective($player_id, $cards): bool
     {
         $players = $this->game->loadPlayersBasicInfos();
-        $hand = $this->listCards('hand', playerId: $player_id);
+        $potential = $this->listCards('potential', playerId: $player_id);
         foreach ($cards as $card) {
             $cardGroup = match (intdiv($card[0], 100)) {
-                3 => $hand,
+                3 => $potential,
                 default => throw new \BgaUserException('Invalid payment choice'),
             };
             $cardName = $card[1];

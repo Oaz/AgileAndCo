@@ -58,11 +58,11 @@
                 {/each}
             </div>
         </div>
-        {#if datas.drawn.length > 0}
+        {#if datas.conference.length > 0}
             <div class="row">
-                <div class="row-title">{activity.drawn_card_zone_title}</div>
-                <div class="drawn">
-                    {#each datas.drawn as card_key, index}
+                <div class="row-title">{_(Text.ACTIVITY_CONFERENCE_TITLE)}</div>
+                <div class="conference">
+                    {#each datas.conference as card_key, index}
                         <SelectableCardInActivity bind:activity={activity} zone_id={4} {index} {card_key}/>
                     {/each}
                 </div>
@@ -89,7 +89,7 @@
         flex-flow: row wrap;
     }
 
-    .drawn {
+    .conference {
         display: flex;
         flex-flow: row wrap;
     }

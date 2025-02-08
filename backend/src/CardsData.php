@@ -28,24 +28,24 @@ class CardsData
 
     public static function getFullName($groupName, $index): string
     {
-        return $groupName . '_' . CardsData::$groups[$groupName][$index];
+        return $groupName . '_' . self::$groups[$groupName][$index];
     }
 
     public static function getAll($groupName): array
     {
         return array_map(function ($a) use ($groupName) {
             return $groupName . '_' . $a;
-        }, CardsData::$groups[$groupName]);
+        }, self::$groups[$groupName]);
     }
 
     public static function getActivities(): array
     {
-        return CardsData::getAll('ACTIVITY');
+        return self::getAll('ACTIVITY');
     }
 
     public static function getActivityIndex($activityName): int
     {
-        return array_search($activityName, CardsData::getActivities());
+        return array_search($activityName, self::getActivities());
     }
 
     public static mixed $details = [

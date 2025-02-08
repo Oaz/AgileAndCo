@@ -49,19 +49,7 @@ class GameDetails
         }, $keys);
     }
 
-    private function getCardsInLocationSortedByIndexes(string $location, ?int $playerId = null) : array
-    {
-        $cards = $this->cards->getCardsInLocation($location, playerId: $playerId);
-        usort($cards, fn($a, $b) => $a['index'] - $b['index']);
-        $result = [];
-        foreach ($cards as $card) {
-            while (count($result) < $card['index']) {
-                $result[] = false;
-            }
-            $result[] = $this->getCardName($card);
-        }
-        return $result;
-    }
+
 
     public function getGameState(): array
     {
@@ -87,8 +75,8 @@ class GameDetails
                 'activity' => $currentActivity,
                 'choice' => $choice,
                 'initiate' => $activityInitiator == $player_id,
-                'teams' => $this->getCardsInLocationSortedByIndexes('teams', $player_id),
-                'products' => $this->getCardsInLocationSortedByIndexes('products', $player_id),
+                'teams' => Helpers::getCardsInLocationSortedByIndexes( $this->cards, 'teams', $player_id),
+                'products' => Helpers::getCardsInLocationSortedByIndexes($this->cards, 'products', $player_id),
                 'company' => array_values($this->listCards('company', playerId: $player['player_id'])),
                 'potential' => $potential,
                 'conference' => array_values($this->listCards('conference', playerId: $player['player_id'])),
@@ -296,6 +284,7 @@ class GameDetails
             $team = $this->getSingleCard('teams', $index, $player_id);
             $teamType = CardsData::$groups[$team['type']][$team['type_arg']];
             $earning = $earnings[$teamType];
+            $this->cards->playCard($cardId);
             $this->cards->pickCardsForLocation($earning, 'deck', 'potential', $player_id);
             $this->broadcast('DEBUG: ${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', [
                 "player_name" => $players[$player_id]['player_name'],

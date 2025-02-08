@@ -4,24 +4,28 @@ namespace Bga\Games\AgileAndCo;
 
 class Helpers
 {
-    public static function getCardsInLocationSortedByIndexes(
-        IDeckAdapter $deckAdapter, string $location, ?int $playerId = null
-    ) : array
+    public static function pairsToDictionary(array $pairs)
     {
-        $cards = $deckAdapter->getCardsInLocation($location, playerId: $playerId);
-        usort($cards, fn($a, $b) => $a['index'] - $b['index']);
-        $result = [];
-        foreach ($cards as $card) {
-            while (count($result) < $card['index']) {
-                $result[] = false;
-            }
-            $result[] = self::getCardName($card);
-        }
-        return $result;
+        return array_reduce($pairs, fn($carry, $item) => [$item[0] => $item[1]] + $carry, []);
     }
 
-    public static function getCardName($card)
+    public static function orderedArrayValues(array $array)
     {
-        return CardsData::getFullName($card['type'], $card['type_arg']);
+        $keys = array_keys($array);
+        sort($keys);
+        return array_map(function ($key) use ($array) {
+            return $array[$key];
+        }, $keys);
     }
+
+    public static function getCardName($card) : string
+    {
+        return self::getFullName($card['type'], $card['type_arg']);
+    }
+
+    public static function getFullName($groupName, $index): string
+    {
+        return $groupName . '_' . CardsData::$groups[$groupName][$index];
+    }
+
 }

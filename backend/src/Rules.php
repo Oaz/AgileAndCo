@@ -4,6 +4,7 @@ namespace Bga\Games\AgileAndCo;
 
 class Rules
 {
+    private CardsRepository $repo;
     private IDeckAdapter $cards;
     private IGameAdapter $game;
     private IGlobalVariable $ongoingActivity;
@@ -13,6 +14,7 @@ class Rules
     {
         $this->game = $game;
         $this->cards = $cards;
+        $this->repo = new CardsRepository(CardsData::$groups, $cards);
         $this->ongoingActivity = $this->game->globalVariable('ONGOING_ACTIVITY');
         $this->currentEarnings = $this->game->globalVariable('CURRENT_EARNINGS');
     }
@@ -35,22 +37,6 @@ class Rules
         $this->currentEarnings->write(0);
     }
 
-    private function pairsToDictionary(array $pairs)
-    {
-        return array_reduce($pairs, fn($carry, $item) => [$item[0] => $item[1]] + $carry, []);
-    }
-
-    private function orderedArrayValues(array $array)
-    {
-        $keys = array_keys($array);
-        sort($keys);
-        return array_map(function ($key) use ($array) {
-            return $array[$key];
-        }, $keys);
-    }
-
-
-
     public function getGameState(): array
     {
         list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
@@ -62,8 +48,8 @@ class Rules
             if($currentActivity == 'ACTIVITY_RETROSPECTIVE')
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
             $choice = false;
-            $potential = array_values($this->listCards('potential', playerId: $player['player_id']));
-            $selectedInRetrospective = array_values($this->listCards('retrospective', playerId: $player['player_id']));
+            $potential = array_values($this->repo->listCards('potential', playerId: $player['player_id']));
+            $selectedInRetrospective = array_values($this->repo->listCards('retrospective', playerId: $player['player_id']));
             if(count($selectedInRetrospective) > 0) {
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
                 $choice = 300+count($potential);
@@ -74,11 +60,11 @@ class Rules
                 'activity' => $currentActivity,
                 'choice' => $choice,
                 'initiate' => $activityInitiator == $player_id,
-                'teams' => Helpers::getCardsInLocationSortedByIndexes( $this->cards, 'teams', $player_id),
-                'products' => Helpers::getCardsInLocationSortedByIndexes($this->cards, 'products', $player_id),
-                'company' => array_values($this->listCards('company', playerId: $player['player_id'])),
+                'teams' => $this->repo->getCardsInLocationSortedByIndexes('teams', $player_id),
+                'products' => $this->repo->getCardsInLocationSortedByIndexes('products', $player_id),
+                'company' => array_values($this->repo->listCards('company', playerId: $player['player_id'])),
                 'potential' => $potential,
-                'conference' => array_values($this->listCards('conference', playerId: $player['player_id'])),
+                'conference' => array_values($this->repo->listCards('conference', playerId: $player['player_id'])),
             ];
         }, $infos->players);
         $publicPlayerGames = array_map(function ($player) {
@@ -90,22 +76,22 @@ class Rules
             return $playerCopy;
         }, $playerGames);
 
-        $activities = $this->pairsToDictionary(array_map(function ($activityCard) use ($ongoingActivity) {
+        $activities = Helpers::pairsToDictionary(array_map(function ($activityCard) use ($ongoingActivity) {
             $locArg = $activityCard['location_arg'];
             $index = $locArg % 100;
-            $activityName = CardsData::getActivities()[$index];
+            $activityName = $this->repo->getActivities()[$index];
             $selected = $ongoingActivity == $activityName;
             $hidden = !$selected && intdiv($locArg, 100) == 1;
             return [$index, [$activityName, $hidden, $selected]];
         }, $this->cards->getCardsInLocation('activities')));
 
-        $earnings = CardsData::getAll('EARNINGS')[$this->currentEarnings->read()];
+        $earnings = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
         return [
             'public' => [
                 'active_player' => $ongoingActivity == '' ? $this->game->getActivePlayerId() : 0,
                 'central' => [
                     'selection' => false,
-                    'activities' => $this->orderedArrayValues($activities),
+                    'activities' => Helpers::orderedArrayValues($activities),
                     'earnings' => [$earnings, $ongoingActivity != 'ACTIVITY_DEPLOYMENT'],
                 ],
                 'players' => $publicPlayerGames,
@@ -135,7 +121,7 @@ class Rules
 
     public function chooseActivity(string $activity): string
     {
-        $activityIndex = CardsData::getActivityIndex($activity);
+        $activityIndex = $this->repo->getActivityIndex($activity);
         $selection = $this->cards->getCardsInLocation('activities', index:$activityIndex);
         if (count($selection) === 0)
             throw new \BgaUserException('Invalid activity choice');
@@ -197,23 +183,11 @@ class Rules
         return "nextActivity";
     }
 
-    private function listCards($location, ?int $index = null, ?int $playerId = null)
-    {
-        return array_map(function ($card) {
-            return $this->getCardName($card);
-        }, $this->cards->getCardsInLocation($location, $index, $playerId));
-    }
-
-    private function getCardName($card)
-    {
-        return CardsData::getFullName($card['type'], $card['type_arg']);
-    }
-
     public function completeConference($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $potential = $this->listCards('potential', playerId: $player_id);
-        $conference = $this->listCards('conference', playerId: $player_id);
+        $potential = $this->repo->listCards('potential', playerId: $player_id);
+        $conference = $this->repo->listCards('conference', playerId: $player_id);
         foreach ($cards as $card) {
             $cardGroup = match (intdiv($card[0], 100)) {
                 3 => $potential,
@@ -240,7 +214,7 @@ class Rules
     {
         $infos = $this->game->loadInfos();
         $inputs = array_map(null, $teams, $products);
-        $potential = $this->listCards('potential', playerId: $player_id);
+        $potential = $this->repo->listCards('potential', playerId: $player_id);
         foreach ($inputs as $input) {
             $team = $input[0];
             $teamIndex = $team[0] % 100;
@@ -261,28 +235,24 @@ class Rules
 
     public function prepareDeployment(): void
     {
-        $index = rand(0, count(CardsData::getAll('EARNINGS')) - 1);
+        $index = rand(0, count($this->repo->getAll('EARNINGS')) - 1);
         $this->currentEarnings->write($index);
-    }
-
-    private function getSingleCard($location, ?int $index = null, ?int $playerId = null) {
-        return array_values($this->cards->getCardsInLocation($location, $index, $playerId))[0];
     }
 
     public function completeDeployment($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $earningCard = CardsData::getAll('EARNINGS')[$this->currentEarnings->read()];
+        $earningCard = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
         $earnings = CardsData::$details[$earningCard];
         foreach ($cards as $card) {
             $cardName = $card[1];
             $index = $card[0] % 100;
-            $product = $this->getSingleCard('products', $index, $player_id);
-            if($cardName != $this->getCardName($product))
+            $product = $this->repo->getSingleCard('products', $index, $player_id);
+            if($cardName != $this->repo->getCardName($product))
                 throw new \BgaUserException('Invalid deployment');
             $cardId = $product['id'];
-            $team = $this->getSingleCard('teams', $index, $player_id);
-            $teamType = CardsData::$groups[$team['type']][$team['type_arg']];
+            $team = $this->repo->getSingleCard('teams', $index, $player_id);
+            $teamType = $this->repo->getCardSubName($team);
             $earning = $earnings[$teamType];
             $this->cards->playCard($cardId);
             $this->cards->pickCardsForLocation($earning, 'deck', 'potential', $player_id);
@@ -300,7 +270,7 @@ class Rules
     public function chooseForRetrospective($player_id, $card): bool
     {
         $infos = $this->game->loadInfos();
-        $potential = $this->listCards('potential', playerId: $player_id);
+        $potential = $this->repo->listCards('potential', playerId: $player_id);
         $cardName = $card[1];
         $cardId = array_search($cardName, $potential);
         if (!$cardId)
@@ -317,7 +287,7 @@ class Rules
     public function payForRetrospective($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $potential = $this->listCards('potential', playerId: $player_id);
+        $potential = $this->repo->listCards('potential', playerId: $player_id);
         foreach ($cards as $card) {
             $cardGroup = match (intdiv($card[0], 100)) {
                 3 => $potential,

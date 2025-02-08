@@ -4,7 +4,7 @@ namespace Bga\Games\AgileAndCo;
 
 class CardsData
 {
-    public static mixed $groups = [
+    public static array $groups = [
         'PRODUCT_TEAM' => [
             'ADVERGAME', 'EDUCATION', 'SOCIAL', 'MMOG',
         ],
@@ -25,28 +25,6 @@ class CardsData
             'CARD_1', 'CARD_2', 'CARD_3', 'CARD_4',
         ],
     ];
-
-    public static function getFullName($groupName, $index): string
-    {
-        return $groupName . '_' . self::$groups[$groupName][$index];
-    }
-
-    public static function getAll($groupName): array
-    {
-        return array_map(function ($a) use ($groupName) {
-            return $groupName . '_' . $a;
-        }, self::$groups[$groupName]);
-    }
-
-    public static function getActivities(): array
-    {
-        return self::getAll('ACTIVITY');
-    }
-
-    public static function getActivityIndex($activityName): int
-    {
-        return array_search($activityName, self::getActivities());
-    }
 
     public static mixed $details = [
         'PRODUCT_TEAM_ADVERGAME' => ['cost' => 1, 'score' => 1,],

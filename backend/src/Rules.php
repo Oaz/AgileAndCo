@@ -2,19 +2,19 @@
 
 namespace Bga\Games\AgileAndCo;
 
-class GameDetails
+class Rules
 {
     private IDeckAdapter $cards;
-    private mixed $game;
-    private GlobalVariable $ongoingActivity;
-    private GlobalVariable $currentEarnings;
+    private IGameAdapter $game;
+    private IGlobalVariable $ongoingActivity;
+    private IGlobalVariable $currentEarnings;
 
-    public function __construct($cards, $game)
+    public function __construct(IDeckAdapter $cards, IGameAdapter $game)
     {
         $this->game = $game;
         $this->cards = $cards;
-        $this->ongoingActivity = new GlobalVariable($game, 'ONGOING_ACTIVITY');
-        $this->currentEarnings = new GlobalVariable($game, 'CURRENT_EARNINGS');
+        $this->ongoingActivity = $this->game->globalVariable('ONGOING_ACTIVITY');
+        $this->currentEarnings = $this->game->globalVariable('CURRENT_EARNINGS');
     }
 
     public function initGame($players): void
@@ -55,11 +55,10 @@ class GameDetails
     {
         list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
 
-        $players = $this->game->loadPlayersBasicInfos();
-        $activePlayers = $this->game->gamestate->getActivePlayerList();
-        $playerGames = array_map(function ($player) use ($ongoingActivity, $activityInitiator, $activePlayers) {
+        $infos = $this->game->loadInfos();
+        $playerGames = array_map(function ($player) use ($ongoingActivity, $activityInitiator, $infos) {
             $player_id = $player['player_id'];
-            $currentActivity = in_array($player_id, $activePlayers) ? $ongoingActivity : '';
+            $currentActivity = in_array($player_id, $infos->activePlayers) ? $ongoingActivity : '';
             if($currentActivity == 'ACTIVITY_RETROSPECTIVE')
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
             $choice = false;
@@ -81,7 +80,7 @@ class GameDetails
                 'potential' => $potential,
                 'conference' => array_values($this->listCards('conference', playerId: $player['player_id'])),
             ];
-        }, $players);
+        }, $infos->players);
         $publicPlayerGames = array_map(function ($player) {
             $playerCopy = array_map(function ($item) {
                 return $item;
@@ -110,16 +109,17 @@ class GameDetails
                     'earnings' => [$earnings, $ongoingActivity != 'ACTIVITY_DEPLOYMENT'],
                 ],
                 'players' => $publicPlayerGames,
-                'debug' => $this->getDebugInfos($players, $playerGames)
+                'debug' => $this->getDebugInfos($infos, $playerGames)
             ],
             '_private' => $playerGames,
         ];
     }
 
-    private function getDebugInfos($players, array $playerGames): array
+    private function getDebugInfos($infos, array $playerGames): array
     {
         return [
-            'players' => $players,
+            'players' => $infos->players,
+            'active_players' => $infos->activePlayers,
             'act_type' => $this->cards->getCardsOfType('ACTIVITY'),
             'activities' => $this->cards->getCardsInLocation('activities'),
             'earnings' => $this->cards->getCardsInLocation('earnings'),
@@ -152,7 +152,7 @@ class GameDetails
 
         $this->cards->moveCard($activityCard['id'], 'activities', index: $activityIndex, playerId: 1);
 
-        $player_id = (int)$this->game->getActivePlayerId();
+        $player_id = $this->game->getActivePlayerId();
         $this->ongoingActivity->write([$activity, $player_id]);
 
         $this->broadcast('${player_name} chooses activity ${activity}', [
@@ -165,15 +165,15 @@ class GameDetails
 
     public function broadcast(string $message, array $args = []): void
     {
-        $this->game->notifyAllPlayers("message", clienttranslate($message), $args);
+        $this->game->notifyAllPlayers("message", $message, $args);
     }
 
     public function prepareConference(): void
     {
         $this->broadcast('Tous à la conf!');
         list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
-        $players = $this->game->loadPlayersBasicInfos();
-        foreach ($players as $player_id => $player) {
+        $infos = $this->game->loadInfos();
+        foreach ($infos->players as $player_id => $player) {
             $n = $activityInitiator == $player_id ? 5 : 2;
             $this->cards->pickCardsForLocation($n, 'deck', 'conference', $player_id);
         }
@@ -181,7 +181,7 @@ class GameDetails
 
     public function doCoach(): string
     {
-        $player_id = (int)$this->game->getActivePlayerId();
+        $player_id = $this->game->getActivePlayerId();
         $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
 
         $this->broadcast('Coach gives potential to ${player_name}', [
@@ -211,7 +211,7 @@ class GameDetails
 
     public function completeConference($player_id, $cards): bool
     {
-        $players = $this->game->loadPlayersBasicInfos();
+        $infos = $this->game->loadInfos();
         $potential = $this->listCards('potential', playerId: $player_id);
         $conference = $this->listCards('conference', playerId: $player_id);
         foreach ($cards as $card) {
@@ -227,7 +227,7 @@ class GameDetails
             unset($cardGroup[$cardId]);
             $this->cards->playCard($cardId);
             $this->broadcast('DEBUG: ${player_name} discards ${cardName} id ${cardId}', [
-                "player_name" => $players[$player_id]['player_name'],
+                "player_name" => $infos->getPlayerName($player_id),
                 "cardId" => $cardId,
                 "cardName" => $cardName,
             ]);
@@ -238,7 +238,7 @@ class GameDetails
 
     public function completeDevelopment($player_id, $teams, $products): bool
     {
-        $players = $this->game->loadPlayersBasicInfos();
+        $infos = $this->game->loadInfos();
         $inputs = array_map(null, $teams, $products);
         $potential = $this->listCards('potential', playerId: $player_id);
         foreach ($inputs as $input) {
@@ -251,7 +251,7 @@ class GameDetails
                 throw new \BgaUserException('Invalid development');
             $this->cards->moveCard($productCardId, 'products', $teamIndex, $player_id);
             $this->broadcast('DEBUG: ${player_name} develop in team ${teamCard} with potential ${productName}', [
-                "player_name" => $players[$player_id]['player_name'],
+                "player_name" => $infos->getPlayerName($player_id),
                 "teamCard" => $team[1],
                 "productName" => $product[1],
             ]);
@@ -271,7 +271,7 @@ class GameDetails
 
     public function completeDeployment($player_id, $cards): bool
     {
-        $players = $this->game->loadPlayersBasicInfos();
+        $infos = $this->game->loadInfos();
         $earningCard = CardsData::getAll('EARNINGS')[$this->currentEarnings->read()];
         $earnings = CardsData::$details[$earningCard];
         foreach ($cards as $card) {
@@ -287,7 +287,7 @@ class GameDetails
             $this->cards->playCard($cardId);
             $this->cards->pickCardsForLocation($earning, 'deck', 'potential', $player_id);
             $this->broadcast('DEBUG: ${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', [
-                "player_name" => $players[$player_id]['player_name'],
+                "player_name" => $infos->getPlayerName($player_id),
                 "cardName" => $cardName,
                 "cardId" => $cardId,
                 "teamType" => $teamType,
@@ -299,7 +299,7 @@ class GameDetails
 
     public function chooseForRetrospective($player_id, $card): bool
     {
-        $players = $this->game->loadPlayersBasicInfos();
+        $infos = $this->game->loadInfos();
         $potential = $this->listCards('potential', playerId: $player_id);
         $cardName = $card[1];
         $cardId = array_search($cardName, $potential);
@@ -307,7 +307,7 @@ class GameDetails
             throw new \BgaUserException('Invalid retrospective choice');
         $this->cards->moveCard($cardId, 'retrospective', playerId:$player_id);
         $this->broadcast('DEBUG: ${player_name} choose ${cardName} (${cardId}) during retrospective', [
-            "player_name" => $players[$player_id]['player_name'],
+            "player_name" => $infos->getPlayerName($player_id),
             "cardName" => $cardName,
             "cardId" => $cardId,
         ]);
@@ -316,7 +316,7 @@ class GameDetails
 
     public function payForRetrospective($player_id, $cards): bool
     {
-        $players = $this->game->loadPlayersBasicInfos();
+        $infos = $this->game->loadInfos();
         $potential = $this->listCards('potential', playerId: $player_id);
         foreach ($cards as $card) {
             $cardGroup = match (intdiv($card[0], 100)) {
@@ -330,7 +330,7 @@ class GameDetails
             unset($cardGroup[$cardId]);
             $this->cards->playCard($cardId);
             $this->broadcast('DEBUG: ${player_name} pays with ${cardName} id ${cardId}', [
-                "player_name" => $players[$player_id]['player_name'],
+                "player_name" => $infos->getPlayerName($player_id),
                 "cardId" => $cardId,
                 "cardName" => $cardName,
             ]);
@@ -339,7 +339,7 @@ class GameDetails
         return true;
     }
 
-    public function getGamePrivateState($player_id): mixed
+    public function getGamePrivateState($player_id): array
     {
         $gameState = $this->getGameState();
         return [

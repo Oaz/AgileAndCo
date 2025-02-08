@@ -2,7 +2,7 @@
 
 namespace Bga\Games\AgileAndCo;
 
-class GlobalVariable
+class GlobalVariable implements IGlobalVariable
 {
     private mixed $game;
     private mixed $name;

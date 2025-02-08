@@ -22,7 +22,7 @@ require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
 class Game extends \Table
 {
-    private mixed $details;
+    private mixed $rules;
 
     /**
      * Your global variables labels:
@@ -46,7 +46,8 @@ class Game extends \Table
         ]);
 
         $deckAdapter = new DeckAdapter($this->getNew("module.common.deck"));
-        $this->details = new GameDetails($deckAdapter, $this);
+        $gameAdapter = new GameAdapter($this);
+        $this->rules = new Rules($deckAdapter, $gameAdapter);
     }
 
     public function getGameProgression()
@@ -116,7 +117,7 @@ class Game extends \Table
         // $this->initStat("player", "player_teststat1", 0);
 
         // TODO: Setup the initial game situation here.
-        $this->details->initGame($players);
+        $this->rules->initGame($players);
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
@@ -124,29 +125,29 @@ class Game extends \Table
 
     public function argGameState(): array
     {
-        return $this->details->getGameState();
+        return $this->rules->getGameState();
     }
 
     public function argGamePrivateState($player_id): array
     {
-        return $this->details->getGamePrivateState($player_id);
+        return $this->rules->getGamePrivateState($player_id);
     }
 
     public function stNextPlayer(): void
     {
         $this->activeNextPlayer();
-        $this->gamestate->nextState($this->details->gotToNextPlayer());
+        $this->gamestate->nextState($this->rules->gotToNextPlayer());
     }
 
     public function actChooseActivity(string $activity_id): void
     {
-        $transitionName = $this->details->chooseActivity($activity_id);
+        $transitionName = $this->rules->chooseActivity($activity_id);
         $this->gamestate->nextState($transitionName);
     }
 
     public function stConference(): void
     {
-        $this->details->prepareConference();
+        $this->rules->prepareConference();
         $this->gamestate->setAllPlayersMultiactive();
         $this->gamestate->nextState();
     }
@@ -154,9 +155,9 @@ class Game extends \Table
     public function actConference(string $cards): void
     {
         $player_id = $this->getCurrentPlayerId();
-        if ($this->details->completeConference($player_id, json_decode($cards, true))) {
+        if ($this->rules->completeConference($player_id, json_decode($cards, true))) {
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
-            $this->details->updateState($player_id);
+            $this->rules->updateState($player_id);
         }
     }
 
@@ -169,15 +170,15 @@ class Game extends \Table
     public function actDevelop(string $teams, string $products): void
     {
         $player_id = $this->getCurrentPlayerId();
-        if ($this->details->completeDevelopment($player_id, json_decode($teams, true), json_decode($products, true))) {
+        if ($this->rules->completeDevelopment($player_id, json_decode($teams, true), json_decode($products, true))) {
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
-            $this->details->updateState($player_id);
+            $this->rules->updateState($player_id);
         }
     }
 
     public function stDeployment(): void
     {
-        $this->details->prepareDeployment();
+        $this->rules->prepareDeployment();
         $this->gamestate->setAllPlayersMultiactive();
         $this->gamestate->nextState();
     }
@@ -185,9 +186,9 @@ class Game extends \Table
     public function actDeploy(string $cards): void
     {
         $player_id = $this->getCurrentPlayerId();
-        if ($this->details->completeDeployment($player_id, json_decode($cards, true))) {
+        if ($this->rules->completeDeployment($player_id, json_decode($cards, true))) {
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
-            $this->details->updateState($player_id);
+            $this->rules->updateState($player_id);
         }
     }
 
@@ -200,25 +201,25 @@ class Game extends \Table
     public function actRetrospectiveChoice(string $card): void
     {
         $player_id = $this->getCurrentPlayerId();
-        if ($this->details->chooseForRetrospective($player_id, json_decode($card, true))) {
+        if ($this->rules->chooseForRetrospective($player_id, json_decode($card, true))) {
             $this->gamestate->nextPrivateState($player_id, "payment");
-            $this->details->updateState($player_id);
+            $this->rules->updateState($player_id);
         }
     }
 
     public function actRetrospectivePayment(string $cards): void
     {
         $player_id = $this->getCurrentPlayerId();
-        if ($this->details->payForRetrospective($player_id, json_decode($cards, true))) {
+        if ($this->rules->payForRetrospective($player_id, json_decode($cards, true))) {
             $this->gamestate->unsetPrivateState($player_id);
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
-            $this->details->updateState($player_id);
+            $this->rules->updateState($player_id);
         }
     }
 
     public function stCoachGivesPotential(): void
     {
-        $this->gamestate->nextState($this->details->doCoach());
+        $this->gamestate->nextState($this->rules->doCoach());
     }
 
     public function stEndTurn(): void

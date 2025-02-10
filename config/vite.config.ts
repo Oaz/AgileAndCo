@@ -6,7 +6,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import path from 'path';
 
 export default defineConfig(({ command }) => {
-    const isBuildMockups = process.env.BUILD_TARGET !== 'integration';
+    const isBuildMockups = process.env.BUILD_TARGET !== 'bga';
 
     return {
         base:'./',

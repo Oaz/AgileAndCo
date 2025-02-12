@@ -77,13 +77,12 @@ class Rules
         }, $playerGames);
 
         $activities = Helpers::pairsToDictionary(array_map(function ($activityCard) use ($ongoingActivity) {
-            $locArg = $activityCard['location_arg'];
-            $index = $locArg % 100;
+            $index = $activityCard->index;
             $activityName = $this->repo->getActivities()[$index];
             $selected = $ongoingActivity == $activityName;
-            $hidden = !$selected && intdiv($locArg, 100) == 1;
+            $hidden = !$selected && $activityCard->playerId == 1;
             return [$index, [$activityName, $hidden, $selected]];
-        }, $this->cards->getCardsInLocation('activities')));
+        }, $this->repo->loadFromLocation('activities')));
 
         $earnings = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
         return [
@@ -106,15 +105,15 @@ class Rules
         return [
             'players' => $infos->players,
             'active_players' => $infos->activePlayers,
-            'act_type' => $this->cards->getCardsOfType('ACTIVITY'),
-            'activities' => $this->cards->getCardsInLocation('activities'),
-            'earnings' => $this->cards->getCardsInLocation('earnings'),
-            'teams' => $this->cards->getCardsInLocation('teams'),
-            'products' => $this->cards->getCardsInLocation('products'),
-            'potential' => $this->cards->getCardsInLocation('potential'),
-            'discard' => $this->cards->getCardsInLocation('discard'),
-            'conference' => $this->cards->getCardsInLocation('conference'),
-            'deck' => $this->cards->getCardsInLocation('deck'),
+            'act_type' => $this->repo->getActivities(),
+            'activities' => $this->repo->loadFromLocation('activities'),
+            'earnings' => $this->repo->loadFromLocation('earnings'),
+            'teams' => $this->repo->loadFromLocation('teams'),
+            'products' => $this->repo->loadFromLocation('products'),
+            'potential' => $this->repo->loadFromLocation('potential'),
+            'discard' => $this->repo->loadFromLocation('discard'),
+            'conference' => $this->repo->loadFromLocation('conference'),
+            'deck' => $this->repo->loadFromLocation('deck'),
             'yolo' => $playerGames,
         ];
     }
@@ -122,7 +121,7 @@ class Rules
     public function chooseActivity(string $activity): string
     {
         $activityIndex = $this->repo->getActivityIndex($activity);
-        $selection = $this->cards->getCardsInLocation('activities', index:$activityIndex);
+        $selection = $this->repo->loadFromLocation('activities', index:$activityIndex);
         if (count($selection) === 0)
             throw new \BgaUserException('Invalid activity choice');
         $activityCard = array_values($selection)[0];
@@ -136,7 +135,7 @@ class Rules
             default => throw new \BgaUserException('Invalid activity choice'),
         };
 
-        $this->cards->moveCard($activityCard['id'], 'activities', index: $activityIndex, playerId: 1);
+        $this->cards->moveCard($activityCard->id, 'activities', index: $activityIndex, playerId: 1);
 
         $player_id = $this->game->getActivePlayerId();
         $this->ongoingActivity->write([$activity, $player_id]);
@@ -248,19 +247,18 @@ class Rules
             $cardName = $card[1];
             $index = $card[0] % 100;
             $product = $this->repo->getSingleCard('products', $index, $player_id);
-            if($cardName != $this->repo->getCardName($product))
+            if($cardName != $product->fullName)
                 throw new \BgaUserException('Invalid deployment');
-            $cardId = $product['id'];
+            $cardId = $product->id;
             $team = $this->repo->getSingleCard('teams', $index, $player_id);
-            $teamType = $this->repo->getCardSubName($team);
-            $earning = $earnings[$teamType];
+            $earning = $earnings[$team->name];
             $this->cards->playCard($cardId);
             $this->cards->pickCardsForLocation($earning, 'deck', 'potential', $player_id);
             $this->broadcast('DEBUG: ${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', [
                 "player_name" => $infos->getPlayerName($player_id),
                 "cardName" => $cardName,
                 "cardId" => $cardId,
-                "teamType" => $teamType,
+                "teamType" => $team->name,
                 "earning" => $earning,
             ]);
         }

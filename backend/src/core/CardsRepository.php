@@ -32,14 +32,14 @@ class CardsRepository
 
     public function getCardsInLocationSortedByIndexes(string $location, ?int $playerId = null): array
     {
-        $cards = $this->deck->getCardsInLocation($location, playerId: $playerId);
-        usort($cards, fn($a, $b) => $a['index'] - $b['index']);
+        $cards = $this->loadFromLocation($location, playerId: $playerId);
+        usort($cards, fn($a, $b) => $a->index - $b->index);
         $result = [];
         foreach ($cards as $card) {
-            while (count($result) < $card['index']) {
+            while (count($result) < $card->index) {
                 $result[] = false;
             }
-            $result[] = $this->getCardName($card);
+            $result[] = $card->fullName;
         }
         return $result;
     }
@@ -47,12 +47,12 @@ class CardsRepository
     public function listCards($location, ?int $index = null, ?int $playerId = null)
     {
         return array_map(function ($card) {
-            return $this->getCardName($card);
-        }, $this->deck->getCardsInLocation($location, $index, $playerId));
+            return $card->fullName;
+        }, $this->loadFromLocation($location, $index, $playerId));
     }
 
     public function getSingleCard($location, ?int $index = null, ?int $playerId = null) {
-        return array_values($this->deck->getCardsInLocation($location, $index, $playerId))[0];
+        return array_values($this->loadFromLocation($location, $index, $playerId))[0];
     }
 
     public function getCardName($card): string
@@ -63,6 +63,15 @@ class CardsRepository
     public function getCardSubName($card): string
     {
         return $this->groups[$card['type']][$card['type_arg']];
+    }
+
+    public function loadFromLocation(string $location, ?int $index = null, ?int $playerId = null): array {
+        return array_map(function ($data) use ($location) {
+            return new Card(
+                $data['id'], $data['type'], $this->groups[$data['type']][$data['type_arg']],
+                $data['player_id'], $location, $data['index']
+            );
+        }, $this->deck->getCardsInLocation($location, $index, $playerId));
     }
 
 }

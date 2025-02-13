@@ -14,7 +14,7 @@ class Rules
     {
         $this->game = $game;
         $this->cards = $cards;
-        $this->repo = new CardsRepository(CardsData::$groups, $cards);
+        $this->repo = new CardsRepository(CardsData::$groups, CardsData::$details, $cards);
         $this->ongoingActivity = $this->game->globalVariable('ONGOING_ACTIVITY');
         $this->currentEarnings = $this->game->globalVariable('CURRENT_EARNINGS');
     }
@@ -48,7 +48,7 @@ class Rules
             if($currentActivity == 'ACTIVITY_RETROSPECTIVE')
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
             $choice = false;
-            $potential = array_values($this->repo->listCards('potential', playerId: $player['player_id']));
+            $potential = $this->repo->getCardsInLocationSortedByUsage('potential', $player['player_id']);
             $selectedInRetrospective = array_values($this->repo->listCards('retrospective', playerId: $player['player_id']));
             if(count($selectedInRetrospective) > 0) {
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
@@ -62,9 +62,9 @@ class Rules
                 'initiate' => $activityInitiator == $player_id,
                 'teams' => $this->repo->getCardsInLocationSortedByIndexes('teams', $player_id),
                 'products' => $this->repo->getCardsInLocationSortedByIndexes('products', $player_id),
-                'company' => array_values($this->repo->listCards('company', playerId: $player['player_id'])),
+                'company' => $this->repo->getCardsInLocationSortedByUsage('company', $player['player_id']),
                 'potential' => $potential,
-                'conference' => array_values($this->repo->listCards('conference', playerId: $player['player_id'])),
+                'conference' => $this->repo->getCardsInLocationSortedByUsage('conference', $player['player_id']),
             ];
         }, $infos->players);
         $publicPlayerGames = array_map(function ($player) {
@@ -110,7 +110,7 @@ class Rules
             'earnings' => $this->repo->loadFromLocation('earnings'),
             'teams' => $this->repo->loadFromLocation('teams'),
             'products' => $this->repo->loadFromLocation('products'),
-            'potential' => $this->repo->loadFromLocation('potential'),
+            'potential' => $this->repo->loadAndSortFromLocation('potential',null),
             'discard' => $this->repo->loadFromLocation('discard'),
             'conference' => $this->repo->loadFromLocation('conference'),
             'deck' => $this->repo->loadFromLocation('deck'),

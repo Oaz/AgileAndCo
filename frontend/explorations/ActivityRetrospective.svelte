@@ -19,12 +19,13 @@
                     'AGILE_MATURITY_PASSIONATE_DEVELOPER',
                     'AGILE_MATURITY_USER_EXPERIENCE',
                 ],
+                'retrospective': [
+                ],
             }
         },
         {
             label: 'Pay improvement', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_PAYMENT',
-                'choice': 302,
                 'teams': [
                     'PRODUCT_TEAM_ADVERGAME',
                 ],
@@ -37,6 +38,8 @@
                 'potential': [
                     'AGILE_MATURITY_AGILE_PRACTITIONER',
                     'AGILE_MATURITY_PASSIONATE_DEVELOPER',
+                ],
+                'retrospective': [
                     'AGILE_MATURITY_USER_EXPERIENCE',
                 ],
             }
@@ -59,6 +62,8 @@
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_CONTINUOUS_DELIVERY',
                 ],
+                'retrospective': [
+                ],
             }
         },
         {
@@ -79,6 +84,8 @@
                     'AGILE_VALUE_FEEDBACK',
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_CONTINUOUS_DELIVERY',
+                ],
+                'retrospective': [
                 ],
             }
         },
@@ -101,6 +108,8 @@
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_CONTINUOUS_DELIVERY',
                 ],
+                'retrospective': [
+                ],
             }
         },
         {
@@ -122,6 +131,8 @@
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_CONTINUOUS_DELIVERY',
                 ],
+                'retrospective': [
+                ],
             }
         },
         {
@@ -140,6 +151,8 @@
                 'potential': [
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_CONTINUOUS_DELIVERY',
+                ],
+                'retrospective': [
                 ],
             }
         },
@@ -162,12 +175,13 @@
                     'AGILE_MATURITY_PRODUCT_VISION',
                     'PRODUCT_TEAM_MMOG',
                 ],
+                'retrospective': [
+                ],
             }
         },
         {
             label: 'Pay improvement with undeployed products', data: {
                 'activity': 'ACTIVITY_RETROSPECTIVE_PAYMENT',
-                'choice': 301,
                 'teams': [
                     'PRODUCT_TEAM_ADVERGAME',
                     'PRODUCT_TEAM_ADVERGAME',
@@ -183,6 +197,8 @@
                 ],
                 'potential': [
                     'AGILE_MATURITY_PRODUCT_VISION',
+                ],
+                'retrospective': [
                     'PRODUCT_TEAM_MMOG',
                 ],
             }

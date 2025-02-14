@@ -47,24 +47,20 @@ class Rules
             $currentActivity = in_array($player_id, $infos->activePlayers) ? $ongoingActivity : '';
             if($currentActivity == 'ACTIVITY_RETROSPECTIVE')
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
-            $choice = false;
             $potential = $this->repo->getCardsInLocationSortedByUsage('potential', $player['player_id']);
             $selectedInRetrospective = array_values($this->repo->listCards('retrospective', playerId: $player['player_id']));
-            if(count($selectedInRetrospective) > 0) {
+            if(count($selectedInRetrospective) > 0)
                 $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
-                $choice = 300+count($potential);
-                $potential[] = $selectedInRetrospective[0];
-            }
             return [
                 'name' => $player['player_name'],
                 'activity' => $currentActivity,
-                'choice' => $choice,
                 'initiate' => $activityInitiator == $player_id,
                 'teams' => $this->repo->getCardsInLocationSortedByIndexes('teams', $player_id),
                 'products' => $this->repo->getCardsInLocationSortedByIndexes('products', $player_id),
                 'company' => $this->repo->getCardsInLocationSortedByUsage('company', $player['player_id']),
                 'potential' => $potential,
                 'conference' => $this->repo->getCardsInLocationSortedByUsage('conference', $player['player_id']),
+                'retrospective' => $selectedInRetrospective
             ];
         }, $infos->players);
         $publicPlayerGames = array_map(function ($player) {

@@ -6,7 +6,7 @@ export abstract class Activity extends Action {
     public card_key: string;
     public selection: Record<number, boolean>;
     public interaction: Record<number, Interaction>;
-    public details: Record<number, any>;
+    public details: Record<string, any>;
     public cards: any;
     public datas: any;
     public selection_min: number = 0;
@@ -17,6 +17,8 @@ export abstract class Activity extends Action {
         this.card_key = card_key;
         if (!datas.conference)
             datas.conference = [];
+        if (!datas.retrospective)
+            datas.retrospective = [];
         this.datas = datas;
         this.selection = {};
         this.interaction = {};
@@ -28,11 +30,12 @@ export abstract class Activity extends Action {
             ...Object.fromEntries(datas.company.map((value, index) => [this.id(2, index), value])),
             ...Object.fromEntries(datas.potential.map((value, index) => [this.id(3, index), value])),
             ...Object.fromEntries(datas.conference.map((value, index) => [this.id(4, index), value])),
+            ...Object.fromEntries(datas.retrospective.map((value, index) => [this.id(5, index), value])),
         });
         const cardDetails = cardsData();
         this.details = Object.fromEntries(
             Object.entries(this.cards).map(
-                ([key, value]) => [key, {
+                ([_, value]) => [value, {
                     ...cardDetails[value.toString()].props,
                     ...{kind: cardDetails[value.toString()].kind}
                 }]

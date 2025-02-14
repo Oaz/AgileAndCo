@@ -38,7 +38,8 @@
                     {#each datas.teams as team, index}
                         <SelectableCardInActivity bind:activity={activity} zone_id={0} {index} card_key={team}/>
                         {#if datas.products[index]}
-                            <SelectableCardInActivity bind:activity={activity} zone_id={1} {index} card_key={datas.products[index]}
+                            <SelectableCardInActivity bind:activity={activity} zone_id={1} {index}
+                                                      card_key={datas.products[index]}
                                                       hidden={true}/>
                         {/if}
                     {/each}
@@ -55,6 +56,9 @@
             <div class="potential">
                 {#each datas.potential as card_key, index}
                     <SelectableCardInActivity bind:activity={activity} zone_id={3} {index} {card_key}/>
+                {/each}
+                {#each datas.retrospective as card_key, index}
+                    <SelectableCardInActivity bind:activity={activity} zone_id={5} {index} {card_key}/>
                 {/each}
             </div>
         </div>

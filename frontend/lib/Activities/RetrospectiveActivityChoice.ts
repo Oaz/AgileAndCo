@@ -15,7 +15,7 @@ export class RetrospectiveActivityChoice extends RetrospectiveActivity {
         this.define_interactions(
             [3],
             key => {
-                return this.compute_cost(key) <= affordable_cost;
+                return this.compute_cost(this.details[this.cards[key]]) <= affordable_cost;
             }
         );
     }

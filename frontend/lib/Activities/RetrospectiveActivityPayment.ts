@@ -5,28 +5,26 @@ import {BGA} from "../BGA";
 export class RetrospectiveActivityPayment extends RetrospectiveActivity {
     constructor(datas) {
         super(datas);
-        const choice = datas.choice.toString();
-        this.price = this.compute_cost(choice)
-        let zones = datas.company.includes('AGILE_MATURITY_DEVOPS') ? [1,3] : [3];
-        this.define_interactions(
-            zones,
-            key => key !== choice
-        );
+        let selectedCard = this.details[datas.retrospective[0]];
+        this.price = this.compute_cost(selectedCard);
+        let zones = datas.company.includes('AGILE_MATURITY_DEVOPS') ? [1, 3] : [3];
+        this.define_interactions(zones);
     }
 
-    private readonly price:number;
+    private readonly price: number;
 
     public get undeployed() {
         return this.selected_in_zone(1).length;
     }
+
     public get other() {
         return this.selected_in_zone(3).length;
     }
 
     public get can_act() {
-        const payment = 2*this.undeployed+this.other;
+        const payment = 2 * this.undeployed + this.other;
         return payment === this.price
-            || (payment === this.price+1 && this.undeployed > 1);
+            || (payment === this.price + 1 && this.undeployed > 1);
     }
 
     public get action_text(): string {

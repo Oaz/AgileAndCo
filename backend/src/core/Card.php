@@ -23,6 +23,10 @@ readonly class Card
     public string $location;
     public int $index;
 
+    public function withIndex(int $index): Card {
+        return new self($this->id, $this->type, $this->name, $this->playerId, $this->location, $index);
+    }
+
     public function __toString(): string
     {
         return json_encode(get_object_vars($this));

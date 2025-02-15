@@ -44,4 +44,8 @@ class GameAdapter implements IGameAdapter
     {
         return new GlobalVariable($this->game, $name);
     }
+
+    public function trace(string $message): void {
+        $this->game->trace($message);
+    }
 }

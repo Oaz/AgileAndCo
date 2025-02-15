@@ -151,7 +151,6 @@ class Rules
 
     public function prepareConference(): void
     {
-        $this->broadcast('Tous à la conf!');
         list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
         $infos = $this->game->loadInfos();
         foreach ($infos->players as $player_id => $player) {
@@ -181,24 +180,23 @@ class Rules
     public function completeConference($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $potential = $this->repo->listCards('potential', playerId: $player_id);
-        $conference = $this->repo->listCards('conference', playerId: $player_id);
+        $potential = $this->repo->loadAndSortFromLocation('potential', $player_id);
+        $conference = $this->repo->loadAndSortFromLocation('conference', $player_id);
         foreach ($cards as $card) {
-            $cardGroup = match (intdiv($card[0], 100)) {
-                3 => $potential,
-                4 => $conference,
-                default => throw new \BgaUserException('Invalid discard choice'),
+            $cardGroup = match ($card['zone']) {
+                'potential' => $potential,
+                'conference' => $conference,
+                default => throw new \BgaUserException('Invalid discard choice - unexpected zone'),
             };
-            $cardName = $card[1];
-            $cardId = array_search($cardName, $cardGroup);
-            if (!$cardId)
-                throw new \BgaUserException('Invalid discard choice');
-            unset($cardGroup[$cardId]);
+            $selected = $cardGroup[$card['index']] ?? null;
+            if (!$selected)
+                throw new \BgaUserException('Invalid discard choice - unexpected index');
+            $cardId = $selected->id;
             $this->cards->playCard($cardId);
             $this->broadcast('DEBUG: ${player_name} discards ${cardName} id ${cardId}', [
                 "player_name" => $infos->getPlayerName($player_id),
                 "cardId" => $cardId,
-                "cardName" => $cardName,
+                "cardName" => $selected->fullName,
             ]);
         }
         $this->cards->moveAllCardsInLocation('conference', 'potential', playerId: $player_id);
@@ -209,20 +207,24 @@ class Rules
     {
         $infos = $this->game->loadInfos();
         $inputs = array_map(null, $teams, $products);
-        $potential = $this->repo->listCards('potential', playerId: $player_id);
+        $potential = $this->repo->loadAndSortFromLocation('potential', $player_id);
+        $used=[];
         foreach ($inputs as $input) {
             $team = $input[0];
-            $teamIndex = $team[0] % 100;
+            $teamIndex = $team['index'];
             $product = $input[1];
-            $productCardId = array_search($product[1], $potential);
-            unset($potential[$productCardId]);
-            if (!$productCardId)
-                throw new \BgaUserException('Invalid development');
+            $productCard = $potential[$product['index']] ?? null;
+            if ($productCard === null)
+                throw new \BgaUserException('Invalid development - unexpected index');
+            $productCardId = $productCard->id;
+            if($used[$productCardId] ?? false)
+                throw new \BgaUserException('Invalid development - duplicate index');
+            $used[$productCardId] = true;
             $this->cards->moveCard($productCardId, 'products', $teamIndex, $player_id);
             $this->broadcast('DEBUG: ${player_name} develop in team ${teamCard} with potential ${productName}', [
                 "player_name" => $infos->getPlayerName($player_id),
-                "teamCard" => $team[1],
-                "productName" => $product[1],
+                "teamCard" => $team['name'],
+                "productName" => $product['name'],
             ]);
         }
         return true;
@@ -240,8 +242,8 @@ class Rules
         $earningCard = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
         $earnings = CardsData::$details[$earningCard];
         foreach ($cards as $card) {
-            $cardName = $card[1];
-            $index = $card[0] % 100;
+            $cardName = $card['name'];
+            $index = $card['index'];
             $product = $this->repo->getSingleCard('products', $index, $player_id);
             if($cardName != $product->fullName)
                 throw new \BgaUserException('Invalid deployment');
@@ -264,11 +266,12 @@ class Rules
     public function chooseForRetrospective($player_id, $card): bool
     {
         $infos = $this->game->loadInfos();
-        $potential = $this->repo->listCards('potential', playerId: $player_id);
-        $cardName = $card[1];
-        $cardId = array_search($cardName, $potential);
-        if (!$cardId)
+        $potential = $this->repo->loadAndSortFromLocation('potential', $player_id);
+        $cardName = $card['name'];
+        $selected = $potential[$card['index']] ?? null;
+        if ($selected === null)
             throw new \BgaUserException('Invalid retrospective choice');
+        $cardId = $selected->id;
         $this->cards->moveCard($cardId, 'retrospective', playerId:$player_id);
         $this->broadcast('DEBUG: ${player_name} choose ${cardName} (${cardId}) during retrospective', [
             "player_name" => $infos->getPlayerName($player_id),
@@ -281,17 +284,21 @@ class Rules
     public function payForRetrospective($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $potential = $this->repo->listCards('potential', playerId: $player_id);
+        $potential = $this->repo->loadAndSortFromLocation('potential', $player_id);
+        $used=[];
         foreach ($cards as $card) {
-            $cardGroup = match (intdiv($card[0], 100)) {
-                3 => $potential,
+            $cardGroup = match ($card['zone']) {
+                'potential' => $potential,
                 default => throw new \BgaUserException('Invalid payment choice'),
             };
-            $cardName = $card[1];
-            $cardId = array_search($cardName, $cardGroup);
-            if (!$cardId)
-                throw new \BgaUserException('Invalid payment choice');
-            unset($cardGroup[$cardId]);
+            $cardName = $card['name'];
+            $selected = $cardGroup[$card['index']] ?? null;
+            if ($selected === null)
+                throw new \BgaUserException('Invalid payment - unexpected index');
+            $cardId = $selected->id;
+            if($used[$cardId] ?? false)
+                throw new \BgaUserException('Invalid payment - duplicate index');
+            $used[$cardId] = true;
             $this->cards->playCard($cardId);
             $this->broadcast('DEBUG: ${player_name} pays with ${cardName} id ${cardId}', [
                 "player_name" => $infos->getPlayerName($player_id),

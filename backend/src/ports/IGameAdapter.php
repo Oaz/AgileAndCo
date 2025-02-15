@@ -13,4 +13,6 @@ interface IGameAdapter
     public function notifyPlayer(int $player_id, string $notification, string $message, array $args = []): void;
 
     public function globalVariable(string $name) : IGlobalVariable;
+
+    public function trace(string $message): void;
 }

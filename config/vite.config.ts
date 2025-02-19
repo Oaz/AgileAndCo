@@ -5,10 +5,45 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import path from 'path';
 
-export default defineConfig(({ command }) => {
-    const isBuildMockups = process.env.BUILD_TARGET !== 'bga';
+const isStandalone = process.env.BUILD_TARGET !== 'bga';
 
-    return {
+const root = isStandalone
+    ? path.resolve(__dirname, '../frontend/explorations')
+    : path.resolve(__dirname, '../frontend/lib');
+
+const build = isStandalone ? {
+    outDir: path.resolve(__dirname, '../local/standalone'),
+    minify: false,
+    lib: {
+        entry: path.resolve(__dirname, '../frontend/explorations/main.ts'),
+        fileName: (format:any) => 'demo_agileandco.js',
+        formats: ['amd'],
+    },
+    rollupOptions: {
+        format: 'amd',
+        treeshake: false,
+        plugins: [
+        ],
+    }
+} : {
+    outDir: path.resolve(__dirname, '../remote'),
+    minify: true,
+    lib: {
+        entry: path.resolve(__dirname, '../frontend/lib/integration.js'),
+        fileName: (format:any) => 'modules/frontend.js',
+        formats: ['amd'],
+    },
+    rollupOptions: {
+        format: 'amd',
+        treeshake: false,
+        plugins: [
+        ],
+    }
+};
+
+export default defineConfig(
+
+    {
         base:'./',
         plugins: [
             svelte(),
@@ -16,35 +51,6 @@ export default defineConfig(({ command }) => {
             svgr(),
             image(),
         ],
-        root: isBuildMockups ? path.resolve(__dirname, '../frontend/explorations') : path.resolve(__dirname, '../frontend/lib'),
-        build: {
-            outDir: path.resolve(__dirname, isBuildMockups ? '../local/mockups' : '../remote'),
-            minify: false,
-            lib: {
-                entry: path.resolve(__dirname, '../frontend/lib/integration.js'),
-                fileName: (format) => `modules/frontend.js`,
-                formats: ['amd'],
-            },
-            rollupOptions: {
-                input: isBuildMockups
-                    ? path.resolve(__dirname, '../frontend/explorations/main.ts')
-                    : path.resolve(__dirname, '../frontend/lib/integration.js'),
-                output: {
-                    format: 'amd',
-                    entryFileNames: (chunkInfo) => {
-                        return isBuildMockups ? 'mockups.js' : 'modules/frontend.js';
-                    },
-                    assetFileNames: (assetInfo) => {
-                        if (assetInfo.name.endsWith('.svg')) {
-                            return 'img/[name].svg';
-                        }
-                        return '[name][extname]';
-                    },
-                },
-                treeshake: false,
-                plugins: [
-                ],
-            },
-        },
-    };
-});
+        root: root,
+        build: build,
+    });

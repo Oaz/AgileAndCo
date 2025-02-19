@@ -27,7 +27,12 @@
 
 
     BGA.setPerformAction((action, args) => {
-        alert('ACTION ' + action + '\n' + JSON.stringify(args));
+        if (action === 'actChooseActivity')
+            alert('ACTION ' + action + '\n' + JSON.stringify(args));
+        else
+            alert('ACTION ' + action + '\n' + JSON.stringify(Object.fromEntries(
+                Object.entries(args).map(([key, value]) => [key, JSON.parse(value.toString())])
+            ), null, 2));
     });
     BGA.setTranslate(text => text);
 </script>

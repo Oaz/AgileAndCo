@@ -2,23 +2,30 @@
 
 namespace Bga\Games\AgileAndCo;
 
+enum SortForSelection {
+    case BY_INDEX;
+    case BY_USAGE;
+}
+
 class CardSelection
 {
-    private CardsRepository $repo;
     private array $taken;
     private string $usage;
-    private int $playerId;
     private array $locations;
 
     public function __construct(string $usage, int $playerId, array $allowedLocations, CardsRepository $repo)
     {
         $this->usage = $usage;
-        $this->playerId = $playerId;
-        $this->repo = $repo;
         $this->taken = [];
         $this->locations =  array_reduce(
-            $allowedLocations,
-            fn($carry, $location) => $carry + [$location => $this->repo->loadAndSortFromLocation($location, $this->playerId)],
+            array_keys($allowedLocations),
+            function ($carry, $location) use ($repo, $playerId, $allowedLocations) {
+                $cards = match ($allowedLocations[$location]) {
+                    SortForSelection::BY_INDEX => $repo->loadAndSortByIndexFromLocation($location, $playerId),
+                    SortForSelection::BY_USAGE => $repo->loadAndSortByUsageFromLocation($location, $playerId),
+                };
+                return $carry + [$location => $cards];
+            },
             []
         );
     }

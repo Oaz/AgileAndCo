@@ -1,6 +1,8 @@
 <?php
 
 namespace Bga\Games\AgileAndCo\Tests;
+
+use Bga\Games\AgileAndCo\CardsData;
 use Bga\Games\AgileAndCo\IDeckAdapter;
 
 class FakeDeck implements IDeckAdapter
@@ -8,6 +10,17 @@ class FakeDeck implements IDeckAdapter
     private $cards = [];
     private $locations = [];
 
+    public function __construct()
+    {
+        $data = array_map(function ($data) {
+            $data['id'] = 0;
+            $data['player_id'] = 0;
+            $data['location'] = '';
+            $data['index'] = 0;
+            return $data;
+        }, CardsData::$instances);
+        $this->createCards($data, 'deck');
+    }
 
     /**
      * Create cards with the given data and place them in the specified location.

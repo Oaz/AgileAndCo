@@ -106,7 +106,7 @@ class Rules
             'earnings' => $this->repo->loadFromLocation('earnings'),
             'teams' => $this->repo->loadFromLocation('teams'),
             'products' => $this->repo->loadFromLocation('products'),
-            'potential' => $this->repo->loadAndSortFromLocation('potential',null),
+            'potential' => $this->repo->loadAndSortByUsageFromLocation('potential',null),
             'discard' => $this->repo->loadFromLocation('discard'),
             'conference' => $this->repo->loadFromLocation('conference'),
             'deck' => $this->repo->loadFromLocation('deck'),
@@ -180,7 +180,10 @@ class Rules
     public function completeConference($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $selection = new CardSelection('discard', $player_id, ['potential', 'conference'], $this->repo);
+        $selection = new CardSelection('discard', $player_id, [
+            'potential' => SortForSelection::BY_USAGE,
+            'conference' => SortForSelection::BY_USAGE
+        ], $this->repo);
         foreach ($cards as $card) {
             $selected = $selection->take($card);
             $cardId = $selected->id;
@@ -199,8 +202,8 @@ class Rules
     {
         $infos = $this->game->loadInfos();
         $inputs = array_map(null, $teams, $products);
-        $teamSelection = new CardSelection('development team', $player_id, ['teams'], $this->repo);
-        $productSelection = new CardSelection('development product', $player_id, ['potential'], $this->repo);
+        $teamSelection = new CardSelection('development team', $player_id, ['teams' => SortForSelection::BY_INDEX], $this->repo);
+        $productSelection = new CardSelection('development product', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
         foreach ($inputs as $input) {
             $team = $teamSelection->take($input[0]);
             $product = $productSelection->take($input[1]);
@@ -225,7 +228,7 @@ class Rules
         $infos = $this->game->loadInfos();
         $earningCard = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
         $earnings = CardsData::$details[$earningCard];
-        $selection = new CardSelection('deployment', $player_id, ['products'], $this->repo);
+        $selection = new CardSelection('deployment', $player_id, ['products' => SortForSelection::BY_INDEX], $this->repo);
         foreach ($cards as $card) {
             $product = $selection->take($card);
             $cardId = $product->id;
@@ -247,7 +250,7 @@ class Rules
     public function chooseForRetrospective($player_id, $card): bool
     {
         $infos = $this->game->loadInfos();
-        $selection = new CardSelection('retrospective choice', $player_id, ['potential'], $this->repo);
+        $selection = new CardSelection('retrospective choice', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
         $selected = $selection->take($card);
         $cardId = $selected->id;
         $this->cards->moveCard($cardId, 'retrospective', playerId:$player_id);
@@ -262,7 +265,7 @@ class Rules
     public function payForRetrospective($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $selection = new CardSelection('retrospective payment', $player_id, ['potential'], $this->repo);
+        $selection = new CardSelection('retrospective payment', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
         foreach ($cards as $card) {
             $selected = $selection->take($card);
             $cardId = $selected->id;

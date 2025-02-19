@@ -19,7 +19,7 @@ class CardsRepositoryTest extends TestCase
             $data['index'] = 0;
             return $data;
         }, CardsData::$instances);
-        $this->deck->createCards($data, 'deck');
+
         $cards = array_map(fn($d) => $this->repo->createCard($d), $data);
         $this->cards = array_combine(array_map(fn($c) => $c->fullName, $cards), $cards);
     }
@@ -50,7 +50,7 @@ class CardsRepositoryTest extends TestCase
 
     public function testGetCardsInLocationSortedByUsage()
     {
-        $this->moveSomeCardsToLocation([
+        $this->repo->moveCardsToLocation([
             'AGILE_MATURITY_DEVOPS', 'PRODUCT_TEAM_EDUCATION', 'PRODUCT_TEAM_SOCIAL',
             'AGILE_MATURITY_PASSIONATE_DEVELOPER', 'PRODUCT_TEAM_ADVERGAME'], 'potential', 23);
         $cards = $this->repo->getCardsInLocationSortedByUsage('potential', 23);
@@ -61,29 +61,12 @@ class CardsRepositoryTest extends TestCase
 
     public function testGetCardsInLocationSortedByUsageWithMultiples()
     {
-        $this->moveSomeCardsToLocation([
+        $this->repo->moveCardsToLocation([
             'AGILE_MATURITY_DEVOPS', 'PRODUCT_TEAM_SOCIAL', 'AGILE_MATURITY_PASSIONATE_DEVELOPER', 'PRODUCT_TEAM_EDUCATION', 'PRODUCT_TEAM_SOCIAL',
-            'AGILE_MATURITY_PASSIONATE_DEVELOPER', 'PRODUCT_TEAM_ADVERGAME'], 'potential', 23);
+            'AGILE_MATURITY_AGILE_PRACTITIONER', 'AGILE_MATURITY_PASSIONATE_DEVELOPER', 'PRODUCT_TEAM_ADVERGAME'], 'potential', 23);
         $cards = $this->repo->getCardsInLocationSortedByUsage('potential', 23);
         $this->assertEquals([
-            'PRODUCT_TEAM_ADVERGAME', 'PRODUCT_TEAM_EDUCATION', 'PRODUCT_TEAM_SOCIAL', 'PRODUCT_TEAM_SOCIAL',
+            'PRODUCT_TEAM_ADVERGAME', 'PRODUCT_TEAM_EDUCATION', 'PRODUCT_TEAM_SOCIAL', 'PRODUCT_TEAM_SOCIAL', 'AGILE_MATURITY_AGILE_PRACTITIONER',
             'AGILE_MATURITY_PASSIONATE_DEVELOPER', 'AGILE_MATURITY_PASSIONATE_DEVELOPER', 'AGILE_MATURITY_DEVOPS'], $cards);
-    }
-
-    public function moveSomeCardsToLocation(array $fullNames, string $location, ?int $playerId = null): void
-    {
-        $moved = [];
-        foreach ($fullNames as $fullName) {
-            $card = $this->cards[$fullName];
-            $deck_cards = $this->deck->getCardsOfType($card->type, $this->repo->getIndex($card->type, $card->name));
-            foreach ($deck_cards as $deck_card) {
-                $cardId = $deck_card['id'];
-                if (isset($moved[$cardId]))
-                    continue;
-                $this->deck->moveCard($cardId, $location, playerId: $playerId);
-                $moved[$cardId] = true;
-                break;
-            }
-        }
     }
 }

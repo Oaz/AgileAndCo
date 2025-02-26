@@ -2,25 +2,12 @@
 
 namespace Bga\Games\AgileAndCo\Tests;
 
-use Bga\Games\AgileAndCo\CardsData;
 use Bga\Games\AgileAndCo\IDeckAdapter;
 
 class FakeDeck implements IDeckAdapter
 {
     private $cards = [];
     private $locations = [];
-
-    public function __construct()
-    {
-        $data = array_map(function ($data) {
-            $data['id'] = 0;
-            $data['player_id'] = 0;
-            $data['location'] = '';
-            $data['index'] = 0;
-            return $data;
-        }, CardsData::$instances);
-        $this->createCards($data, 'deck');
-    }
 
     /**
      * Create cards with the given data and place them in the specified location.
@@ -35,6 +22,7 @@ class FakeDeck implements IDeckAdapter
             unset($data['nbr']);
             for ($i = 0; $i < $numberOfCards; $i++) {
                 $cardId = $this->generateCardId();
+                $data['id'] = $cardId;
                 $this->cards[$cardId] = $data;
                 $this->locations[$location][] = $cardId;
             }
@@ -51,8 +39,8 @@ class FakeDeck implements IDeckAdapter
     public function deckify(string $type, string $location): void
     {
         $cardsOfType = $this->getCardsOfType($type);
-        foreach ($cardsOfType as $cardId) {
-            $this->moveCard($cardId, $location);
+        foreach ($cardsOfType as $index => $cardData) {
+            $this->moveCard($cardData['id'], $location);
         }
     }
 
@@ -66,25 +54,13 @@ class FakeDeck implements IDeckAdapter
      */
     public function moveCard(int $cardId, string $location, ?int $index = null, ?int $playerId = null): void
     {
-        // Remove card from current location
-        foreach ($this->locations as $loc => $cards) {
-            $key = array_search($cardId, $cards);
-            if ($key !== false) {
-                unset($this->locations[$loc][$key]);
-                $this->locations[$loc] = array_values($this->locations[$loc]); // Reindex array
-                break;
-            }
-        }
-
-        // Determine the target location key
-        $targetLocationKey = $playerId !== null ? "{$location}_{$playerId}" : $location;
-
-        // Add card to new location
+        $this->unloadCardFromLocations($cardId, reindex: false);
+        $targetLocationKey = $this->getLocationKey($location, $playerId);
         if ($index !== null) {
             if (!isset($this->locations[$targetLocationKey])) {
                 $this->locations[$targetLocationKey] = [];
             }
-            array_splice($this->locations[$targetLocationKey], $index, 0, [$cardId]);
+            $this->locations[$targetLocationKey][$index] = $cardId;
         } else {
             $this->locations[$targetLocationKey][] = $cardId;
         }
@@ -132,31 +108,27 @@ class FakeDeck implements IDeckAdapter
      */
     public function getCardsInLocation(string $location, ?int $index = null, ?int $playerId = null): array
     {
-        $targetLocationKey = $playerId !== null ? "{$location}_{$playerId}" : $location;
-
-        if (!isset($this->locations[$targetLocationKey])) {
-            return [];
-        }
-
-        $cardsInLocation = $this->locations[$targetLocationKey];
         $result = [];
-
-        foreach ($cardsInLocation as $idx => $cardId) {
-            if ($index !== null && $idx !== $index) {
+        foreach ($this->locations as $locationKey => $cards) {
+            if(!$this->isLocationKey($locationKey, $location, $playerId))
                 continue;
+            [$loc, $plId] = $this->explodeLocation($locationKey);
+            foreach ($cards as $idx => $cardId) {
+                if ($index !== null && $idx !== $index) {
+                    continue;
+                }
+                $data = $this->cards[$cardId];
+
+                $result[] = [
+                    'id' => $cardId,
+                    'type' => $data['type'],
+                    'type_arg' => $data['type_arg'],
+                    'location' => $loc,
+                    'player_id' => $plId,
+                    'index' => $idx,
+                ];
             }
-            $data = $this->cards[$cardId];
-
-            $result[] = [
-                'id' => $cardId,
-                'type' => $data['type'],
-                'type_arg' => $data['type_arg'],
-                'location' => $location,
-                'player_id' => $playerId ?? 0,
-                'index' => $idx,
-            ];
         }
-
         return $result;
     }
 
@@ -182,8 +154,8 @@ class FakeDeck implements IDeckAdapter
      */
     public function pickCardsForLocation(int $number, string $fromLocation, string $toLocation, int $playerId): void
     {
-        $fromLocationKey = "{$fromLocation}_{$playerId}";
-        $toLocationKey = "{$toLocation}_{$playerId}";
+        $fromLocationKey = $this->getLocationKey($fromLocation, null);
+        $toLocationKey = $this->getLocationKey($toLocation, $playerId);
 
         if (isset($this->locations[$fromLocationKey])) {
             $pickedCards = array_splice($this->locations[$fromLocationKey], 0, $number);
@@ -214,8 +186,8 @@ class FakeDeck implements IDeckAdapter
      */
     public function moveAllCardsInLocation(string $fromLocation, string $toLocation, ?int $fromIndex = null, ?int $toIndex = null, ?int $playerId = null): void
     {
-        $fromLocationKey = $playerId !== null ? "{$fromLocation}_{$playerId}" : $fromLocation;
-        $toLocationKey = $playerId !== null ? "{$toLocation}_{$playerId}" : $toLocation;
+        $fromLocationKey = $this->getLocationKey($fromLocation, $playerId);
+        $toLocationKey = $this->getLocationKey($toLocation, $playerId);
 
         if (isset($this->locations[$fromLocationKey])) {
             $cardsToMove = $this->locations[$fromLocationKey];
@@ -234,12 +206,6 @@ class FakeDeck implements IDeckAdapter
         return count($this->cards) + 1;
     }
 
-    /**
-     * Find the location of a specific card.
-     *
-     * @param int $cardId
-     * @return string|null
-     */
     private function findCardLocation(int $cardId): ?string
     {
         foreach ($this->locations as $location => $cards) {
@@ -255,6 +221,31 @@ class FakeDeck implements IDeckAdapter
         $parts = explode('_', $location);
         $playerId = isset($parts[1]) ? (int)$parts[1] : 0;
         return [$parts[0], $playerId];
+    }
+
+    public function getLocationKey(string $location, ?int $playerId): string
+    {
+        return $playerId !== null ? "{$location}_{$playerId}" : $location;
+    }
+
+    public function isLocationKey(string $locationKey, string $location, ?int $playerId): bool
+    {
+        return $playerId !== null
+            ? $locationKey == $this->getLocationKey($location, $playerId)
+            : str_starts_with($locationKey, $location);
+    }
+
+    private function unloadCardFromLocations(int $cardId, bool $reindex): void
+    {
+        foreach ($this->locations as $loc => $cards) {
+            $key = array_search($cardId, $cards);
+            if ($key !== false) {
+                unset($this->locations[$loc][$key]);
+                if($reindex)
+                    $this->locations[$loc] = array_values($this->locations[$loc]);
+                break;
+            }
+        }
     }
 
 }

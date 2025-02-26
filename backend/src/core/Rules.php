@@ -99,8 +99,7 @@ class Rules
     private function getDebugInfos($infos, array $playerGames): array
     {
         return [
-            'players' => $infos->players,
-            'active_players' => $infos->activePlayers,
+            'infos' => $infos,
             'act_type' => $this->repo->getActivities(),
             'activities' => $this->repo->loadFromLocation('activities'),
             'earnings' => $this->repo->loadFromLocation('earnings'),

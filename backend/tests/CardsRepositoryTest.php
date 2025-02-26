@@ -11,6 +11,7 @@ class CardsRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->deck = new FakeDeck();
+        $this->deck->createCards(CardsData::$instances, 'deck');
         $this->repo = new CardsRepository(CardsData::$groups, CardsData::$details, $this->deck);
         $data = array_map(function ($data) {
             $data['id'] = 0;

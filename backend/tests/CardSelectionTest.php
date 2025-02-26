@@ -3,8 +3,8 @@
 namespace Bga\Games\AgileAndCo\Tests;
 
 use Bga\Games\AgileAndCo\CardsData;
-use Bga\Games\AgileAndCo\CardsRepository;
 use Bga\Games\AgileAndCo\CardSelection;
+use Bga\Games\AgileAndCo\CardsRepository;
 use Bga\Games\AgileAndCo\SortForSelection;
 use PHPUnit\Framework\TestCase;
 
@@ -17,6 +17,7 @@ class CardSelectionTest extends TestCase
     protected function setUp(): void
     {
         $this->deck = new FakeDeck();
+        $this->deck->createCards(CardsData::$instances, 'deck');
         $this->repo = new CardsRepository(CardsData::$groups, CardsData::$details, $this->deck);
 
         $this->repo->moveCardsToLocation(

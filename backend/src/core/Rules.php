@@ -242,6 +242,8 @@ class Rules
                 "productName" => $product->fullName,
             ]);
         }
+        if(count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company']))
+            $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
         return true;
     }
 

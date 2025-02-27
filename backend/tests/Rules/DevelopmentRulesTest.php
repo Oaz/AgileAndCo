@@ -8,7 +8,7 @@ class DevelopmentRulesTest extends RulesTestCase
     /**
      * @dataProvider developmentCompletion
      */
-    public function testCompleteDevelopment($currentPlayer, $teamSelection, $productSelection, $teams, $products, $powers): void
+    public function testCompleteDevelopment($currentPlayer, $teamSelection, $productSelection, $teams, $products, $powers, $bonus): void
     {
         // Arrange
         $this->withMultiActivity('ACTIVITY_DEVELOPMENT', 26, [9, 26, 68, 144]);
@@ -18,7 +18,7 @@ class DevelopmentRulesTest extends RulesTestCase
         $selectedTeams = new FakeSelection($this->rules, $currentPlayer, $teamSelection);
         $selectedProducts = new FakeSelection($this->rules, $currentPlayer, $productSelection);
         $potentialBefore = $this->rules->repo->listCardIds('potential', playerId: $currentPlayer);
-        $expectedNewPotential = array_diff($potentialBefore, $selectedProducts->getCardIds());
+        $expectedNewPotential = array_merge( array_diff($potentialBefore, $selectedProducts->getCardIds()), $bonus);
         $productsBefore = $this->rules->repo->listCardIds('products', playerId: $currentPlayer);
         $expectedNewProducts = array_merge($productsBefore, $selectedProducts->getCardIds());
 
@@ -38,21 +38,25 @@ class DevelopmentRulesTest extends RulesTestCase
     public static function developmentCompletion(): array
     {
         return [
-            [9, [], [], [], [], []],
-            [9, [['teams', 0]], [['potential', 0]], [], [], []],
-            [9, [['teams', 1]], [['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], []],
-            [26, [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], []],
+            [9, [], [], [], [], [], []],
+            [9, [['teams', 0]], [['potential', 0]], [], [], [], []],
+            [9, [['teams', 1]], [['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], [], []],
+            [26, [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], [], []],
             [26,
                 [['teams', 0], ['teams', 2]], [['potential', 0], ['potential', 3]],
-                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [], []
+                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [], [], []
             ],
             [9,
                 [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]],
-                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE']
+                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE'], []
             ],
             [26,
                 [['teams', 0], ['teams', 2]], [['potential', 0], ['potential', 3]],
-                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [['AGILE_MATURITY_TEST_TEAM', 1]], []
+                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [['AGILE_MATURITY_TEST_TEAM', 1]], [], []
+            ],
+            [9,
+                [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]],
+                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE', 'AGILE_MATURITY_PAIR_PROGRAMMING'], [21]
             ],
         ];
     }

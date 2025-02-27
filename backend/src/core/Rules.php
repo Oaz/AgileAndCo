@@ -39,29 +39,9 @@ class Rules
 
     public function getGameState(): array
     {
-        list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
-
         $infos = $this->game->loadInfos();
-        $playerGames = array_map(function ($player) use ($ongoingActivity, $activityInitiator, $infos) {
-            $player_id = $player['player_id'];
-            $currentActivity = in_array($player_id, $infos->activePlayers) ? $ongoingActivity : '';
-            if($currentActivity == 'ACTIVITY_RETROSPECTIVE')
-                $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
-            $potential = $this->repo->getCardsInLocationSortedByUsage('potential', $player['player_id']);
-            $selectedInRetrospective = array_values($this->repo->listCards('retrospective', playerId: $player['player_id']));
-            if(count($selectedInRetrospective) > 0)
-                $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
-            return [
-                'name' => $player['player_name'],
-                'activity' => $currentActivity,
-                'initiate' => $activityInitiator == $player_id,
-                'teams' => $this->repo->getCardsInLocationSortedByIndexes('teams', $player_id),
-                'products' => $this->repo->getCardsInLocationSortedByIndexes('products', $player_id),
-                'company' => $this->repo->getCardsInLocationSortedByUsage('company', $player['player_id']),
-                'potential' => $potential,
-                'conference' => $this->repo->getCardsInLocationSortedByUsage('conference', $player['player_id']),
-                'retrospective' => $selectedInRetrospective
-            ];
+        $playerGames = array_map(function ($player) {
+            return $this->getPlayerPrivateState($player['player_id']);
         }, $infos->players);
         $publicPlayerGames = array_map(function ($player) {
             $playerCopy = array_map(function ($item) {
@@ -72,6 +52,7 @@ class Rules
             return $playerCopy;
         }, $playerGames);
 
+        list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
         $activities = Helpers::pairsToDictionary(array_map(function ($activityCard) use ($ongoingActivity) {
             $index = $activityCard->index;
             $activityName = $this->repo->getActivities()[$index];
@@ -96,6 +77,30 @@ class Rules
         ];
     }
 
+    public function getPlayerPrivateState(int $playerId): array
+    {
+        list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
+        $infos = $this->game->loadInfos();
+        $currentActivity = in_array($playerId, $infos->activePlayers) ? $ongoingActivity : '';
+        if ($currentActivity == 'ACTIVITY_RETROSPECTIVE')
+            $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
+        $potential = $this->repo->getCardsInLocationSortedByUsage('potential', $playerId);
+        $selectedInRetrospective = array_values($this->repo->listCards('retrospective', playerId: $playerId));
+        if (count($selectedInRetrospective) > 0)
+            $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
+        return [
+            'name' => $infos->players[$playerId]['player_name'],
+            'activity' => $currentActivity,
+            'initiate' => $activityInitiator == $playerId,
+            'teams' => $this->repo->getCardsInLocationSortedByIndexes('teams', $playerId),
+            'products' => $this->repo->getCardsInLocationSortedByIndexes('products', $playerId),
+            'company' => $this->repo->getCardsInLocationSortedByUsage('company', $playerId),
+            'potential' => $potential,
+            'conference' => $this->repo->getCardsInLocationSortedByUsage('conference', $playerId),
+            'retrospective' => $selectedInRetrospective
+        ];
+    }
+
     private function getDebugInfos($infos, array $playerGames): array
     {
         return [
@@ -105,7 +110,7 @@ class Rules
             'earnings' => $this->repo->loadFromLocation('earnings'),
             'teams' => $this->repo->loadFromLocation('teams'),
             'products' => $this->repo->loadFromLocation('products'),
-            'potential' => $this->repo->loadAndSortByUsageFromLocation('potential',null),
+            'potential' => $this->repo->loadAndSortByUsageFromLocation('potential', null),
             'discard' => $this->repo->loadFromLocation('discard'),
             'conference' => $this->repo->loadFromLocation('conference'),
             'deck' => $this->repo->loadFromLocation('deck'),
@@ -116,7 +121,7 @@ class Rules
     public function chooseActivity(string $activity): string
     {
         $activityIndex = $this->repo->getActivityIndex($activity);
-        $selection = $this->repo->loadFromLocation('activities', index:$activityIndex);
+        $selection = $this->repo->loadFromLocation('activities', index: $activityIndex);
         if (count($selection) === 0)
             throw new \BgaUserException('Invalid activity choice');
         $activityCard = array_values($selection)[0];
@@ -179,10 +184,21 @@ class Rules
     public function completeConference($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $selection = new CardSelection('discard', $player_id, [
-            'potential' => SortForSelection::BY_USAGE,
-            'conference' => SortForSelection::BY_USAGE
-        ], $this->repo);
+        $player = $this->getPlayerPrivateState($player_id);
+        $shouldDiscard = $player['initiate'] ? 4 : 1;
+        if (in_array('AGILE_MATURITY_AGILE_ORGANIZER', $player['company']))
+            $shouldDiscard -= 1;
+        $wantDiscard = count($cards);
+        if ($wantDiscard != $shouldDiscard)
+            throw new \BgaUserException("Should discard {$shouldDiscard} instead of {$wantDiscard}");
+        $selection = in_array('AGILE_MATURITY_AGILE_PRACTITIONER', $player['company'])
+            ? new CardSelection('discard', $player_id, [
+                'potential' => SortForSelection::BY_USAGE,
+                'conference' => SortForSelection::BY_USAGE
+            ], $this->repo)
+            : new CardSelection('discard', $player_id, [
+                'conference' => SortForSelection::BY_USAGE
+            ], $this->repo);
         foreach ($cards as $card) {
             $selected = $selection->take($card);
             $cardId = $selected->id;
@@ -252,7 +268,7 @@ class Rules
         $selection = new CardSelection('retrospective choice', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
         $selected = $selection->take($card);
         $cardId = $selected->id;
-        $this->cards->moveCard($cardId, 'retrospective', playerId:$player_id);
+        $this->cards->moveCard($cardId, 'retrospective', playerId: $player_id);
         $this->broadcast('DEBUG: ${player_name} choose ${cardName} (${cardId}) during retrospective', [
             "player_name" => $infos->getPlayerName($player_id),
             "cardName" => $selected->fullName,
@@ -275,7 +291,7 @@ class Rules
                 "cardName" => $selected->fullName,
             ]);
         }
-        $this->cards->moveAllCardsInLocation('retrospective', 'company', playerId:$player_id);
+        $this->cards->moveAllCardsInLocation('retrospective', 'company', playerId: $player_id);
         return true;
     }
 
@@ -292,5 +308,6 @@ class Rules
     {
         $this->game->notifyPlayer($player_id, 'updateState', '', $this->getGamePrivateState($player_id));
     }
+
 
 }

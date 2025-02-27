@@ -17,7 +17,7 @@ class FakeGame implements IGameAdapter
         $this->players = array_combine($playerIds, array_map(function($id, $no) {
             return [
                 "player_id" => $id,
-                "player_name" => "player" . chr(65 + $no - 1),
+                "player_name" => "player" . chr(65 + $no),
                 "player_no" => $no,
             ];
         }, $playerIds, array_keys($playerIds)));

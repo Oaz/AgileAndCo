@@ -33,10 +33,21 @@ abstract class RulesTestCase extends TestCase
         $this->rules->ongoingActivity->write([$activity, $initiator]);
         $this->game->setActivePlayers([$initiator]);
     }
+
     protected function withMultiActivity(string $activity, int $initiator, array $playerIds): void
     {
         $this->arrange($playerIds);
         $this->rules->ongoingActivity->write([$activity, $initiator]);
         $this->game->setActivePlayers($playerIds);
+    }
+
+    protected function addCardsToCompany($currentPlayer, $powers)
+    {
+        $pickable = $this->rules->repo->loadFromLocation('deck');
+        foreach ($powers as $power) {
+            $picks = array_filter($pickable, fn($card) => $card->fullName === $power);
+            $pick = reset($picks);
+            $this->deck->moveCard($pick->id, 'company', playerId: $currentPlayer);
+        }
     }
 }

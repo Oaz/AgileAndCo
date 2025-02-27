@@ -28,10 +28,11 @@ class ConferenceRulesTest extends RulesTestCase
     /**
      * @dataProvider conferenceCompletion
      */
-    public function testCompleteConference($currentPlayer, $playerSelection): void
+    public function testCompleteConference($currentPlayer, $playerSelection, $powers): void
     {
         // Arrange
         $this->withMultiActivity('ACTIVITY_CONFERENCE', 26, [9,26,68,144]);
+        $this->addCardsToCompany($currentPlayer, $powers);
         $this->rules->prepareConference();
         $selection = new FakeSelection($this->rules, $currentPlayer, $playerSelection);
         $selectedIds = $selection->getCardIds();
@@ -56,37 +57,55 @@ class ConferenceRulesTest extends RulesTestCase
     public static function conferenceCompletion(): array
     {
         return [
-            [9, [['conference', 0]]],
-            [26, [['conference', 0],['conference', 1],['conference', 3],['conference', 4]]],
+            [9, [['conference', 0]], []],
+            [9, [['conference', 1]], []],
+            [26, [['conference', 0],['conference', 1],['conference', 3],['conference', 4]], []],
+            [9, [], ['AGILE_MATURITY_AGILE_ORGANIZER']],
+            [26, [['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER']],
+            [9, [['potential', 0]], ['AGILE_MATURITY_AGILE_PRACTITIONER']],
+            [26, [['potential', 0],['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_PRACTITIONER']],
+            [26, [['potential', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER', 'AGILE_MATURITY_AGILE_PRACTITIONER']],
         ];
     }
 
     /**
      * @dataProvider conferenceNonCompletion
      */
-    public function testCannotCompleteConference($currentPlayer, $playerSelection): void
+    public function testCannotCompleteConference($currentPlayer, $playerSelection, $powers, $expectedMessage): void
     {
         // Arrange
         $this->withMultiActivity('ACTIVITY_CONFERENCE', 26, [9,26,68,144]);
+        $this->addCardsToCompany($currentPlayer, $powers);
         $this->rules->prepareConference();
         $selection = new FakeSelection($this->rules, $currentPlayer, $playerSelection);
         $potential = $this->rules->repo->listCardIds('potential', playerId:$currentPlayer);
         $conference = $this->rules->repo->listCardIds('conference', playerId:$currentPlayer);
 
         // Act
-        $result = $this->rules->completeConference($currentPlayer, $selection->incomingJson());
+        try {
+            $this->rules->completeConference($currentPlayer, $selection->incomingJson());
+            $this->fail("Expected exception BgaUserException was not thrown.");
+        } catch (\BgaUserException $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        }
 
         // Assert
-        $this->assertFalse($result);
         $this->assertCount(0, $this->rules->repo->listCardIds('discard'));
         $this->assertEquivalent($potential, $this->rules->repo->listCardIds('potential', playerId:$currentPlayer));
         $this->assertEquivalent($conference, $this->rules->repo->listCardIds('conference', playerId:$currentPlayer));
+
     }
 
     public static function conferenceNonCompletion(): array
     {
         return [
-            [9, []],
+            [9, [], [], "Should discard 1 instead of 0"],
+            [26, [['conference', 0],['conference', 1],['conference', 3]], [], "Should discard 4 instead of 3"],
+            [26, [['conference', 0],['conference', 3]], ['AGILE_MATURITY_AGILE_ORGANIZER'], "Should discard 3 instead of 2"],
+            [9, [['potential', 0]], [], "Invalid discard - location not allowed"],
+            [26, [['potential', 0],['conference', 1],['conference', 3],['conference', 4]], [], "Invalid discard - location not allowed"],
+
         ];
     }
+
 }

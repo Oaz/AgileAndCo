@@ -66,7 +66,17 @@ class DeploymentRulesTest extends RulesTestCase
                 [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1], ['AGILE_MATURITY_TEST_TEAM', 2]],
                 ['AGILE_MATURITY_CONTINUOUS_DELIVERY']
             ],
-
+            [9, 3, [['products', 0]], [], [['AGILE_MATURITY_TEST_TEAM', 0]], ['AGILE_MATURITY_ENGAGED_USERS']],
+            [9, 6,
+                [['products', 0], ['products', 1]],
+                [['PRODUCT_TEAM_MMOG', 1]], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
+                ['AGILE_MATURITY_CONTINUOUS_DELIVERY','AGILE_MATURITY_USER_EXPERIENCE']
+            ],
+            [9, 7,
+                [['products', 0], ['products', 1]],
+                [['PRODUCT_TEAM_MMOG', 1]], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
+                ['AGILE_MATURITY_CONTINUOUS_DELIVERY','AGILE_MATURITY_USER_EXPERIENCE','AGILE_MATURITY_ENGAGED_USERS']
+            ],
         ];
     }
 

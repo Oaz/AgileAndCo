@@ -280,6 +280,10 @@ class Rules
                 "earning" => $earning,
             ]);
         }
+        if(count($cards) >= 1 && in_array('AGILE_MATURITY_ENGAGED_USERS', $player['company']))
+            $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
+        if(count($cards) >= 2 && in_array('AGILE_MATURITY_USER_EXPERIENCE', $player['company']))
+            $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
         return true;
     }
 

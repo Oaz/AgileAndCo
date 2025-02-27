@@ -101,6 +101,13 @@ class CardsRepository
         }, $this->loadFromLocation($location, $index, $playerId));
     }
 
+    public function listCardIds($location, ?int $index = null, ?int $playerId = null)
+    {
+        return array_map(function ($card) {
+            return $card->id;
+        }, $this->loadFromLocation($location, $index, $playerId));
+    }
+
     public function getSingleCard($location, ?int $index = null, ?int $playerId = null)
     {
         return array_values($this->loadFromLocation($location, $index, $playerId))[0];

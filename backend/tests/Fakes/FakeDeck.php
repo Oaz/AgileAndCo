@@ -54,16 +54,7 @@ class FakeDeck implements IDeckAdapter
      */
     public function moveCard(int $cardId, string $location, ?int $index = null, ?int $playerId = null): void
     {
-        $this->unloadCardFromLocations($cardId, reindex: false);
-        $targetLocationKey = $this->getLocationKey($location, $playerId);
-        if ($index !== null) {
-            if (!isset($this->locations[$targetLocationKey])) {
-                $this->locations[$targetLocationKey] = [];
-            }
-            $this->locations[$targetLocationKey][$index] = $cardId;
-        } else {
-            $this->locations[$targetLocationKey][] = $cardId;
-        }
+        $this->doMoveCard(false, $cardId, $location, $index, $playerId);
     }
 
     /**
@@ -162,6 +153,7 @@ class FakeDeck implements IDeckAdapter
             foreach ($pickedCards as $cardId) {
                 $this->moveCard($cardId, $toLocationKey);
             }
+            $this->reindexLocation($fromLocationKey);
         }
     }
 
@@ -242,9 +234,28 @@ class FakeDeck implements IDeckAdapter
             if ($key !== false) {
                 unset($this->locations[$loc][$key]);
                 if($reindex)
-                    $this->locations[$loc] = array_values($this->locations[$loc]);
+                    $this->reindexLocation($loc);
                 break;
             }
+        }
+    }
+
+    private function reindexLocation(string $locationKey): void
+    {
+        $this->locations[$locationKey] = array_values($this->locations[$locationKey]);
+    }
+
+    public function doMoveCard(bool $reindex, int $cardId, string $location, ?int $index = null, ?int $playerId = null): void
+    {
+        $this->unloadCardFromLocations($cardId, reindex: $reindex);
+        $targetLocationKey = $this->getLocationKey($location, $playerId);
+        if ($index !== null) {
+            if (!isset($this->locations[$targetLocationKey])) {
+                $this->locations[$targetLocationKey] = [];
+            }
+            $this->locations[$targetLocationKey][$index] = $cardId;
+        } else {
+            $this->locations[$targetLocationKey][] = $cardId;
         }
     }
 

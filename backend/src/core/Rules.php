@@ -4,11 +4,11 @@ namespace Bga\Games\AgileAndCo;
 
 class Rules
 {
-    private CardsRepository $repo;
+    public readonly CardsRepository $repo;
     private IDeckAdapter $cards;
     private IGameAdapter $game;
-    private IGlobalVariable $ongoingActivity;
-    private IGlobalVariable $currentEarnings;
+    public readonly IGlobalVariable $ongoingActivity;
+    public readonly IGlobalVariable $currentEarnings;
 
     public function __construct(IDeckAdapter $cards, IGameAdapter $game)
     {

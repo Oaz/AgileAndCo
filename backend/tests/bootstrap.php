@@ -13,6 +13,7 @@ require_once __DIR__ . '/../src/core/CardSelection.php';
 require_once __DIR__ . '/../src/core/Helpers.php';
 require_once __DIR__ . '/../src/core/Rules.php';
 
+require_once __DIR__ . '/Fakes/FakeSelection.php';
 require_once __DIR__ . '/Fakes/FakeDeck.php';
 require_once __DIR__ . '/Fakes/FakeGlobalVariable.php';
 require_once __DIR__ . '/Fakes/FakeGame.php';

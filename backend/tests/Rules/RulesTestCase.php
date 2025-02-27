@@ -20,4 +20,23 @@ abstract class RulesTestCase extends TestCase
         $this->game->globalVariable('ONGOING_ACTIVITY')->write(['', 0]);
 
     }
+
+    protected function assertEquivalent(array $a, array $b) : void {
+        sort($a);
+        sort($b);
+        $this->assertEquals($a, $b);
+    }
+
+    protected function withMonoActivity(string $activity, int $initiator, array $playerIds): void
+    {
+        $this->arrange($playerIds);
+        $this->rules->ongoingActivity->write([$activity, $initiator]);
+        $this->game->setActivePlayers([$initiator]);
+    }
+    protected function withMultiActivity(string $activity, int $initiator, array $playerIds): void
+    {
+        $this->arrange($playerIds);
+        $this->rules->ongoingActivity->write([$activity, $initiator]);
+        $this->game->setActivePlayers($playerIds);
+    }
 }

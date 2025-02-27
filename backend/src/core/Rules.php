@@ -247,13 +247,19 @@ class Rules
 
     public function prepareDeployment(): void
     {
-        $index = rand(0, count($this->repo->getAll('EARNINGS')) - 1);
+        $index = \bga_rand(0, count($this->repo->getAll('EARNINGS')) - 1);
         $this->currentEarnings->write($index);
     }
 
     public function completeDeployment($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
+        $player = $this->getPlayerPrivateState($player_id);
+        $maxNbOfDeployment =  $player['initiate'] ? 2 : 1;
+        if(in_array('AGILE_MATURITY_CONTINUOUS_DELIVERY', $player['company']))
+            $maxNbOfDeployment += 1;
+        if(count($cards) > $maxNbOfDeployment)
+            throw new \BgaUserException("Cannot deploy more than {$maxNbOfDeployment} product(s)");
         $earningCard = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
         $earnings = CardsData::$details[$earningCard];
         $selection = new CardSelection('deployment', $player_id, ['products' => SortForSelection::BY_INDEX], $this->repo);

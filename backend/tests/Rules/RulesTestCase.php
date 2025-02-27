@@ -41,13 +41,20 @@ abstract class RulesTestCase extends TestCase
         $this->game->setActivePlayers($playerIds);
     }
 
-    protected function addCardsToCompany($currentPlayer, $powers)
+    protected function addTo($location, $currentPlayer, $content)
     {
-        $pickable = $this->rules->repo->loadFromLocation('deck');
-        foreach ($powers as $power) {
-            $picks = array_filter($pickable, fn($card) => $card->fullName === $power);
+        foreach ($content as $cardDef) {
+            $index = null;
+            if(is_array($cardDef))
+                list($fullName,$index) = $cardDef;
+            else
+                $fullName = $cardDef;
+            $picks = array_filter(
+                $this->rules->repo->loadFromLocation('deck'),
+                fn($card) => $card->fullName === $fullName
+            );
             $pick = reset($picks);
-            $this->deck->moveCard($pick->id, 'company', playerId: $currentPlayer);
+            $this->deck->moveCard($pick->id, $location, $index, $currentPlayer);
         }
     }
 }

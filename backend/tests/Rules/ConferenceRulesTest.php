@@ -32,7 +32,7 @@ class ConferenceRulesTest extends RulesTestCase
     {
         // Arrange
         $this->withMultiActivity('ACTIVITY_CONFERENCE', 26, [9,26,68,144]);
-        $this->addCardsToCompany($currentPlayer, $powers);
+        $this->addTo('company', $currentPlayer, $powers);
         $this->rules->prepareConference();
         $selection = new FakeSelection($this->rules, $currentPlayer, $playerSelection);
         $selectedIds = $selection->getCardIds();
@@ -75,7 +75,7 @@ class ConferenceRulesTest extends RulesTestCase
     {
         // Arrange
         $this->withMultiActivity('ACTIVITY_CONFERENCE', 26, [9,26,68,144]);
-        $this->addCardsToCompany($currentPlayer, $powers);
+        $this->addTo('company', $currentPlayer, $powers);
         $this->rules->prepareConference();
         $selection = new FakeSelection($this->rules, $currentPlayer, $playerSelection);
         $potential = $this->rules->repo->listCardIds('potential', playerId:$currentPlayer);

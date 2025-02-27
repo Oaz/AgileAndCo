@@ -31,6 +31,12 @@ class CardSelection
     }
 
     public function take(array $card) : Card {
+        $selected = $this->peek($card);
+        $this->taken[$selected->id] = true;
+        return $selected;
+    }
+
+    public function peek(array $card) : Card {
         $cardGroup = $this->locations[$card['zone']] ?? null;
         if($cardGroup == null)
             throw new \BgaUserException("Invalid {$this->usage} - location not allowed");
@@ -41,10 +47,8 @@ class CardSelection
         $selected = $selected->withIndex($card['index']);
         if ($selected->fullName !== $card['name'])
             throw new \BgaUserException("Invalid {$this->usage} - card name mismatch: expected {$selected->fullName} but was {$card['name']}");
-        $cardId = $selected->id;
-        if($this->taken[$cardId] ?? false)
+        if($this->taken[$selected->id] ?? false)
             throw new \BgaUserException("Invalid {$this->usage} - duplicate card");
-        $this->taken[$cardId] = true;
         return $selected;
     }
 }

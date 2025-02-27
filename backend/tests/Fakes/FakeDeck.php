@@ -3,12 +3,20 @@
 namespace Bga\Games\AgileAndCo\Tests;
 
 use Bga\Games\AgileAndCo\IDeckAdapter;
+use Random\Randomizer;
+use Random\Engine\Mt19937;
 
 class FakeDeck implements IDeckAdapter
 {
     private $cards = [];
     private $locations = [];
+    private Randomizer $randomizer;
 
+    public function __construct() {
+        $seed = 123456789;
+        $engine = new Mt19937($seed);
+        $this->randomizer = new Randomizer($engine);
+    }
     /**
      * Create cards with the given data and place them in the specified location.
      *
@@ -131,7 +139,7 @@ class FakeDeck implements IDeckAdapter
     public function shuffle(string $location): void
     {
         if (isset($this->locations[$location])) {
-            shuffle($this->locations[$location]);
+            $this->randomizer->shuffleArray($this->locations[$location]);
         }
     }
 

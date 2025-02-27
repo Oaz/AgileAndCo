@@ -215,10 +215,23 @@ class Rules
 
     public function completeDevelopment($player_id, $teams, $products): bool
     {
+        if(count($teams) != count($products))
+            throw new \BgaUserException("Should have same number of selected teams and products");
         $infos = $this->game->loadInfos();
+        $player = $this->getPlayerPrivateState($player_id);
+        $maxNbOfDev =  $player['initiate'] ? 2 : 1;
+        if(in_array('AGILE_MATURITY_CLEAN_CODE', $player['company']))
+            $maxNbOfDev += 1;
+        if(count($teams) > $maxNbOfDev)
+            throw new \BgaUserException("Cannot develop more than {$maxNbOfDev} product(s)");
         $inputs = array_map(null, $teams, $products);
         $teamSelection = new CardSelection('development team', $player_id, ['teams' => SortForSelection::BY_INDEX], $this->repo);
         $productSelection = new CardSelection('development product', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
+        foreach ($inputs as $input) {
+            $team = $teamSelection->peek($input[0]);
+            if($player['products'][$team->index])
+                throw new \BgaUserException("Team must deploy before developing another product");
+        }
         foreach ($inputs as $input) {
             $team = $teamSelection->take($input[0]);
             $product = $productSelection->take($input[1]);

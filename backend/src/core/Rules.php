@@ -291,6 +291,9 @@ class Rules
     {
         $infos = $this->game->loadInfos();
         $selection = new CardSelection('retrospective choice', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
+        $player = $this->getPlayerPrivateState($player_id);
+        if($this->computeCost($selection->peek($card), $player) > $this->computeFunds($player))
+            throw new \BgaUserException("Insufficient Funds");
         $selected = $selection->take($card);
         $cardId = $selected->id;
         $this->cards->moveCard($cardId, 'retrospective', playerId: $player_id);
@@ -318,6 +321,24 @@ class Rules
         }
         $this->cards->moveAllCardsInLocation('retrospective', 'company', playerId: $player_id);
         return true;
+    }
+
+    public function computeCost(PlayerCard $card, array $player) {
+        $cost = $card->cost;
+        if($player['initiate'])
+            $cost--;
+        if(($card->type == 'AGILE_MATURITY' || $card->type == 'AGILE_VALUE')
+            && in_array('AGILE_MATURITY_INTERNAL_COACH', $player['company']))
+            $cost--;
+        if($card->type == 'PRODUCT_TEAM'
+            && in_array('AGILE_MATURITY_PASSIONATE_DEVELOPER', $player['company']))
+            $cost--;
+        return $cost;
+    }
+
+    public function computeFunds(array $player) {
+        $products = array_filter($player['products'], fn($x) => $x);
+        return count($player['potential']) + 2*count($products) - 1;
     }
 
     public function getGamePrivateState($player_id): array

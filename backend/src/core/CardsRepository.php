@@ -127,10 +127,19 @@ class CardsRepository
             $data['id'], $data['type'], $group[$data['type_arg']],
             $data['player_id'], $data['location'], $data['index']
         );
+        return $this->createPlayerCard($card);
+    }
+
+    public function createCardTemplate(string $fullName) {
+        return $this->createPlayerCard($this->cardsReference[$fullName]);
+    }
+
+    public function createPlayerCard(Card $card) : PlayerCard
+    {
         $details = $this->details[$card->fullName] ?? [];
         $cost = $details['cost'] ?? null;
         if ($cost == null)
-            return $card;
+            return new PlayerCard($card, 0);;
         return new PlayerCard($card, $cost);
     }
 

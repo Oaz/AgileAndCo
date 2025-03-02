@@ -12,6 +12,7 @@ class CardSelection
     private array $taken;
     private string $usage;
     private array $locations;
+    private CardsRepository $repo;
 
     public function __construct(string $usage, int $playerId, array $allowedLocations, CardsRepository $repo)
     {
@@ -28,15 +29,16 @@ class CardSelection
             },
             []
         );
+        $this->repo = $repo;
     }
 
-    public function take(array $card) : Card {
+    public function take(array $card) : PlayerCard {
         $selected = $this->peek($card);
         $this->taken[$selected->id] = true;
         return $selected;
     }
 
-    public function peek(array $card) : Card {
+    public function peek(array $card) : PlayerCard {
         $cardGroup = $this->locations[$card['zone']] ?? null;
         if($cardGroup == null)
             throw new \BgaUserException("Invalid {$this->usage} - location not allowed");
@@ -49,6 +51,6 @@ class CardSelection
             throw new \BgaUserException("Invalid {$this->usage} - card name mismatch: expected {$selected->fullName} but was {$card['name']}");
         if($this->taken[$selected->id] ?? false)
             throw new \BgaUserException("Invalid {$this->usage} - duplicate card");
-        return $selected;
+        return $this->repo->createPlayerCard($selected);
     }
 }

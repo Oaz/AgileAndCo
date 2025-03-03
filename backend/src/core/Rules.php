@@ -227,9 +227,10 @@ class Rules
         $inputs = array_map(null, $teams, $products);
         $teamSelection = new CardSelection('development team', $player_id, ['teams' => SortForSelection::BY_INDEX], $this->repo);
         $productSelection = new CardSelection('development product', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
+        $products = $player['products'];
         foreach ($inputs as $input) {
             $team = $teamSelection->peek($input[0]);
-            if($player['products'][$team->index])
+            if(isset($products[$team->index]) && $products[$team->index] !== false)
                 throw new \BgaUserException("Team must deploy before developing another product");
         }
         foreach ($inputs as $input) {
@@ -289,6 +290,8 @@ class Rules
 
     public function chooseForRetrospective($player_id, $card): bool
     {
+        if(count($card) == 0)
+            return false;
         $infos = $this->game->loadInfos();
         $selection = new CardSelection('retrospective choice', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
         $player = $this->getPlayerPrivateState($player_id);
@@ -308,7 +311,23 @@ class Rules
     public function payForRetrospective($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $selection = new CardSelection('retrospective payment', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
+        $player = $this->getPlayerPrivateState($player_id);
+        $selection = in_array('AGILE_MATURITY_DEVOPS', $player['company'])
+            ? new CardSelection('retrospective payment', $player_id, [
+                'potential' => SortForSelection::BY_USAGE,
+                'products' => SortForSelection::BY_INDEX
+            ], $this->repo)
+            : new CardSelection('retrospective payment', $player_id, [
+                'potential' => SortForSelection::BY_USAGE
+            ], $this->repo);
+        $targetCard = $this->repo->createCardTemplate($player['retrospective'][0]);
+        $payment = 0;
+        foreach ($cards as $card) {
+            $selected = $selection->peek($card);
+            $payment += $selected->location === "products" ? 2 : 1;
+        }
+        if($payment < $this->computeCost($targetCard, $player))
+            throw new \BgaUserException("Insufficient payment");
         foreach ($cards as $card) {
             $selected = $selection->take($card);
             $cardId = $selected->id;
@@ -337,8 +356,12 @@ class Rules
     }
 
     public function computeFunds(array $player) {
-        $products = array_filter($player['products'], fn($x) => $x);
-        return count($player['potential']) + 2*count($products) - 1;
+        $funds = count($player['potential']) - 1;
+        if(in_array('AGILE_MATURITY_DEVOPS', $player['company'])) {
+            $products = array_filter($player['products'], fn($x) => $x);
+            $funds += 2*count($products);
+        }
+        return $funds;
     }
 
     public function getGamePrivateState($player_id): array

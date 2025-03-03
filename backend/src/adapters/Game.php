@@ -203,8 +203,11 @@ class Game extends \Table
         $player_id = $this->getCurrentPlayerId();
         if ($this->rules->chooseForRetrospective($player_id, json_decode($card, true))) {
             $this->gamestate->nextPrivateState($player_id, "payment");
-            $this->rules->updateState($player_id);
+        } else {
+            $this->gamestate->unsetPrivateState($player_id);
+            $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
         }
+        $this->rules->updateState($player_id);
     }
 
     public function actRetrospectivePayment(string $cards): void

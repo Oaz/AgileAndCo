@@ -8,8 +8,6 @@ export class RetrospectiveActivityChoice extends RetrospectiveActivity {
         this.selection_min = 0;
         this.selection_max = 1;
         let affordable_cost = datas.potential.length - 1;
-        if(datas.initiate)
-            affordable_cost += 1;
         if(datas.company.includes('AGILE_MATURITY_DEVOPS'))
             affordable_cost += 2 * this.cards_in_zone(1).length;
         this.define_interactions(
@@ -27,7 +25,10 @@ export class RetrospectiveActivityChoice extends RetrospectiveActivity {
     }
 
     public do_act(): void {
-        BGA.performAction('actRetrospectiveChoice', {card: JSON.stringify(this.selected[0])});
+        if(this.selected.length == 0)
+            BGA.performAction('actRetrospectiveChoice', {card: '{}'});
+        else
+            BGA.performAction('actRetrospectiveChoice', {card: JSON.stringify(this.selected[0])});
     }
 }
 

@@ -41,7 +41,7 @@ abstract class RulesTestCase extends TestCase
         $this->game->setActivePlayers($playerIds);
     }
 
-    protected function addTo($location, $currentPlayer, $content)
+    protected function addTo($location, $playerId, $content)
     {
         foreach ($content as $cardDef) {
             $index = null;
@@ -54,7 +54,14 @@ abstract class RulesTestCase extends TestCase
                 fn($card) => $card->fullName === $fullName
             );
             $pick = reset($picks);
-            $this->deck->moveCard($pick->id, $location, $index, $currentPlayer);
+            $this->deck->moveCard($pick->id, $location, $index, $playerId);
+        }
+    }
+
+    protected function clear($location, $playerId): void {
+        $cardIds = $this->rules->repo->listCardIds($location, playerId: $playerId);
+        foreach ($cardIds as $cardId) {
+            $this->deck->playCard($cardId);
         }
     }
 }

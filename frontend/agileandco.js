@@ -66,17 +66,19 @@ function (dojo, declare, gamegui, counter, frontend) {
                 player_id: this.player_id,
             });
 
-            /*
             this.playerPanels = {}
             Object.values(gamedatas.players).forEach(player => {
+                console.log(`init player panel for player ${player.id}`);
                 const playerPanelContainer = document.createElement('div');
                 this.getPlayerPanelElement(player.id)
                     .insertAdjacentElement('beforeend', playerPanelContainer);
-                this.playerPanels[player.id] = frontend.initPlayerPanel(playerPanelContainer, {
-                    id:player.id, gamedatas
+                this.playerPanels[player.id] = frontend.createPlayerPanel(playerPanelContainer, {
+                    gamedatas,
+                    read_only,
+                    player_id: player.id,
                 });
             });
-            */
+
 
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
@@ -95,13 +97,8 @@ function (dojo, declare, gamegui, counter, frontend) {
             console.log('Entering state: ' + stateName, args);
             window.hh = args;
             if(args.args) {
-                await this.gamePlayAreaComponent.update_public(args.args.public);
-                await this.gamePlayAreaComponent.update_private(args.args._private);
+                await this.notif_updateState(args.args);
             }
-            // await this.gamePlayAreaComponent.enterState(stateName, args);
-            // for (const player_id in this.playerPanels) {
-            //     await this.playerPanels[player_id].enterState(stateName, args);
-            // }
         },
 
         // onLeavingState: this method is called each time we are leaving a game state.
@@ -145,6 +142,9 @@ function (dojo, declare, gamegui, counter, frontend) {
             console.log('updateState',args);
             await this.gamePlayAreaComponent.update_public(args.public);
             await this.gamePlayAreaComponent.update_private(args._private);
+            for (const player_id in this.playerPanels) {
+                await this.playerPanels[player_id].update_public(args.public.players[player_id]);
+            }
         },
 
         notif_activityChoice: async function (args) {

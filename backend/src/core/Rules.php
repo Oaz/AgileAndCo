@@ -47,6 +47,7 @@ class Rules
             $playerCopy = array_map(function ($item) {
                 return $item;
             }, $player);
+            $playerCopy['potentialSize'] = count($playerCopy['potential']);
             unset($playerCopy['potential']);
             unset($playerCopy['conference']);
             return $playerCopy;
@@ -89,6 +90,7 @@ class Rules
         if (count($selectedInRetrospective) > 0)
             $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
         return [
+            'id' => $playerId,
             'name' => $infos->players[$playerId]['player_name'],
             'activity' => $currentActivity,
             'initiate' => $activityInitiator == $playerId,

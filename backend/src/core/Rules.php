@@ -85,6 +85,8 @@ class Rules
         $currentActivity = in_array($playerId, $infos->activePlayers) ? $ongoingActivity : '';
         if ($currentActivity == 'ACTIVITY_RETROSPECTIVE')
             $currentActivity = 'ACTIVITY_RETROSPECTIVE_CHOOSE';
+        $teams = $this->repo->getCardsInLocationSortedByIndexes('teams', $playerId);
+        $company = $this->repo->getCardsInLocationSortedByUsage('company', $playerId);
         $potential = $this->repo->getCardsInLocationSortedByUsage('potential', $playerId);
         $selectedInRetrospective = array_values($this->repo->listCards('retrospective', playerId: $playerId));
         if (count($selectedInRetrospective) > 0)
@@ -92,15 +94,52 @@ class Rules
         return [
             'id' => $playerId,
             'name' => $infos->players[$playerId]['player_name'],
+            'score' => $this->computeScore($teams, $company, $potential),
             'activity' => $currentActivity,
             'initiate' => $activityInitiator == $playerId,
-            'teams' => $this->repo->getCardsInLocationSortedByIndexes('teams', $playerId),
+            'teams' => $teams,
             'products' => $this->repo->getCardsInLocationSortedByIndexes('products', $playerId),
-            'company' => $this->repo->getCardsInLocationSortedByUsage('company', $playerId),
+            'company' => $company,
             'potential' => $potential,
             'conference' => $this->repo->getCardsInLocationSortedByUsage('conference', $playerId),
             'retrospective' => $selectedInRetrospective
         ];
+    }
+
+    public function computeScore($teams, $company, $potential): int
+    {
+        $score = 0;
+        foreach ($teams as $team) {
+            $card = $this->repo->createCardTemplate($team);
+            $score += $card->score;
+        }
+        $valuesCount = 0;
+        $agileSensei = false;
+        $productVision = false;
+        foreach ($company as $action) {
+            $card = $this->repo->createCardTemplate($action);
+            $score += $card->score;
+            if ($card->type == 'AGILE_VALUE')
+                $valuesCount += 1;
+            if ($action == 'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP')
+                $score += 2 * count($teams);
+            $agileSensei = $agileSensei || ($action == 'AGILE_MATURITY_AGILE_SENSEI');
+            $productVision = $productVision || ($action == 'AGILE_MATURITY_PRODUCT_VISION');
+        }
+        $malusCount = 0;
+        foreach ($potential as $malus) {
+            $card = $this->repo->createCardTemplate($malus);
+            if ($card->score >= 0)
+                continue;
+            $score += $card->score;
+            $malusCount++;
+        }
+        $score += $valuesCount * $valuesCount;
+        if($agileSensei)
+            $score += count($company) + $malusCount;
+        if($productVision)
+            $score = 1.3*$score;
+        return $score;
     }
 
     private function getDebugInfos($infos, array $playerGames): array

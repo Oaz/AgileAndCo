@@ -120,7 +120,7 @@ class CardsRepository
         }, $this->deck->getCardsInLocation($location, $index, $playerId));
     }
 
-    public function createCard(array $data)
+    public function createCard(array $data) : PlayerCard
     {
         $group = $this->groups[$data['type']];
         $card = new Card(
@@ -130,17 +130,16 @@ class CardsRepository
         return $this->createPlayerCard($card);
     }
 
-    public function createCardTemplate(string $fullName) {
+    public function createCardTemplate(string $fullName) : PlayerCard {
         return $this->createPlayerCard($this->cardsReference[$fullName]);
     }
 
     public function createPlayerCard(Card $card) : PlayerCard
     {
         $details = $this->details[$card->fullName] ?? [];
-        $cost = $details['cost'] ?? null;
-        if ($cost == null)
-            return new PlayerCard($card, 0);;
-        return new PlayerCard($card, $cost);
+        $cost = $details['cost'] ?? 0;
+        $score = $details['score'] ?? 0;
+        return new PlayerCard($card, $cost, $score);
     }
 
     public function moveCardsToLocation(array $fullNames, string $location, ?int $playerId = null): void

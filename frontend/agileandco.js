@@ -144,16 +144,8 @@ function (dojo, declare, gamegui, counter, frontend) {
             await this.gamePlayAreaComponent.update_private(args._private);
             for (const player_id in this.playerPanels) {
                 await this.playerPanels[player_id].update_public(args.public.players[player_id]);
+                this.scoreCtrl[player_id].setValue(args.public.players[player_id].score);
             }
-        },
-
-        notif_activityChoice: async function (args) {
-            console.log('XXXX notif_activityChoice');
-            // await this.gamePlayAreaComponent.update(args);
-        },
-
-        notif_coachGivesPotential: async function (args) {
-            // await this.gamePlayAreaComponent.update(args);
         },
 
         notif_newScores: async function (args) {

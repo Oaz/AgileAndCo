@@ -52,9 +52,7 @@ class Game extends \Table
 
     public function getGameProgression()
     {
-        // TODO: compute and return the game progression
-
-        return 0;
+        return $this->rules->getGameProgression();
     }
 
     /**

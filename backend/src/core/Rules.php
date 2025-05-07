@@ -9,6 +9,8 @@ class Rules
     private IGameAdapter $game;
     public readonly IGlobalVariable $ongoingActivity;
     public readonly IGlobalVariable $currentEarnings;
+    public readonly IGlobalVariable $completedActivitiesCount;
+
 
     public function __construct(IDeckAdapter $cards, IGameAdapter $game)
     {
@@ -17,6 +19,14 @@ class Rules
         $this->repo = new CardsRepository(CardsData::$groups, CardsData::$details, $cards);
         $this->ongoingActivity = $this->game->globalVariable('ONGOING_ACTIVITY');
         $this->currentEarnings = $this->game->globalVariable('CURRENT_EARNINGS');
+        $this->completedActivitiesCount = $this->game->globalVariable('COMPLETED_ACTIVITIES_COUNT');
+    }
+
+    public function getGameProgression(): int
+    {
+        $totalActivityCount = 48;
+        $currentCount = $this->completedActivitiesCount->read();
+        return 100*$currentCount/$totalActivityCount;
     }
 
     public function initGame($players): void
@@ -35,6 +45,7 @@ class Rules
         }
         $this->ongoingActivity->write(['', 0]);
         $this->currentEarnings->write(0);
+        $this->completedActivitiesCount->write(0);
     }
 
     public function getGameState(): array
@@ -145,6 +156,7 @@ class Rules
     private function getDebugInfos($infos, array $playerGames): array
     {
         return [
+            'completed_activities' => $this->completedActivitiesCount->read(),
             'infos' => $infos,
             'act_type' => $this->repo->getActivities(),
             'activities' => $this->repo->loadFromLocation('activities'),
@@ -219,6 +231,8 @@ class Rules
     public function gotToNextPlayer(): string
     {
         $this->ongoingActivity->write(['', 0]);
+        $currentCount = $this->completedActivitiesCount->read();
+        $this->completedActivitiesCount->write($currentCount + 1);
         return "nextActivity";
     }
 

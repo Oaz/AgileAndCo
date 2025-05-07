@@ -25,7 +25,7 @@
 </script>
 
 <div class="panel">
-Pot:{potentialSize}
+🎴{potentialSize}
 </div>
 
 <style>

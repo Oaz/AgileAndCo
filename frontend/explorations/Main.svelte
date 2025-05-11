@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Banner from "./Banner.svelte";
     import Tabs from "./Tabs.svelte";
     import AllCards from "./AllCards.svelte";
     import CardSelection from "./CardSelection.svelte";
@@ -38,7 +39,7 @@
 </script>
 
 <main>
-    <h1>Agile&Co mock-ups</h1>
+    <Banner />
     <Tabs activeTabValue="0" {items}/>
 </main>
 

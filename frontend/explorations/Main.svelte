@@ -12,6 +12,7 @@
     import CentralPanelTester from "./CentralPanelTester.svelte";
     import GameBoardTester from "./GameBoardTester.svelte";
     import {BGA} from "../lib/BGA";
+    import LanguageToggle from "./LanguageToggle.svelte";
 
     let items = [
         {label: "Game Board", component: GameBoardTester},
@@ -35,12 +36,20 @@
                 Object.entries(args).map(([key, value]) => [key, JSON.parse(value.toString())])
             ), null, 2));
     });
-    BGA.setTranslate(text => text);
+
+    let language = "";
 </script>
 
 <main>
-    <Banner />
-    <Tabs activeTabValue="0" {items}/>
+    {#key language}
+        <Banner />
+    {/key}
+    <div class="tabs-container">
+        <LanguageToggle bind:language />
+        {#key language}
+            <Tabs activeTabValue="0" {items}/>
+        {/key}
+    </div>
 </main>
 
 <style>
@@ -50,7 +59,9 @@
         padding: 20px;
     }
 
-    h1 {
-        margin-bottom: 20px;
+    .tabs-container {
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
     }
 </style>

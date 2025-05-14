@@ -247,3 +247,11 @@ export function _(templateKey: Text, ...args: string[]): string {
         return template;
     return localFormat(template, args);
 }
+
+export function createTranslation(translatedTexts: Record<Text, string>): Record<string, string> {
+    const result: Record<string, string> = {};
+    Object.keys(texts).forEach(key => {
+        result[texts[key]] = translatedTexts[key];
+    });
+    return result;
+}

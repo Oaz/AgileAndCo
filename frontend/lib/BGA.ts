@@ -1,6 +1,6 @@
 
 export class BGA {
-    private static _translate: any;
+    private static _translate: any = x => x;
     private static _performAction: any;
 
     public static setTranslate(translate) {

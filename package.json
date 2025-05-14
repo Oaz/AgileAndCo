@@ -5,11 +5,14 @@
   "description": "An online board game where you manage an agile software development company and lead your teams to success.",
   "main": "index.js",
   "scripts": {
-    "dev": "vite --config config/vite.config.ts",
-    "build:mockups": "vite build --config config/vite.config.ts && npm run copy-mockups",
+    "dev:mockups": "BUILD_TARGET=mockups vite --config config/vite.config.ts",
+    "dev:website": "BUILD_TARGET=website vite --config config/vite.config.ts",
+    "build:mockups": "BUILD_TARGET=mockups vite build --config config/vite.config.ts && npm run copy-mockups",
+    "build:website": "BUILD_TARGET=website vite build --config config/vite.config.ts && npm run copy-website",
     "build:bga": "BUILD_TARGET=bga vite build --config config/vite.config.ts && npm run copy-backend && npm run copy-frontend",
     "check": "svelte-check --tsconfig ./config/tsconfig.json",
     "copy-mockups": "copyfiles -u 3 'frontend/explorations/deploy/index.html' local/standalone",
+    "copy-website": "copyfiles -u 3 'frontend/website/deploy/index.html' local/website",
     "copy-backend": "copyfiles -u 2 'backend/config/*' remote && copyfiles -u 2 -f 'backend/src/**/*' remote/modules/php",
     "copy-frontend": "copyfiles -u 1 'frontend/agileandco.js' remote"
   },

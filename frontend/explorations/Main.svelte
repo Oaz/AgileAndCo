@@ -1,5 +1,6 @@
 <script lang="ts">
-    import Banner from "./Banner.svelte";
+    import Banner from "../shared/Banner.svelte";
+    import LanguageToggle from "../shared/LanguageToggle.svelte";
     import Tabs from "./Tabs.svelte";
     import AllCards from "./AllCards.svelte";
     import CardSelection from "./CardSelection.svelte";
@@ -12,7 +13,6 @@
     import CentralPanelTester from "./CentralPanelTester.svelte";
     import GameBoardTester from "./GameBoardTester.svelte";
     import {BGA} from "../lib/BGA";
-    import LanguageToggle from "./LanguageToggle.svelte";
 
     let items = [
         {label: "Game Board", component: GameBoardTester},

@@ -1,15 +1,29 @@
 <script lang="ts">
     import {BGA} from "../lib/BGA";
     import {frTranslate} from "../lib/texts-fr";
+    import {onMount} from "svelte";
 
-    export let language = "en";
+    let supportedLanguages = ["en", "fr"];
+    const detectBrowserLanguage = () => {
+        for (const lang of navigator.languages) {
+            const primaryLang = lang.split('-')[0];
+            if (supportedLanguages.includes(primaryLang)) {
+                return primaryLang;
+            }
+        }
+        return 'en';
+    };
+
+    export let language = "";
 
     function setLanguage(newLanguage: string) {
-        console.log("setLanguage", newLanguage);
         language = newLanguage;
         BGA.setTranslate(language === "fr" ? frTranslate : text => text);
     }
-    setLanguage("en");
+
+    onMount(() => {
+        setLanguage(detectBrowserLanguage());
+    })
 </script>
 
 <div class="language-toggle">

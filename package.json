@@ -12,7 +12,7 @@
     "build:bga": "BUILD_TARGET=bga vite build --config config/vite.config.ts && npm run copy-backend && npm run copy-frontend",
     "check": "svelte-check --tsconfig ./config/tsconfig.json",
     "copy-mockups": "copyfiles -u 3 'frontend/explorations/deploy/index.html' local/standalone",
-    "copy-website": "copyfiles -u 3 'frontend/website/deploy/index.html' local/website",
+    "copy-website": "copyfiles -u 3 'frontend/website/deploy/{index,print}.html' local/website",
     "copy-backend": "copyfiles -u 2 'backend/config/*' remote && copyfiles -u 2 -f 'backend/src/**/*' remote/modules/php",
     "copy-frontend": "copyfiles -u 1 'frontend/agileandco.js' remote"
   },

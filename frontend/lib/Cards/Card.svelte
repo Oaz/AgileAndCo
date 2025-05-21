@@ -10,15 +10,6 @@
         position: relative;
         border: none !important;
     }
-    .cardtype {
-        text-align: center;
-        margin-top: 3mm;
-        font-family: "Arial", serif;
-        font-weight: bold;
-        font-size: 12pt;
-        color: white;
-        font-variant: small-caps;
-    }
 
     .container {
         border-radius: 2mm;

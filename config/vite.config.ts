@@ -63,6 +63,16 @@ const build = (() => {
                     format: 'amd',
                     treeshake: false,
                     plugins: [],
+                    input: {
+                        main: path.resolve(__dirname, '../frontend/website/index.html'),
+                        print: path.resolve(__dirname, '../frontend/website/print.html')
+                    },
+                    output: {
+                        entryFileNames: '[name].js',
+                        chunkFileNames: 'shared.[name].js',
+                        assetFileNames: '[name].[ext]',
+                    }
+
                 }
             };
         default:

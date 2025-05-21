@@ -2,27 +2,22 @@
     import {_, Text} from '../texts';
     import Logo from "./Logo.svelte";
     import Card from "./Card.svelte";
+    import CardHeader from "./CardHeader.svelte";
 </script>
 
 <style>
     :global(.leader) {
-        border-radius: 0mm;
+        border-radius: 0;
         background-color: #8a8062;
     }
 
     :global(.leader) :global(.container) {
-        top: 5mm;
-        height: 71mm;
-    }
-
-    :global(.leader) .name {
-        margin-top: 5mm;
-        font-size: 16pt;
+        height: 67mm;
     }
 
     :global(.leader) :global(.logo) {
         position: absolute;
-        top: 13mm;
+        top: 6mm;
         left: 12mm;
         width: 20mm;
     }
@@ -30,7 +25,7 @@
     :global(.leader) .description {
         text-align: center;
         position: absolute;
-        top: 33mm;
+        top: 30mm;
         font-family: "Arial", serif;
         font-size: 10pt;
         padding-left: 1mm;
@@ -40,7 +35,7 @@
     :global(.leader) .description2 {
         text-align: center;
         position: absolute;
-        top: 54mm;
+        top: 52mm;
         font-family: "Arial", serif;
         font-size: 10pt;
         padding-left: 1mm;
@@ -50,7 +45,7 @@
 
 
 <Card cardType="leader">
-    <div class="name">{_(Text.GAME_LEADER)}</div>
+    <CardHeader slot="header" cardTypeName={_(Text.GAME_LEADER)} />
     <Logo key="LEADER"/>
     <div class="description">{_(Text.LEADER_DESCRIPTION1)}</div>
     <div class="description2">{_(Text.LEADER_DESCRIPTION2)}</div>

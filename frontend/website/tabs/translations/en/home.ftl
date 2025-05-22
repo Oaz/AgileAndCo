@@ -7,4 +7,4 @@ summary =
     Increase team size or invest in agile practices?
     Foster production capacity or embed values?
 
-    In this card game combining strategy and luck, discuss the importance of agile values and practices.
+    In this card game combining strategy and luck, experience and discuss the importance of agile values and practices.

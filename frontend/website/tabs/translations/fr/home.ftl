@@ -7,4 +7,4 @@ summary =
     Augmenter la taille des équipes ou investir dans des pratiques agiles ?
     Favoriser la capacité de production ou ancrer des valeurs ?
 
-    Dans ce jeux de carte mêlant stratégie et chance, échangez autour de l'importance des valeurs et pratiques agiles.
+    Dans ce jeux de carte mêlant stratégie et chance, expérimentez et échangez autour de l'importance des valeurs et pratiques agiles.

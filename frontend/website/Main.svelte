@@ -1,7 +1,31 @@
 <script lang="ts">
+    import { push } from 'svelte-spa-router'
     import Banner from "../shared/Banner.svelte";
     import LanguageToggle from "../shared/LanguageToggle.svelte";
-    let language = "";
+    import {BGA} from "../lib/BGA";
+    import {frTranslate} from "../lib/texts-fr";
+    export let params: { language?: string };
+
+    const supportedLanguages = ["en", "fr"];
+    const selectedLanguage = () => {
+        if(params?.language)
+            return params?.language;
+        for (const lang of navigator.languages) {
+            const primaryLang = lang.split('-')[0];
+            if (supportedLanguages.includes(primaryLang)) {
+                return primaryLang;
+            }
+        }
+        return 'en';
+    };
+
+    let language = selectedLanguage();
+
+    $: {
+        console.log('pushing',language);
+        push(`/${language}`);
+        BGA.setTranslate(language === "fr" ? frTranslate : text => text);
+    }
 
     function openPrintPage() {
         window.open(`print.html?lang=${language}`, '_blank');

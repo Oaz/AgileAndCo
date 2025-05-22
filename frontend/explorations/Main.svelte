@@ -13,6 +13,7 @@
     import CentralPanelTester from "./CentralPanelTester.svelte";
     import GameBoardTester from "./GameBoardTester.svelte";
     import {BGA} from "../lib/BGA";
+    import {frTranslate} from "../lib/texts-fr";
 
     let items = [
         {label: "Game Board", component: GameBoardTester},
@@ -37,7 +38,10 @@
             ), null, 2));
     });
 
-    let language = "";
+    let language = "en";
+    $: {
+        BGA.setTranslate(language === "fr" ? frTranslate : text => text);
+    }
 </script>
 
 <main>

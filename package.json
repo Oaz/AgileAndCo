@@ -36,6 +36,7 @@
   "private": true,
   "dependencies": {
     "@rollup/plugin-image": "^3.0.3",
+    "svelte-spa-router": "^4.0.1",
     "vite-plugin-svgr": "^4.3.0"
   }
 }

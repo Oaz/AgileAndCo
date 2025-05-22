@@ -5,11 +5,11 @@
     import {BGA} from "../lib/BGA";
     import {frTranslate} from "../lib/texts-fr";
     import Tabs from "../shared/Tabs.svelte";
-    import Home from "./Home.svelte";
-    import Rules from "./Rules.svelte";
-    import Tutorial from "./Tutorial.svelte";
-    import PrintCards from "./PrintCards.svelte";
-    import Material from "./Material.svelte";
+    import Home from "./tabs/Home.svelte";
+    import Rules from "./tabs/Rules.svelte";
+    import Tutorial from "./tabs/Tutorial.svelte";
+    import PrintCards from "./tabs/PrintCards.svelte";
+    import Material from "./tabs/Material.svelte";
     export let params: { language?: string, tab?: string };
 
     const supportedLanguages = ["en", "fr"];

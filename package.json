@@ -17,6 +17,7 @@
     "copy-frontend": "copyfiles -u 1 'frontend/agileandco.js' remote"
   },
   "devDependencies": {
+    "@nubolab-ffwd/svelte-fluent": "^1.0.3",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tsconfig/svelte": "^5.0.4",

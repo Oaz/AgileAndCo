@@ -8,7 +8,22 @@
     }
 </script>
 
-<main>
+<div class="app-wrapper">
     <Router {routes} />
-</main>
+</div>
+
+<style>
+    .app-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .app-wrapper {
+            padding: 0 1rem;
+        }
+    }
+</style>
+
 

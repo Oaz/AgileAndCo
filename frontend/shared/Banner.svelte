@@ -13,7 +13,7 @@
         "PRODUCT_TEAM_MMOG",
         "AGILE_MATURITY_ENGAGED_USERS",
         "AGILE_VALUE_HUMOR",
-        "ACTIVITY_CONFERENCE",
+        "ACTIVITY_DEPLOYMENT",
         "AGILE_MATURITY_PASSIONATE_DEVELOPER",
         "LEADER_CARD",
         "AGILE_MATURITY_TEST_TEAM",
@@ -33,7 +33,7 @@
         "AGILE_VALUE_TRUST",
         "AGILE_VALUE_RESPECT",
         "AGILE_VALUE_COURAGE",
-        "ACTIVITY_DEPLOYMENT",
+        "ACTIVITY_CONFERENCE",
         "AGILE_MATURITY_DETAILED_PLANNING",
         "EARNINGS_CARD_3",
         "AGILE_MATURITY_PAIR_PROGRAMMING",
@@ -66,7 +66,7 @@
 
     .cards-container {
         position: absolute;
-        top: -100%;
+        top: -70%;
         left: -20%;
         width: 100%;
         height: 100%;

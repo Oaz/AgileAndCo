@@ -4,7 +4,7 @@
 
     const routes = {
         '/': Main,
-        '/:language': Main,
+        '/:language/:tab': Main,
     }
 </script>
 

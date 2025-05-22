@@ -10,7 +10,7 @@
     import Tutorial from "./Tutorial.svelte";
     import PrintCards from "./PrintCards.svelte";
     import Material from "./Material.svelte";
-    export let params: { language?: string };
+    export let params: { language?: string, tab?: string };
 
     const supportedLanguages = ["en", "fr"];
     const selectedLanguage = () => {
@@ -27,22 +27,26 @@
 
     let language = selectedLanguage();
     let activeTabValue = 0;
+    $: items = [
+            {key:'home', label: "Home", component: Home, props: { language }},
+            {key:'material', label: "Material", component: Material, props: { language }},
+            {key:'print', label: "Print Cards", component: PrintCards, props: { language }},
+            {key:'rules', label: "Rules", component: Rules, props: { language }},
+            {key:'tutorial', label: "Tutorial", component: Tutorial, props: { language }},
+        ];
 
-    $: {
-        console.log('pushing',language);
-        push(`/${language}`);
-        BGA.setTranslate(language === "fr" ? frTranslate : text => text);
+    $: if (params?.tab && items) {
+        const tabIndex = items.findIndex(item => item.key === params.tab);
+        if (tabIndex !== -1) {
+            activeTabValue = tabIndex;
+        }
     }
 
-    $: items = [
-        {key:'home', label: "Home", component: Home, props: { language }},
-        {key:'material', label: "Material", component: Material, props: { language }},
-        {key:'print', label: "Print Cards", component: PrintCards, props: { language }},
-        {key:'rules', label: "Rules", component: Rules, props: { language }},
-        {key:'tutorial', label: "Tutorial", component: Tutorial, props: { language }},
-    ];
-
-
+    $: {
+        const currentTab = items[activeTabValue].key;
+        push(`/${language}/${currentTab}`);
+        BGA.setTranslate(language === "fr" ? frTranslate : text => text);
+    }
 
 </script>
 

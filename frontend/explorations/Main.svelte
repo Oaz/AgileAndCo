@@ -1,7 +1,7 @@
 <script lang="ts">
     import Banner from "../shared/Banner.svelte";
     import LanguageToggle from "../shared/LanguageToggle.svelte";
-    import Tabs from "./Tabs.svelte";
+    import Tabs from "../shared/Tabs.svelte";
     import AllCards from "./AllCards.svelte";
     import CardSelection from "./CardSelection.svelte";
     import OtherPlayerBoardTester from "./OtherPlayerBoardTester.svelte";

@@ -4,6 +4,12 @@
     import LanguageToggle from "../shared/LanguageToggle.svelte";
     import {BGA} from "../lib/BGA";
     import {frTranslate} from "../lib/texts-fr";
+    import Tabs from "../shared/Tabs.svelte";
+    import Home from "./Home.svelte";
+    import Rules from "./Rules.svelte";
+    import Tutorial from "./Tutorial.svelte";
+    import PrintCards from "./PrintCards.svelte";
+    import Material from "./Material.svelte";
     export let params: { language?: string };
 
     const supportedLanguages = ["en", "fr"];
@@ -20,6 +26,7 @@
     };
 
     let language = selectedLanguage();
+    let activeTabValue = 0;
 
     $: {
         console.log('pushing',language);
@@ -27,9 +34,16 @@
         BGA.setTranslate(language === "fr" ? frTranslate : text => text);
     }
 
-    function openPrintPage() {
-        window.open(`print.html?lang=${language}`, '_blank');
-    }
+    $: items = [
+        {key:'home', label: "Home", component: Home, props: { language }},
+        {key:'material', label: "Material", component: Material, props: { language }},
+        {key:'print', label: "Print Cards", component: PrintCards, props: { language }},
+        {key:'rules', label: "Rules", component: Rules, props: { language }},
+        {key:'tutorial', label: "Tutorial", component: Tutorial, props: { language }},
+    ];
+
+
+
 </script>
 
 <main>
@@ -38,8 +52,9 @@
     {/key}
     <div class="tabs-container">
         <LanguageToggle bind:language />
-        <h1>Drive your software development business to success by mastering agile practices</h1>
-        <button class="print-button" on:click={openPrintPage}>Printable Cards</button>
+        {#key language}
+            <Tabs bind:activeTabValue {items}/>
+        {/key}
     </div>
 </main>
 
@@ -54,20 +69,5 @@
         position: relative;
         width: 100%;
         margin-top: 20px;
-    }
-
-    .print-button {
-        padding: 8px 16px;
-        margin-top: 20px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    .print-button:hover {
-        background-color: #45a049;
     }
 </style>

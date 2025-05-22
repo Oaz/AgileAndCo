@@ -15,7 +15,7 @@
 {#each items as item, index}
     {#if activeTabValue == index}
         <div class="box">
-            <svelte:component this={item.component}/>
+            <svelte:component this={item.component} {...(item.props || {})}/>
         </div>
     {/if}
 {/each}

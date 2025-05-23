@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Banner from "../shared/Banner.svelte";
+    import Banner from "../shared/banner/Banner.svelte";
     import LanguageToggle from "../shared/LanguageToggle.svelte";
     import Tabs from "../shared/Tabs.svelte";
     import AllCards from "./AllCards.svelte";

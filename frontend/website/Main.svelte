@@ -1,6 +1,5 @@
 <script lang="ts">
     import { push } from 'svelte-spa-router'
-    import Banner from "../shared/Banner.svelte";
     import LanguageToggle from "../shared/LanguageToggle.svelte";
     import {BGA} from "../lib/BGA";
     import {frTranslate} from "../lib/texts-fr";
@@ -52,7 +51,9 @@
 
 <main>
     {#key language}
-        <Banner />
+        <div class="banner">
+            <img src={`/banner_${language}.jpg`} alt="Banner" />
+        </div>
     {/key}
     <div class="tabs-container">
         <LanguageToggle bind:language />
@@ -68,7 +69,9 @@
         text-align: center;
         padding: 20px;
     }
-
+    .banner {
+        overflow: hidden;
+    }
     .tabs-container {
         position: relative;
         width: 100%;

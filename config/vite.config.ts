@@ -13,6 +13,8 @@ const root = (() => {
             return path.resolve(__dirname, '../frontend/explorations');
         case 'website':
             return path.resolve(__dirname, '../frontend/website');
+        case 'banner':
+            return path.resolve(__dirname, '../frontend/shared/banner');
         default:
             return undefined;
     }

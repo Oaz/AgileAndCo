@@ -7,6 +7,7 @@
   "scripts": {
     "dev:mockups": "BUILD_TARGET=mockups vite --config config/vite.config.ts",
     "dev:website": "BUILD_TARGET=website vite --config config/vite.config.ts",
+    "dev:banner": "BUILD_TARGET=banner vite --config config/vite.config.ts",
     "build:mockups": "BUILD_TARGET=mockups vite build --config config/vite.config.ts && npm run copy-mockups",
     "build:website": "BUILD_TARGET=website vite build --config config/vite.config.ts && npm run copy-website",
     "build:bga": "BUILD_TARGET=bga vite build --config config/vite.config.ts && npm run copy-backend && npm run copy-frontend",
@@ -14,10 +15,12 @@
     "copy-mockups": "copyfiles -u 3 'frontend/explorations/deploy/index.html' local/standalone",
     "copy-website": "copyfiles -u 3 'frontend/website/deploy/{index,print}.html' local/website",
     "copy-backend": "copyfiles -u 2 'backend/config/*' remote && copyfiles -u 2 -f 'backend/src/**/*' remote/modules/php",
-    "copy-frontend": "copyfiles -u 1 'frontend/agileandco.js' remote"
+    "copy-frontend": "copyfiles -u 1 'frontend/agileandco.js' remote",
+    "generate-banner": "node --loader ts-node/esm frontend/shared/banner/generate.ts"
   },
   "devDependencies": {
     "@nubolab-ffwd/svelte-fluent": "^1.0.3",
+    "@playwright/test": "^1.42.1",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tsconfig/svelte": "^5.0.4",
@@ -36,6 +39,7 @@
   },
   "private": true,
   "dependencies": {
+    "@playwright/test": "^1.52.0",
     "@rollup/plugin-image": "^3.0.3",
     "svelte-spa-router": "^4.0.1",
     "vite-plugin-svgr": "^4.3.0"

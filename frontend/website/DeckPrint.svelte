@@ -62,14 +62,21 @@
 <DeckPrintFooter />
 
 <style>
-    :global(body) {
-        margin: 6mm;
-    }
-
     :global(.card) {
         margin: 1mm;
         display: inline-block;
     }
 
+    @page {
+        size: landscape;
+        margin: 10mm;
+    }
+
+    @media print {
+        :global(body) {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
 
 </style>

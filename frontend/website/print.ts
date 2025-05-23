@@ -17,4 +17,8 @@ const app = mount(DeckPrint, {
     target: document.getElementById('app')!,
 })
 
+setTimeout(() => {
+    window.print();
+}, 100);
+
 export default app

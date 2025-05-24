@@ -9,6 +9,11 @@
     import Tutorial from "./tabs/Tutorial.svelte";
     import PrintCards from "./tabs/PrintCards.svelte";
     import Material from "./tabs/Material.svelte";
+    import enTranslations from './tabs/translations/en/tabs.ftl?raw';
+    import frTranslations from './tabs/translations/fr/tabs.ftl?raw';
+    import {initTranslations} from "./tabs/translations";
+    import { getFluentContext } from '@nubolab-ffwd/svelte-fluent';
+
     export let params: { language?: string, tab?: string };
 
     const supportedLanguages = ["en", "fr"];
@@ -26,13 +31,27 @@
 
     let language = selectedLanguage();
     let activeTabValue = 0;
-    $: items = [
-            {key:'home', label: "Home", component: Home, props: { language }},
-            {key:'material', label: "Material", component: Material, props: { language }},
-            {key:'print', label: "Print Cards", component: PrintCards, props: { language }},
-            {key:'rules', label: "Rules", component: Rules, props: { language }},
-            {key:'tutorial', label: "Tutorial", component: Tutorial, props: { language }},
-        ];
+    let fluentContext = undefined;
+    $: {
+        initTranslations(language, {
+            en: enTranslations,
+            fr: frTranslations
+        });
+        fluentContext = getFluentContext();
+    }
+
+    $: items = Object.entries({
+        home: Home,
+        material: Material,
+        print: PrintCards,
+        rules: Rules,
+        tutorial: Tutorial
+    }).map(([key, component]) => ({
+        key,
+        label: fluentContext.localize(`${key}-tab`),
+        component,
+        props: {language}
+    }));
 
     $: if (params?.tab && items) {
         const tabIndex = items.findIndex(item => item.key === params.tab);

@@ -18,7 +18,8 @@
     "copy-frontend": "copyfiles -u 1 'frontend/agileandco.js' remote",
     "generate-banner": "node --loader ts-node/esm frontend/shared/banner/generate.ts",
     "copy-banners-dev": "npm run generate-banner && copyfiles -u 4 'frontend/shared/banner/output/*.jpg' frontend/website/public",
-    "copy-banners-prod": "npm run generate-banner && copyfiles -u 4 'frontend/shared/banner/output/*.jpg' local/website/public"
+    "copy-banners-prod": "npm run generate-banner && copyfiles -u 4 'frontend/shared/banner/output/*.jpg' local/website/public",
+    "test": "vitest --config ./config/vitest.config.ts"
   },
   "devDependencies": {
     "@nubolab-ffwd/svelte-fluent": "^1.0.3",
@@ -27,13 +28,15 @@
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tsconfig/svelte": "^5.0.4",
     "@types/node": "^22.10.3",
+    "@vitest/coverage-v8": "^3.1.4",
     "copyfiles": "^2.4.1",
     "sass": "^1.83.0",
     "svelte": "^5.16.0",
     "svelte-check": "^4.1.1",
     "svelte-preprocess": "^6.0.3",
     "typescript": "~5.6.2",
-    "vite": "^6.0.6"
+    "vite": "^6.0.6",
+    "vitest": "^3.1.4"
   },
   "repository": {
     "type": "git",

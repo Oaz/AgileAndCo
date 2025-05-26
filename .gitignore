@@ -29,3 +29,5 @@ vendor
 .phpunit.result.cache
 
 banner_*.jpg
+
+coverage

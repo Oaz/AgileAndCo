@@ -25,6 +25,7 @@
     "@nubolab-ffwd/svelte-fluent": "^1.0.3",
     "@playwright/test": "^1.42.1",
     "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-image": "^3.0.3",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tsconfig/svelte": "^5.0.4",
     "@types/node": "^22.10.3",
@@ -34,8 +35,10 @@
     "svelte": "^5.16.0",
     "svelte-check": "^4.1.1",
     "svelte-preprocess": "^6.0.3",
+    "ts-node": "^10.9.2",
     "typescript": "~5.6.2",
-    "vite": "^6.0.6",
+    "vite": "6.3.4",
+    "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.1.4"
   },
   "repository": {
@@ -44,9 +47,6 @@
   },
   "private": true,
   "dependencies": {
-    "@playwright/test": "^1.52.0",
-    "@rollup/plugin-image": "^3.0.3",
-    "svelte-spa-router": "^4.0.1",
-    "vite-plugin-svgr": "^4.3.0"
+    "svelte-spa-router": "^4.0.1"
   }
 }

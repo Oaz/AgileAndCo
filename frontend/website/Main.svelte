@@ -7,7 +7,6 @@
     import Home from "./tabs/Home.svelte";
     import Rules from "./tabs/Rules.svelte";
     import Tutorial from "./tabs/Tutorial.svelte";
-    import PrintCards from "./tabs/PrintCards.svelte";
     import Material from "./tabs/Material.svelte";
     import enTranslations from './tabs/translations/en/tabs.ftl?raw';
     import frTranslations from './tabs/translations/fr/tabs.ftl?raw';
@@ -43,7 +42,6 @@
     $: items = Object.entries({
         home: Home,
         material: Material,
-        print: PrintCards,
         rules: Rules,
         tutorial: Tutorial
     }).map(([key, component]) => ({

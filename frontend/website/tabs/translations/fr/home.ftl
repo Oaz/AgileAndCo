@@ -1,4 +1,4 @@
-description = Un jeu de cartes pour découvrir les méthodes agiles
+description = Un jeu de cartes pour découvrir et expérimenter les méthodes agiles
 tag-line = Conduisez votre entreprise de développement de logiciels vers le succès en maîtrisant les pratiques agiles
 summary =
     Vous êtes à la tête d'une petite entreprise de jeux vidéos et fermement décidé à la développer.

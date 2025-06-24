@@ -1,4 +1,4 @@
-description = A card game to discover agile methods
+description = A card game to discover and experiment agile methods
 tag-line = Drive your software development business to success by mastering agile practices
 summary =
     You're the head of a small video game company and determined to grow it.

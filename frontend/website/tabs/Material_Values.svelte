@@ -34,7 +34,7 @@
     .card-row {
         display: flex;
         gap: 0.5rem;
-        transform: scale(0.67);
+        transform: scale(0.65);
         transform-origin: left top;
         width: 200%; /* Give more room for the cards */
     }

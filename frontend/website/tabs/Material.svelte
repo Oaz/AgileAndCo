@@ -16,6 +16,7 @@
     import Smells from "./Material_Smells.svelte";
     import Values from "./Material_Values.svelte";
     import { getFluentContext } from '@nubolab-ffwd/svelte-fluent';
+    import LocalizedList from "./LocalizedList.svelte";
 
     export let language: string;
     let activeSubtabValue = 0;
@@ -62,17 +63,7 @@
 </script>
 <div class="material-wrapper">
     <p class="summary">
-        <Localized id="intro">
-            {#snippet children({ text, attrs })}
-                <div class="intro-header">{text}</div>
-                <ul>
-                    {#each getItemsFromAttrs(attrs) as item}
-                        <li>{item}</li>
-                    {/each}
-                </ul>
-
-            {/snippet}
-        </Localized>
+        <LocalizedList id="intro" />
     </p>
     <button class="print-button" on:click={openPrintPage}><Localized id="print" /></button>
     <div class="subtabs-container">
@@ -89,19 +80,6 @@
         line-height: 1.6;
         color: var(--text-color, #666);
         margin-bottom: 2rem;
-        text-align: left;
-    }
-    .intro-header {
-        text-align: left;
-        margin-bottom: 0.5rem;
-    }
-    ul {
-        margin: 0.5rem 0 0 1.5rem;
-        padding: 0;
-        text-align: left;
-    }
-    li {
-        margin-bottom: 0.5rem;
         text-align: left;
     }
     .print-button {

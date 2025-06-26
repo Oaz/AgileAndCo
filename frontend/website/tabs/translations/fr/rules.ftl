@@ -39,7 +39,7 @@ end-game = Fin du jeu
 
 addendum1 = Impact de la maturité agile
     .details =
-    Lors d’une rétrospective, les améliorations relatives à la **maturité agile** influencent à la fois le score et le déroulement des activités.
+    Lors d’une rétrospective, les améliorations relatives à la maturité agile influencent à la fois le score et le déroulement des activités.
     Chaque carte de maturité précise son effet ainsi que l’icône correspondant à l’activité concernée.
     Par exemple, la carte "Code propre" permet de réaliser l’action DÉVELOPPEMENT deux fois au lieu d’une, voire trois fois si le groupe initie l’activité.
     Une amélioration de maturité ne peut être mise en place qu’une seule fois dans l’entreprise, son effet étant permanent dès activation.

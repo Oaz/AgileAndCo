@@ -36,7 +36,6 @@
 
     .box {
         margin-bottom: 10px;
-        padding: 20px;
         border: 1px solid #dee2e6;
         border-radius: 0 0 .5rem .5rem;
         flex: 1;

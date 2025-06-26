@@ -2,9 +2,9 @@
 
     import enTranslations from './translations/en/material_teams.ftl?raw';
     import frTranslations from './translations/fr/material_teams.ftl?raw';
-    import DeckCard from "../../lib/Cards/DeckCard.svelte";
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
+    import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
 
     export let language: string;
     initTranslations(language, {
@@ -14,10 +14,10 @@
 </script>
 <div class="card-container">
     <div class="card-row">
-        <DeckCard key="PRODUCT_TEAM_ADVERGAME" />
-        <DeckCard key="PRODUCT_TEAM_EDUCATION" />
-        <DeckCard key="PRODUCT_TEAM_SOCIAL" />
-        <DeckCard key="PRODUCT_TEAM_MMOG" />
+        <WrappedDeckCard key="PRODUCT_TEAM_ADVERGAME" />
+        <WrappedDeckCard key="PRODUCT_TEAM_EDUCATION" />
+        <WrappedDeckCard key="PRODUCT_TEAM_SOCIAL" />
+        <WrappedDeckCard key="PRODUCT_TEAM_MMOG" />
     </div>
     <p class="description-text"><Localized id="description"/></p>
 </div>
@@ -30,10 +30,9 @@
 
     .card-row {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.5rem;
-        transform: scale(0.9);
-        transform-origin: left top;
-        width: 200%; /* Give more room for the cards */
+        width: 100%;
     }
 
     .description-text {

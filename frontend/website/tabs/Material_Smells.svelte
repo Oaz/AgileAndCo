@@ -2,9 +2,9 @@
 
     import enTranslations from './translations/en/material_earnings.ftl?raw';
     import frTranslations from './translations/fr/material_earnings.ftl?raw';
-    import DeckCard from "../../lib/Cards/DeckCard.svelte";
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
+    import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
 
     export let language: string;
     initTranslations(language, {
@@ -14,10 +14,10 @@
 </script>
 <div class="card-container">
     <div class="card-row">
-        <DeckCard key="AGILE_MATURITY_DETAILED_PLANNING" />
-        <DeckCard key="AGILE_MATURITY_TEST_TEAM" />
-        <DeckCard key="AGILE_MATURITY_APPLICATION_FRAMEWORK" />
-        <DeckCard key="AGILE_MATURITY_AGILE_CERTIFICATION" />
+        <WrappedDeckCard key="AGILE_MATURITY_DETAILED_PLANNING" />
+        <WrappedDeckCard key="AGILE_MATURITY_TEST_TEAM" />
+        <WrappedDeckCard key="AGILE_MATURITY_APPLICATION_FRAMEWORK" />
+        <WrappedDeckCard key="AGILE_MATURITY_AGILE_CERTIFICATION" />
     </div>
     <p class="description-text"><Localized id="description"/></p>
 </div>
@@ -30,10 +30,9 @@
 
     .card-row {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.5rem;
-        transform: scale(0.9);
-        transform-origin: left top;
-        width: 200%; /* Give more room for the cards */
+        width: 100%;
     }
 
     .description-text {

@@ -2,7 +2,7 @@
 
     import enTranslations from './translations/en/material_earnings.ftl?raw';
     import frTranslations from './translations/fr/material_earnings.ftl?raw';
-    import DeckCard from "../../lib/Cards/DeckCard.svelte";
+    import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
 
@@ -11,16 +11,17 @@
         en: enTranslations,
         fr: frTranslations
     });
+    let scale = 0.64
 </script>
 <div class="card-container">
     <div class="card-row">
-        <DeckCard key="AGILE_VALUE_HUMOR" />
-        <DeckCard key="AGILE_VALUE_FEEDBACK" />
-        <DeckCard key="AGILE_VALUE_SIMPLICITY" />
-        <DeckCard key="AGILE_VALUE_TRUST" />
-        <DeckCard key="AGILE_VALUE_TRANSPARENCY" />
-        <DeckCard key="AGILE_VALUE_COURAGE" />
-        <DeckCard key="AGILE_VALUE_RESPECT" />
+        <WrappedDeckCard key="AGILE_VALUE_HUMOR" scale={scale} />
+        <WrappedDeckCard key="AGILE_VALUE_FEEDBACK" scale={scale} />
+        <WrappedDeckCard key="AGILE_VALUE_SIMPLICITY" scale={scale} />
+        <WrappedDeckCard key="AGILE_VALUE_TRUST" scale={scale} />
+        <WrappedDeckCard key="AGILE_VALUE_TRANSPARENCY" scale={scale} />
+        <WrappedDeckCard key="AGILE_VALUE_COURAGE" scale={scale} />
+        <WrappedDeckCard key="AGILE_VALUE_RESPECT" scale={scale} />
     </div>
     <p class="description-text"><Localized id="description"/></p>
 </div>
@@ -33,10 +34,9 @@
 
     .card-row {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.5rem;
-        transform: scale(0.65);
-        transform-origin: left top;
-        width: 200%; /* Give more room for the cards */
+        width: 100%;
     }
 
     .description-text {

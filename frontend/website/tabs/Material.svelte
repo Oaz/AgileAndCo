@@ -3,7 +3,7 @@
     import {initTranslations} from './translations';
     import enTranslations from './translations/en/material.ftl?raw';
     import frTranslations from './translations/fr/material.ftl?raw';
-    import Tabs from "../../shared/Tabs.svelte";
+    import Scroll from "../../shared/Scroll.svelte";
     import Leader from "./Material_Leader.svelte";
     import Activities from "./Material_Activities.svelte";
     import Teams from "./Material_Teams.svelte";
@@ -67,7 +67,17 @@
     </p>
     <button class="print-button" on:click={openPrintPage}><Localized id="print" /></button>
     <div class="subtabs-container">
-        <Tabs bind:activeSubtabValue vertical=true {items}/>
+        <Scroll items={items.map(item => ({ label: item.label, anchorId: item.key }))}>
+            <div>
+                {#each items as item}
+                    <section id={item.key}>
+                        <h2>{item.label}</h2>
+                        <svelte:component this={item.component} {...item.props} />
+                    </section>
+                {/each}
+
+            </div>
+        </Scroll>
     </div>
 </div>
 

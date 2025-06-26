@@ -1,10 +1,10 @@
 <script lang="ts">
 
-    import DeckCard from "../../lib/Cards/DeckCard.svelte";
     import { initTranslations } from './translations';
     import enTranslations from './translations/en/material_leader.ftl?raw';
     import frTranslations from './translations/fr/material_leader.ftl?raw';
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
+    import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
     export let language: string;
 
     initTranslations(language, {
@@ -15,7 +15,7 @@
 
 <div class="deck-container">
     <div class="deck-card">
-        <DeckCard key="LEADER_CARD" />
+        <WrappedDeckCard key="LEADER_CARD" />
     </div>
     <div class="description">
         <p class="description-text"><Localized id="description"/></p>
@@ -33,7 +33,6 @@
 
     .deck-card {
         flex: 0 0 auto;
-        transform: scale(0.9);
     }
 
     .description {

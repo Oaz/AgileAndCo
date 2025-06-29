@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import enTranslations from './translations/en/material_teams.ftl?raw';
-    import frTranslations from './translations/fr/material_teams.ftl?raw';
+    import enTranslations from './translations/en/material.ftl?raw';
+    import frTranslations from './translations/fr/material.ftl?raw';
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
     import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
@@ -19,7 +19,7 @@
         <WrappedDeckCard key="PRODUCT_TEAM_SOCIAL" />
         <WrappedDeckCard key="PRODUCT_TEAM_MMOG" />
     </div>
-    <p class="description-text"><Localized id="description"/></p>
+    <p class="description-text"><Localized id="teams-section.description"/></p>
 </div>
 
 

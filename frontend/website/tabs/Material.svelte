@@ -55,7 +55,7 @@
         values: Values,
     }).map(([key, component]) => ({
         key,
-        label: fluentContext.localize(`${key}-subtab`),
+        label: fluentContext.localize(`${key}-section`),
         component,
         props: {language}
     }));

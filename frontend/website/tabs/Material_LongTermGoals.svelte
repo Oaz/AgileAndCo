@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import enTranslations from './translations/en/material_long_term_goals.ftl?raw';
-    import frTranslations from './translations/fr/material_long_term_goals.ftl?raw';
+    import enTranslations from './translations/en/material.ftl?raw';
+    import frTranslations from './translations/fr/material.ftl?raw';
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
     import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
@@ -19,7 +19,7 @@
         <WrappedDeckCard key="AGILE_MATURITY_AGILE_SENSEI" />
         <WrappedDeckCard key="AGILE_MATURITY_PRODUCT_VISION" />
     </div>
-    <p class="description-text"><Localized id="description"/></p>
+    <p class="description-text"><Localized id="long-term-goals-section.description"/></p>
 </div>
 
 

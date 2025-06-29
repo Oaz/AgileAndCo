@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import enTranslations from './translations/en/material_activities.ftl?raw';
-    import frTranslations from './translations/fr/material_activities.ftl?raw';
+    import enTranslations from './translations/en/material.ftl?raw';
+    import frTranslations from './translations/fr/material.ftl?raw';
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
     import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
@@ -20,7 +20,7 @@
         <WrappedDeckCard key="ACTIVITY_RETROSPECTIVE" />
         <WrappedDeckCard key="ACTIVITY_COACH" />
     </div>
-    <p class="description-text"><Localized id="description"/></p>
+    <p class="description-text"><Localized id="activities-section.description"/></p>
 </div>
 
 

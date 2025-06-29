@@ -1,8 +1,8 @@
 <script lang="ts">
 
     import { initTranslations } from './translations';
-    import enTranslations from './translations/en/material_leader.ftl?raw';
-    import frTranslations from './translations/fr/material_leader.ftl?raw';
+    import enTranslations from './translations/en/material.ftl?raw';
+    import frTranslations from './translations/fr/material.ftl?raw';
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
     export let language: string;
@@ -18,7 +18,7 @@
         <WrappedDeckCard key="LEADER_CARD" />
     </div>
     <div class="description">
-        <p class="description-text"><Localized id="description"/></p>
+        <p class="description-text"><Localized id="leader-section.description"/></p>
     </div>
 </div>
 

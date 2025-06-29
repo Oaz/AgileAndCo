@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import enTranslations from './translations/en/material_earnings.ftl?raw';
-    import frTranslations from './translations/fr/material_earnings.ftl?raw';
+    import enTranslations from './translations/en/material.ftl?raw';
+    import frTranslations from './translations/fr/material.ftl?raw';
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
     import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
@@ -19,7 +19,7 @@
         <WrappedDeckCard key="EARNINGS_CARD_3" />
         <WrappedDeckCard key="EARNINGS_CARD_4" />
     </div>
-    <p class="description-text"><Localized id="description"/></p>
+    <p class="description-text"><Localized id="deployment-earnings-section.description"/></p>
 </div>
 
 

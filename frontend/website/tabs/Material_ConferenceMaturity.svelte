@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import enTranslations from './translations/en/material_maturity_conference.ftl?raw';
-    import frTranslations from './translations/fr/material_maturity_conference.ftl?raw';
+    import enTranslations from './translations/en/material.ftl?raw';
+    import frTranslations from './translations/fr/material.ftl?raw';
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
     import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
@@ -17,7 +17,7 @@
         <WrappedDeckCard key="AGILE_MATURITY_AGILE_PRACTITIONER" />
         <WrappedDeckCard key="AGILE_MATURITY_AGILE_ORGANIZER" />
     </div>
-    <p class="description-text"><Localized id="description"/></p>
+    <p class="description-text"><Localized id="conference-maturity-section.description"/></p>
 </div>
 
 

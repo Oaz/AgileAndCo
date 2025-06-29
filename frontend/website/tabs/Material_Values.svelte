@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import enTranslations from './translations/en/material_values.ftl?raw';
-    import frTranslations from './translations/fr/material_values.ftl?raw';
+    import enTranslations from './translations/en/material.ftl?raw';
+    import frTranslations from './translations/fr/material.ftl?raw';
     import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
@@ -23,7 +23,7 @@
         <WrappedDeckCard key="AGILE_VALUE_COURAGE" scale={scale} />
         <WrappedDeckCard key="AGILE_VALUE_RESPECT" scale={scale} />
     </div>
-    <p class="description-text"><Localized id="description"/></p>
+    <p class="description-text"><Localized id="values-section.description"/></p>
 </div>
 
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import enTranslations from './translations/en/material_earnings.ftl?raw';
-    import frTranslations from './translations/fr/material_earnings.ftl?raw';
+    import enTranslations from './translations/en/material_values.ftl?raw';
+    import frTranslations from './translations/fr/material_values.ftl?raw';
     import WrappedDeckCard from "../../shared/WrappedDeckCard.svelte";
     import {Localized} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";

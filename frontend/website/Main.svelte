@@ -87,7 +87,14 @@
         padding: 20px;
     }
     .banner {
-        overflow: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+    .banner img {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        display: block;
     }
     .tabs-container {
         position: relative;

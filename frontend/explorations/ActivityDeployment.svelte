@@ -42,7 +42,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_AGILE_PRACTITIONER',
-                    'AGILE_VALUE_TRANSPARENCY',
+                    'AGILE_VALUE_OPENNESS',
                 ],
             }
         },
@@ -71,7 +71,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_AGILE_PRACTITIONER',
-                    'AGILE_VALUE_TRANSPARENCY',
+                    'AGILE_VALUE_OPENNESS',
                 ],
             }
         },
@@ -98,7 +98,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_AGILE_PRACTITIONER',
-                    'AGILE_VALUE_TRANSPARENCY',
+                    'AGILE_VALUE_OPENNESS',
                 ],
             }
         },
@@ -125,7 +125,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_AGILE_PRACTITIONER',
-                    'AGILE_VALUE_TRANSPARENCY',
+                    'AGILE_VALUE_OPENNESS',
                 ],
             }
         },
@@ -153,7 +153,7 @@
                     'PRODUCT_TEAM_MMOG',
                     'PRODUCT_TEAM_MMOG',
                     'AGILE_MATURITY_AGILE_PRACTITIONER',
-                    'AGILE_VALUE_TRANSPARENCY',
+                    'AGILE_VALUE_OPENNESS',
                 ],
             }
         },

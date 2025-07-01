@@ -18,8 +18,8 @@
         <WrappedDeckCard key="AGILE_VALUE_HUMOR" scale={scale} />
         <WrappedDeckCard key="AGILE_VALUE_FEEDBACK" scale={scale} />
         <WrappedDeckCard key="AGILE_VALUE_SIMPLICITY" scale={scale} />
-        <WrappedDeckCard key="AGILE_VALUE_TRUST" scale={scale} />
-        <WrappedDeckCard key="AGILE_VALUE_TRANSPARENCY" scale={scale} />
+        <WrappedDeckCard key="AGILE_VALUE_FOCUS" scale={scale} />
+        <WrappedDeckCard key="AGILE_VALUE_OPENNESS" scale={scale} />
         <WrappedDeckCard key="AGILE_VALUE_COURAGE" scale={scale} />
         <WrappedDeckCard key="AGILE_VALUE_RESPECT" scale={scale} />
     </div>

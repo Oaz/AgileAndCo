@@ -247,7 +247,7 @@ class RetrospectiveRulesTest extends RulesTestCase
             [9, [['potential', 0]], [], [], [], ['AGILE_MATURITY_AGILE_PRACTITIONER']],
             [26, [['potential', 0], ['potential', 2]],
                 [], [],
-                ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_TRUST']
+                ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_FOCUS']
             ],
             [9, [['potential', 1], ['products', 0]],
                 [], [['AGILE_MATURITY_TEST_TEAM', 0]],
@@ -300,7 +300,7 @@ class RetrospectiveRulesTest extends RulesTestCase
             [9, [], [], [], [], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "Insufficient payment"],
             [26, [['potential', 2]],
                 [], [],
-                ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_TRUST'], "Insufficient payment"
+                ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_FOCUS'], "Insufficient payment"
             ],
             [9, [['products', 0]],
                 [], [['AGILE_MATURITY_TEST_TEAM', 0]],

@@ -215,20 +215,20 @@ export const cardsData = () => {
                 description: _(Text.AGILE_VALUE_SIMPLICITY_DESCRIPTION),
             }
         },
-        AGILE_VALUE_TRUST: {
+        AGILE_VALUE_FOCUS: {
             kind: 'AGILE_VALUE',
             props: {
-                title: _(Text.AGILE_VALUE_TRUST_TITLE),
+                title: _(Text.AGILE_VALUE_FOCUS_TITLE),
                 cost: 4,
-                description: _(Text.AGILE_VALUE_TRUST_DESCRIPTION),
+                description: _(Text.AGILE_VALUE_FOCUS_DESCRIPTION),
             }
         },
-        AGILE_VALUE_TRANSPARENCY: {
+        AGILE_VALUE_OPENNESS: {
             kind: 'AGILE_VALUE',
             props: {
-                title: _(Text.AGILE_VALUE_TRANSPARENCY_TITLE),
+                title: _(Text.AGILE_VALUE_OPENNESS_TITLE),
                 cost: 4,
-                description: _(Text.AGILE_VALUE_TRANSPARENCY_DESCRIPTION),
+                description: _(Text.AGILE_VALUE_OPENNESS_DESCRIPTION),
             }
         },
         AGILE_VALUE_COURAGE: {

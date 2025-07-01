@@ -26,8 +26,8 @@
         <DeckCard key="AGILE_VALUE_HUMOR" />
         <DeckCard key="AGILE_VALUE_FEEDBACK" />
         <DeckCard key="AGILE_VALUE_SIMPLICITY" />
-        <DeckCard key="AGILE_VALUE_TRUST" />
-        <DeckCard key="AGILE_VALUE_TRANSPARENCY" />
+        <DeckCard key="AGILE_VALUE_FOCUS" />
+        <DeckCard key="AGILE_VALUE_OPENNESS" />
         <DeckCard key="AGILE_VALUE_COURAGE" />
         <DeckCard key="AGILE_VALUE_RESPECT" />
     </div>

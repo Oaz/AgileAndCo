@@ -135,7 +135,7 @@
                             'PRODUCT_TEAM_SOCIAL',
                             'AGILE_MATURITY_INTERNAL_COACH',
                             'AGILE_MATURITY_CLEAN_CODE',
-                            'AGILE_VALUE_TRANSPARENCY',
+                            'AGILE_VALUE_OPENNESS',
                             'AGILE_MATURITY_AGILE_CERTIFICATION',
                         ],
                     },

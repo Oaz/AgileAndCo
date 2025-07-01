@@ -16,7 +16,7 @@ class CardsData
             'SOFTWARE_CRAFTSMANSHIP', 'AGILE_SENSEI', 'PRODUCT_VISION'
         ],
         'AGILE_VALUE' => [
-            'HUMOR', 'FEEDBACK', 'SIMPLICITY', 'TRUST', 'TRANSPARENCY', 'COURAGE', 'RESPECT',
+            'HUMOR', 'FEEDBACK', 'SIMPLICITY', 'FOCUS', 'OPENNESS', 'COURAGE', 'RESPECT',
         ],
         'ACTIVITY' => [
             'CONFERENCE', 'DEVELOPMENT', 'DEPLOYMENT', 'RETROSPECTIVE', 'COACH',
@@ -53,8 +53,8 @@ class CardsData
         'AGILE_VALUE_HUMOR' => ['cost' => 4,],
         'AGILE_VALUE_FEEDBACK' => ['cost' => 4,],
         'AGILE_VALUE_SIMPLICITY' => ['cost' => 4,],
-        'AGILE_VALUE_TRUST' => ['cost' => 4,],
-        'AGILE_VALUE_TRANSPARENCY' => ['cost' => 4,],
+        'AGILE_VALUE_FOCUS' => ['cost' => 4,],
+        'AGILE_VALUE_OPENNESS' => ['cost' => 4,],
         'AGILE_VALUE_COURAGE' => ['cost' => 4,],
         'AGILE_VALUE_RESPECT' => ['cost' => 4,],
         'EARNINGS_CARD_1' => ['ADVERGAME' => 2, 'EDUCATION' => 2, 'SOCIAL' => 3, 'MMOG' => 3],

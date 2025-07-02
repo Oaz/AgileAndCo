@@ -11,7 +11,9 @@
     import enTranslations from './tabs/translations/en/tabs.ftl?raw';
     import frTranslations from './tabs/translations/fr/tabs.ftl?raw';
     import {initTranslations} from "./tabs/translations";
-    import { getFluentContext } from '@nubolab-ffwd/svelte-fluent';
+    import {getFluentContext} from '@nubolab-ffwd/svelte-fluent';
+    import LocalizedTooltip from "../shared/LocalizedTooltip.svelte";
+
 
     export let params: { language?: string, tab?: string };
 
@@ -80,6 +82,15 @@
     </div>
 </main>
 
+<footer>
+    <div class="footer-content">
+        {#key language}
+            <LocalizedTooltip textId="legal" tooltipId="legal-host-info" />
+        {/key}
+    </div>
+</footer>
+
+
 <style>
     main {
         font-family: Arial, sans-serif;
@@ -101,4 +112,22 @@
         width: 100%;
         margin-top: 20px;
     }
+    footer {
+        width: 100%;
+        background-color: #f5f5f5;
+        padding: 15px 0;
+        text-align: center;
+        border-top: 1px solid #e0e0e0;
+        margin-top: 20px;
+    }
+    footer a {
+        color: #666;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+
 </style>

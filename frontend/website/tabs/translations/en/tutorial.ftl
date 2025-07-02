@@ -1,98 +1,98 @@
-tutorial-purpose = Pourquoi un tutoriel ?
+tutorial-purpose = Why a tutorial?
     .details =
-    Dans un contexte de formation ou d'apprentissage, ce tutoriel vous permettra de démarrer rapidement sans perdre de temps sur l'explication des règles complètes. Vous pourrez ainsi vous concentrer sur l'expérience d'apprentissage et les concepts agiles présentés dans le jeu.
+    In a training or learning context, this tutorial will allow you to get started quickly without wasting time on explaining the complete rules. You can thus focus on the learning experience and the agile concepts presented in the game.
 
-            AGILE & Co peut être utilisé comme un outil pédagogique où chaque "joueur" peut être représenté par un binôme ou un trinôme. Cette approche collaborative favorise les échanges sur les choix stratégiques et leurs impacts, enrichissant ainsi l'expérience d'apprentissage.
+            AGILE & Co can be used as a pedagogical tool where each "player" can be represented by a pair or a trio. This collaborative approach encourages discussions about strategic choices and their impacts, thereby enriching the learning experience.
 
-tutorial-setup = Mise en place du tutoriel
+tutorial-setup = Tutorial Setup
     .details =
-    Pour ce tutoriel, nous allons faire le premier tour d'une partie à 4 joueurs : A, B, C et D.
+    For this tutorial, we will play the first round of a 4-player game: A, B, C, and D.
 
-            Chaque joueur dispose d'un plateau sur lequel seront placées les cartes représentant l'état actuel de son entreprise et son potentiel d'évolution.
+            Each player has a board on which cards representing the current state of their company and its evolution potential will be placed.
 
-            Mise en place initiale des cartes :
-            1. Disposez les 5 cartes Activité face visible au centre de la table.
-            2. Constituez la pile de cartes Gains face cachée.
-            3. Chaque joueur reçoit une carte "Équipe Produit ADVERGAME" qu'il place sur la zone "Entreprise" de son plateau. Cette carte représente l'état initial de son entreprise : une unique équipe produit chargée de réaliser des jeux publicitaires.
-            4. Mélangez les autres cartes (Équipe Produit, Maturité et Valeurs) pour former une pioche commune.
-            5. Chaque joueur pioche 4 cartes qu'il place dans la zone "Potentiel" de son plateau. Ces cartes constituent le potentiel initial de son entreprise.
-            6. Le Joueur A reçoit la carte "Meneur de jeu" pour ce tutoriel.
+            Initial card setup:
+            1. Place the 5 Activity cards face up in the center of the table.
+            2. Create the pile of Earnings cards face down.
+            3. Each player receives an "ADVERGAME Product Team" card, which they place in the "Company" area of their board. This card represents the initial state of their company: a single product team responsible for creating advergames.
+            4. Shuffle the other cards (Product Team, Maturity, and Values) to form a common draw pile.
+            5. Each player draws 4 cards and places them in the "Potential" area of their board. These cards constitute their company's initial potential.
+            6. Player A receives the "Game Leader" card for this tutorial.
 
-download-gameboards = Télécharger les plateaux de jeu
+download-gameboards = Download the game boards
 
-tutorial-flow = Déroulement du tutoriel
+tutorial-flow = Tutorial Flow
     .details =
-    Ce tutoriel vous guidera à travers l'exécution de 4 activités essentielles dans l'ordre suivant : CONFÉRENCE, DÉVELOPPEMENT, DÉPLOIEMENT et RÉTROSPECTIVE.
+    This tutorial will guide you through the execution of 4 essential activities in the following order: CONFERENCE, DEVELOPMENT, DEPLOYMENT, and RETROSPECTIVE.
 
-conference-activity = 1. CONFÉRENCE - Enrichir votre potentiel
+conference-activity = 1. CONFERENCE - Enrich your potential
     .details =
-    Votre équipe vient de créer sa startup de développement de jeux vidéo. Pour démarrer, vous décidez de participer à une conférence agile afin d'enrichir votre potentiel.
+    Your team has just created its video game development startup. To get started, you decide to attend an agile conference to enrich your potential.
 
-            Actions à réaliser :
-            1. Le Joueur A (initiateur) choisit l'activité CONFÉRENCE et place la carte correspondante devant lui.
-            2. Le Joueur A pioche 5 cartes de la pile commune, en choisit 1 qu'il conserve dans son potentiel et défausse les 4 autres.
-            3. Le Joueur B pioche 2 cartes, en conserve 1 et défausse l'autre.
-            4. Le Joueur C pioche 2 cartes, en conserve 1 et défausse l'autre.
-            5. Le Joueur D pioche 2 cartes, en conserve 1 et défausse l'autre.
+            Actions to perform:
+            1. Player A (initiator) chooses the CONFERENCE activity and places the corresponding card in front of them.
+            2. Player A draws 5 cards from the common pile, chooses 1 to keep in their potential, and discards the other 4.
+            3. Player B draws 2 cards, keeps 1, and discards the other.
+            4. Player C draws 2 cards, keeps 1, and discards the other.
+            5. Player D draws 2 cards, keeps 1, and discards the other.
 
-            Ces cartes représentent votre potentiel d'amélioration pour votre entreprise.
+            These cards represent your company's improvement potential.
 
-development-activity = 2. DÉVELOPPEMENT - Créer votre premier produit
+development-activity = 2. DEVELOPMENT - Create your first product
     .details =
-    Après avoir acquis de nouvelles connaissances, il est temps de développer un produit.
+    After acquiring new knowledge, it's time to develop a product.
 
-            Actions à réaliser :
-            1. Le Joueur B (initiateur) choisit l'activité DÉVELOPPEMENT et place la carte correspondante devant lui.
-            2. Le Joueur B choisit une carte de son potentiel et la place face cachée sur son unique équipe produit. Comme il est l'initiateur, il aurait pu répéter cette action avec une seconde équipe produit s'il en avait possèdé une.
-            3. Le Joueur C choisit une carte de son potentiel et la place face cachée sur l'une de ses équipes produit.
-            4. Le Joueur D choisit une carte de son potentiel et la place face cachée sur l'une de ses équipes produit.
-            5. Le Joueur A choisit une carte de son potentiel et la place face cachée sur l'une de ses équipes produit.
+            Actions to perform:
+            1. Player B (initiator) chooses the DEVELOPMENT activity and places the corresponding card in front of them.
+            2. Player B chooses a card from their potential and places it face down on their single product team. As the initiator, they could have repeated this action with a second product team if they had one.
+            3. Player C chooses a card from their potential and places it face down on one of their product teams.
+            4. Player D chooses a card from their potential and places it face down on one of their product teams.
+            5. Player A chooses a card from their potential and places it face down on one of their product teams.
 
-            Ces cartes faces cachées représentent les produits en cours de développement par les équipes.
+            These face-down cards represent the products currently being developed by the teams.
 
-deployment-activity = 3. DÉPLOIEMENT - Livrer votre produit et générer des gains
+deployment-activity = 3. DEPLOYMENT - Deliver your product and generate earnings
     .details =
-    Maintenant que vos produits sont développés, il est temps de les déployer sur le marché et d'en tirer des bénéfices.
+    Now that your products are developed, it's time to deploy them to the market and reap the benefits.
 
-            Actions à réaliser :
-            1. Le Joueur C (initiateur) choisit l'activité DÉPLOIEMENT et place la carte correspondante devant lui.
-            2. Retournez la carte du haut de la pile Gains pour révéler les opportunités du marché.
-            3. Le Joueur C déploie son unique produit en défaussant la carte placée face cachée sur son équipe produit. Comme il est l'initiateur, il aurait pu déployer un second produit s'il en avait eu un.
-            4. Le Joueur C pioche le nombre de cartes indiqué sur la carte Gains pour une équipe ADVERGAME.
-            5. Le Joueur D déploie son produit et pioche ses cartes de gain.
-            6. Le Joueur A déploie son produit et pioche ses cartes de gain.
-            7. Le Joueur B déploie son produit et pioche ses cartes de gain.
-            8. À la fin de l'activité, mélangez les cartes Gains pour reconstituer une pile face cachée.
+            Actions to perform:
+            1. Player C (initiator) chooses the DEPLOYMENT activity and places the corresponding card in front of them.
+            2. Flip the top card of the Earnings pile to reveal market opportunities.
+            3. Player C deploys their single product by discarding the face-down card on their product team. As the initiator, they could have deployed a second product if they had one.
+            4. Player C draws the number of cards indicated on the Earnings card for an ADVERGAME team.
+            5. Player D deploys their product and draws their earning cards.
+            6. Player A deploys their product and draws their earning cards.
+            7. Player B deploys their product and draws their earning cards.
+            8. At the end of the activity, shuffle the Earnings cards to recreate a face-down pile.
 
-retrospective-activity = 4. RÉTROSPECTIVE - Améliorer votre entreprise
+retrospective-activity = 4. RETROSPECTIVE - Improve your company
     .details =
-    Pour clôturer ce cycle, vous organisez une rétrospective pour améliorer votre entreprise en exploitant les connaissances acquises.
+    To close this cycle, you organize a retrospective to improve your company by leveraging the knowledge acquired.
 
-            Actions à réaliser :
-            1. Le Joueur D (initiateur) choisit l'activité RÉTROSPECTIVE et place la carte correspondante devant lui.
-            2. Le Joueur D peut améliorer son entreprise en posant une carte d'amélioration depuis son potentiel (Maturité Agile, Valeur Agile ou Équipe Produit). Pour valider cette amélioration, il doit défausser un nombre de cartes 'potentiel' égal au coût indiqué sur la carte, moins 1 (puisqu'il est l'initiateur).
-            3. Le Joueur A pose une carte d'amélioration et défausse le nombre de cartes 'potentiel' correspondant au coût indiqué sur la carte.
-            4. Le Joueur B pose une carte d'amélioration et défausse le nombre de cartes 'potentiel' correspondant au coût indiqué sur la carte.
-            5. Le Joueur C pose une carte d'amélioration et défausse le nombre de cartes 'potentiel' correspondant au coût indiqué sur la carte.
+            Actions to perform:
+            1. Player D (initiator) chooses the RETROSPECTIVE activity and places the corresponding card in front of them.
+            2. Player D can improve their company by playing an improvement card from their potential (Agile Maturity, Agile Value, or Product Team). To validate this improvement, they must discard a number of 'potential' cards equal to the cost indicated on the card, minus 1 (since they are the initiator).
+            3. Player A plays an improvement card and discards the number of 'potential' cards corresponding to the cost indicated on the card.
+            4. Player B plays an improvement card and discards the number of 'potential' cards corresponding to the cost indicated on the card.
+            5. Player C plays an improvement card and discards the number of 'potential' cards corresponding to the cost indicated on the card.
 
-end-tutorial = Fin du tutoriel
+end-tutorial = End of the tutorial
     .details =
-    Chaque joueur ayant initié une activité, le tour est terminé. La carte meneur de jeu passe au joueur B.
+    Each player having initiated an activity, the turn is over. The game leader card passes to player B.
 
-            Pour une partie complète à 4 joueurs, vous devrez jouer 11 autres tours.
+            For a full 4-player game, you will need to play 11 more turns.
 
-            Le nombre de tours total dépend du nombre de joueurs :
-            - 12 tours pour 4 joueurs
-            - 16 tours pour 3 joueurs
-            - 24 tours pour 2 joueurs
+            The total number of turns depends on the number of players:
+            - 12 turns for 4 players
+            - 16 turns for 3 players
+            - 24 turns for 2 players
 
-            À la fin de chaque tour, n'oubliez pas que :
-            - La carte "Meneur de jeu" passe au joueur suivant
-            - Chaque joueur ne peut conserver que 6 cartes de potentiel (plus une par Valeur Agile adoptée)
-            - Le jeu se termine après le nombre de tours prévus, et le gagnant est celui qui a accumulé le plus de points
+            At the end of each turn, remember that:
+            - The "Game Leader" card passes to the next player
+            - Each player can only keep 6 potential cards (plus one for each Agile Value adopted)
+            - The game ends after the planned number of turns, and the winner is the one who has accumulated the most points
 
-tips = Conseils pour l'utilisation en formation
+tips = Tips for use in training
     .details =
-    - Prévoyez 10 minutes pour le tutoriel et 45 minutes pour finir la partie
-        - Incitez les joueurs à ne pas passer plus de quelques secondes sur les choix de cartes à conserver ou défausser
-        - A l'opposé, lors des activités de RETROSPECTIVE, encouragez les discussions entre les membres de chaque équipe (binôme/trinôme)
+    - Allow 10 minutes for the tutorial and 45 minutes to finish the game
+            - Encourage players not to spend more than a few seconds on choosing which cards to keep or discard
+            - Conversely, during RETROSPECTIVE activities, encourage discussions among the members of each team (pair/trio)

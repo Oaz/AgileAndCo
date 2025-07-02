@@ -35,7 +35,7 @@ end-game = Fin du jeu
     .details =
     Le jeu se termine après 48 activités.
     Chaque joueur totalise les points de son entreprise (cumul des points des cartes posées) pour déterminer le gagnant.
-    Le nombre de tours est ajusté en fonction du nombre de joueurs : 12 tours pour 4 joueurs, 19 tours pour 3 joueurs, 24 tours pour 2 joueurs.
+    Le nombre de tours est ajusté en fonction du nombre de joueurs : 12 tours pour 4 joueurs, 16 tours pour 3 joueurs, 24 tours pour 2 joueurs.
 
 addendum1 = Impact de la maturité agile
     .details =

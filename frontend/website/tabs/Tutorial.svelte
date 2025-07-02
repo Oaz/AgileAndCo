@@ -1,17 +1,44 @@
 <script lang="ts">
 
-    export let language: string;
+    import enTranslations from './translations/en/tutorial.ftl?raw';
+    import frTranslations from './translations/fr/tutorial.ftl?raw';
+    import {Localized, Overlay} from "@nubolab-ffwd/svelte-fluent";
+    import {initTranslations} from "./translations";
+    import LocalizedSection from "./LocalizedSection.svelte";
+    import LocalizedList from "./LocalizedList.svelte";
+    import SiteButton from "../../shared/SiteButton.svelte";
 
+    export let language: string;
+    initTranslations(language, {
+        en: enTranslations,
+        fr: frTranslations
+    });
 </script>
 
-<div>
-    <p class="description-text">🚧</p>
+<div class="content">
+    <LocalizedSection id="tutorial-purpose" />
+    <LocalizedSection id="tutorial-setup" />
+    <SiteButton id="download-gameboards" action={() => {
+        console.log("Download gameboards clicked");
+        window.open(`print.html?lang=${language}`, '_blank');
+    }} />
+    <LocalizedSection id="tutorial-flow" />
+    <LocalizedSection id="conference-activity" />
+    <LocalizedSection id="development-activity" />
+    <LocalizedSection id="deployment-activity" />
+    <LocalizedSection id="retrospective-activity" />
+    <LocalizedSection id="end-tutorial" />
+    <LocalizedSection id="tips" />
 </div>
 
+
 <style>
-    .description-text {
-        font-size: 5rem;  /* Makes the emoji about 80px tall */
-        text-align: center;
-        margin: 1rem 0;
+
+    .content {
+        white-space: pre-line;
+        line-height: 1.6;
+        color: var(--text-color, #666);
+        text-align: left;
     }
+
 </style>

@@ -19,8 +19,7 @@
     <LocalizedSection id="tutorial-purpose" />
     <LocalizedSection id="tutorial-setup" />
     <SiteButton id="download-gameboards" action={() => {
-        console.log("Download gameboards clicked");
-        window.open(`print.html?lang=${language}`, '_blank');
+        window.open(`board_${language}.pdf`, '_blank');
     }} />
     <LocalizedSection id="tutorial-flow" />
     <LocalizedSection id="conference-activity" />

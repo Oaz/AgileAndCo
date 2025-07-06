@@ -7,6 +7,7 @@ intro = Le jeu est constitué de 108 cartes :
     .item6 = 13 cartes "Valeur Agile"
 
 print = Imprimer les cartes
+box = Imprimer la boite
 
 leader-section = Meneur de jeu
     .description =

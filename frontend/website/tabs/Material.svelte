@@ -1,5 +1,4 @@
 <script lang="ts">
-    import {Localized} from '@nubolab-ffwd/svelte-fluent';
     import {initTranslations} from './translations';
     import enTranslations from './translations/en/material.ftl?raw';
     import frTranslations from './translations/fr/material.ftl?raw';
@@ -17,6 +16,7 @@
     import Values from "./Material_Values.svelte";
     import { getFluentContext } from '@nubolab-ffwd/svelte-fluent';
     import LocalizedList from "./LocalizedList.svelte";
+    import SiteButton from "../../shared/SiteButton.svelte";
 
     export let language: string;
     let activeSubtabValue = 0;
@@ -65,7 +65,12 @@
     <p class="summary">
         <LocalizedList id="intro" />
     </p>
-    <button class="print-button" on:click={openPrintPage}><Localized id="print" /></button>
+    <SiteButton id="print" action={() => {
+        window.open(`print.html?lang=${language}`, '_blank');
+    }} />
+    <SiteButton id="box" action={() => {
+        window.open(`box_${language}.pdf`, '_blank');
+    }} />
     <div class="subtabs-container">
         <Scroll items={items.map(item => ({ label: item.label, anchorId: item.key }))}>
             <div>
@@ -91,19 +96,6 @@
         color: var(--text-color, #666);
         margin-bottom: 2rem;
         text-align: left;
-    }
-    .print-button {
-        padding: 8px 16px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    .print-button:hover {
-        background-color: #45a049;
     }
 
     .subtabs-container {

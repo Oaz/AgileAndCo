@@ -7,6 +7,7 @@ intro = The game consists of 108 cards:
     .item6 = 13 "Agile Value" cards
 
 print = Print the cards
+box = Print the box
 
 leader-section = Game Leader
     .description =

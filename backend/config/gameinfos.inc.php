@@ -14,23 +14,23 @@ $gameinfos = [
     'game_name' => "Agile&Co",
 
     // Game publisher (use empty string if there is no publisher)
-    'publisher' => '',
+    'publisher' => 'Web published',
 
     // Url of game publisher website
-    'publisher_website' => 'http://www.mypublishingcompany.com/',
+    'publisher_website' => 'https://agile-and-co.mnt.space/',
 
     // Board Game Geek ID of the publisher
-    'publisher_bgg_id' => 1234,
+    'publisher_bgg_id' => 1001,
 
     // Board game geek ID of the game
-    'bgg_id' => 0,
+    'bgg_id' => 449529,
 
     // Players configuration that can be played (ex: 2 to 4 players)
     'players' => [2, 3, 4],
 
     // Suggest players to play with this number of players. Must be null if there is no such advice, or if there is only one possible player configuration.
     // NB: the automatic lobby will try first the lowest number of players if this is not specified. So you _have to_ specify this parameter if the lowest player number is not compatible with the default options.
-    'suggest_player_number' => null,
+    'suggest_player_number' => 4,
 
     // Discourage players to play with these numbers of players. Must be null if there is no such advice.
     'not_recommend_player_number' => null,
@@ -72,7 +72,7 @@ $gameinfos = [
     // Language dependency. If false or not set, there is no language dependency. If true, all players at the table must speak the same language.
     // If an array of shortcode languages such as array( 1 => 'en', 2 => 'fr', 3 => 'it' ) then all players at the table must speak the same language, and this language must be one of the listed languages.
     // NB: the default will be the first language in this list spoken by the player, so you should list them by popularity/preference.
-    'language_dependency' => true,
+    'language_dependency' => false,
 
     // Colors attributed to players
     'player_colors' => ["ff0000", "008000", "0000ff", "ffa500", "773300"],

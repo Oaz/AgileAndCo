@@ -1,1 +1,2 @@
 https://www.templatemaker.nl/en/boxlid/?W=90&L=115&H=30&LIDHEIGHT=20&GLUE=15&ALPHA=60&PAGEPRESET=Auto&REQUEST=SVG
+https://www.templatemaker.nl/en/cardbox/?L=110&REQUEST=SVG&W=28

@@ -228,12 +228,19 @@ class Rules
         return "nextPlayer";
     }
 
-    public function gotToNextPlayer(): string
+    public function goToNextPlayer(): string
     {
         $this->ongoingActivity->write(['', 0]);
         $currentCount = $this->completedActivitiesCount->read();
-        $this->completedActivitiesCount->write($currentCount + 1);
-        return "nextActivity";
+        $infos = $this->game->loadInfos();
+        $numberOfPlayers = count($infos->players);
+        if($currentCount+1 < $numberOfPlayers) {
+            $this->completedActivitiesCount->write($currentCount + 1);
+            return "nextActivity";
+        } else {
+            $this->completedActivitiesCount->write(0);
+            return "endTurn";
+        }
     }
 
     public function completeConference($player_id, $cards): bool

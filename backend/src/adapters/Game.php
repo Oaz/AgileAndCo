@@ -134,7 +134,7 @@ class Game extends \Table
     public function stNextPlayer(): void
     {
         $this->activeNextPlayer();
-        $this->gamestate->nextState($this->rules->gotToNextPlayer());
+        $this->gamestate->nextState($this->rules->goToNextPlayer());
     }
 
     public function actChooseActivity(string $activity_id): void

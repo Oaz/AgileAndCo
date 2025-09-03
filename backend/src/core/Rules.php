@@ -22,13 +22,6 @@ class Rules
         $this->completedActivitiesCount = $this->game->globalVariable('COMPLETED_ACTIVITIES_COUNT');
     }
 
-    public function getGameProgression(): int
-    {
-        $totalActivityCount = 48;
-        $currentCount = $this->completedActivitiesCount->read();
-        return 100*$currentCount/$totalActivityCount;
-    }
-
     public function initGame($players): void
     {
         $this->cards->createCards(CardsData::$instances, 'deck');
@@ -232,15 +225,29 @@ class Rules
     {
         $this->ongoingActivity->write(['', 0]);
         $currentCount = $this->completedActivitiesCount->read();
+        $currentCount++;
+        $this->completedActivitiesCount->write($currentCount);
         $infos = $this->game->loadInfos();
         $numberOfPlayers = count($infos->players);
-        if($currentCount+1 < $numberOfPlayers) {
-            $this->completedActivitiesCount->write($currentCount + 1);
-            return "nextActivity";
-        } else {
-            $this->completedActivitiesCount->write(0);
+        if($currentCount % $numberOfPlayers == 0)
             return "endTurn";
-        }
+        return "nextActivity";
+    }
+
+    private const TOTAL_ACTIVITY_COUNT = 48;
+
+    public function getGameProgression(): int
+    {
+        $currentCount = $this->completedActivitiesCount->read();
+        return 100*$currentCount/Rules::TOTAL_ACTIVITY_COUNT;
+    }
+
+    public function endTurn(): string
+    {
+        $currentCount = $this->completedActivitiesCount->read();
+        if($currentCount < Rules::TOTAL_ACTIVITY_COUNT)
+            return "nextTurn";
+        return "endGame";
     }
 
     public function completeConference($player_id, $cards): bool

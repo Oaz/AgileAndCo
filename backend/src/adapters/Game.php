@@ -225,7 +225,7 @@ class Game extends \Table
 
     public function stEndTurn(): void
     {
-        $this->gamestate->nextState("endGame");
+        $this->gamestate->nextState($this->rules->endTurn());
     }
 
     /**

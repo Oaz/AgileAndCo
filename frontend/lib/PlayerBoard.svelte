@@ -8,6 +8,7 @@
     import {RetrospectiveActivityPayment} from "./Activities/RetrospectiveActivityPayment";
     import SelectableCardInActivity from "./SelectableCardInActivity.svelte";
     import ActionButton from "./ActionButton.svelte";
+    import {EndOfTurn} from "./Activities/EndOfTurn";
 
     export let datas;
 
@@ -17,6 +18,7 @@
         ACTIVITY_CONFERENCE: ConferenceActivity,
         ACTIVITY_RETROSPECTIVE_CHOOSE: RetrospectiveActivityChoice,
         ACTIVITY_RETROSPECTIVE_PAYMENT: RetrospectiveActivityPayment,
+        END_OF_TURN: EndOfTurn,
     }
 
     let activity: Activity;

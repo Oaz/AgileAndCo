@@ -226,6 +226,12 @@ class Rules
         return "nextPlayer";
     }
 
+    public function startTurn(): string
+    {
+        $this->ongoingActivity->write(['', 0]);
+        return "";
+    }
+
     public function goToNextPlayer(): string
     {
         $this->ongoingActivity->write(['', 0]);
@@ -247,17 +253,35 @@ class Rules
         return 100 * $currentCount / Rules::TOTAL_ACTIVITY_COUNT;
     }
 
-    public function endTurn(): string
+    public function endTurn(): array
     {
         $currentCount = $this->completedActivitiesCount->read();
         if ($currentCount == Rules::TOTAL_ACTIVITY_COUNT)
-            return "endGame";
+            return ["endGame", []];
         $activityCards = $this->cards->getCardsInLocation("activities");
         foreach ($activityCards as $card) {
             $this->cards->moveCard($card['id'], "activities", index: $card['index'], playerId: 0);
         }
-        return "nextTurn";
+        $overLimitPlayers = $this->getPlayersOverPotentialLimit();
+        if (count($overLimitPlayers) > 0) {
+            $this->ongoingActivity->write(['END_OF_TURN', 0]);
+            return ["closeTurn", $overLimitPlayers];
+        }
+        return ["nextTurn", []];
     }
+
+    private function getPlayersOverPotentialLimit() {
+        $gameState = $this->getGameState();
+        $players = $gameState['public']['players'];
+        $overLimitPlayers = [];
+        foreach ($players as $player) {
+            if ($player['potentialSize'] > 6) {
+                $overLimitPlayers[] = $player['id'];
+            }
+        }
+        return $overLimitPlayers;
+    }
+
 
     public function completeConference($player_id, $cards): bool
     {

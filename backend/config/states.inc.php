@@ -63,8 +63,15 @@ $machinestates = [
     ),
 
     // Note: ID=2 => your first state
-
     2 => [
+        "name" => "startTurn",
+        "description" => '',
+        "type" => "game",
+        "action" => "stStartTurn",
+        "transitions" => ["" => 6]
+    ],
+
+    6 => [
         "name" => "playerChooseActivity",
         "description" => clienttranslate('${actplayer} must choose the next activity'),
         "descriptionmyturn" => clienttranslate('${you} must choose the next activity'),
@@ -203,11 +210,10 @@ $machinestates = [
     5 => [
         "name" => "adjustPotential",
         "description" => clienttranslate('Some players must remove cards from their potential'),
-        "descriptionmyturn" => clienttranslate('${you} must remove ${n} cards from your potential'),
+        "descriptionmyturn" => clienttranslate('${you} must remove cards from your potential'),
         "type" => "multipleactiveplayer",
         "args" => "argGameState",
         "possibleactions" => [
-            // these actions are called from the front with bgaPerformAction, and matched to the function on the game.php file
             "actAdjustPotential",
         ],
         "transitions" => ["nextTurn" => 2]

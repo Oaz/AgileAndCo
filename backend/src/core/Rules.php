@@ -139,10 +139,10 @@ class Rules
             $malusCount++;
         }
         $score += $valuesCount * $valuesCount;
-        if($agileSensei)
+        if ($agileSensei)
             $score += count($company) + $malusCount;
-        if($productVision)
-            $score = 1.3*$score;
+        if ($productVision)
+            $score = 1.3 * $score;
         return $score;
     }
 
@@ -181,7 +181,7 @@ class Rules
             default => throw new \BgaUserException('Invalid activity choice'),
         };
 
-        $this->cards->moveCard($activityCard->id, 'activities', index: $activityIndex, playerId: 1);
+        $this->useActivity($activityCard->id, $activityIndex);
 
         $player_id = $this->game->getActivePlayerId();
         $this->ongoingActivity->write([$activity, $player_id]);
@@ -192,6 +192,11 @@ class Rules
             "activity" => $activity,
         ]);
         return $transition;
+    }
+
+    public function useActivity($cardId, $cardIndex)
+    {
+        $this->cards->moveCard($cardId, "activities", index: $cardIndex, playerId: 1);
     }
 
     public function broadcast(string $message, array $args = []): void
@@ -229,7 +234,7 @@ class Rules
         $this->completedActivitiesCount->write($currentCount);
         $infos = $this->game->loadInfos();
         $numberOfPlayers = count($infos->players);
-        if($currentCount % $numberOfPlayers == 0)
+        if ($currentCount % $numberOfPlayers == 0)
             return "endTurn";
         return "nextActivity";
     }
@@ -239,15 +244,19 @@ class Rules
     public function getGameProgression(): int
     {
         $currentCount = $this->completedActivitiesCount->read();
-        return 100*$currentCount/Rules::TOTAL_ACTIVITY_COUNT;
+        return 100 * $currentCount / Rules::TOTAL_ACTIVITY_COUNT;
     }
 
     public function endTurn(): string
     {
         $currentCount = $this->completedActivitiesCount->read();
-        if($currentCount < Rules::TOTAL_ACTIVITY_COUNT)
-            return "nextTurn";
-        return "endGame";
+        if ($currentCount == Rules::TOTAL_ACTIVITY_COUNT)
+            return "endGame";
+        $activityCards = $this->cards->getCardsInLocation("activities");
+        foreach ($activityCards as $card) {
+            $this->cards->moveCard($card['id'], "activities", index: $card['index'], playerId: 0);
+        }
+        return "nextTurn";
     }
 
     public function completeConference($player_id, $cards): bool
@@ -284,14 +293,14 @@ class Rules
 
     public function completeDevelopment($player_id, $teams, $products): bool
     {
-        if(count($teams) != count($products))
+        if (count($teams) != count($products))
             throw new \BgaUserException("Should have same number of selected teams and products");
         $infos = $this->game->loadInfos();
         $player = $this->getPlayerPrivateState($player_id);
-        $maxNbOfDev =  $player['initiate'] ? 2 : 1;
-        if(in_array('AGILE_MATURITY_CLEAN_CODE', $player['company']))
+        $maxNbOfDev = $player['initiate'] ? 2 : 1;
+        if (in_array('AGILE_MATURITY_CLEAN_CODE', $player['company']))
             $maxNbOfDev += 1;
-        if(count($teams) > $maxNbOfDev)
+        if (count($teams) > $maxNbOfDev)
             throw new \BgaUserException("Cannot develop more than {$maxNbOfDev} product(s)");
         $inputs = array_map(null, $teams, $products);
         $teamSelection = new CardSelection('development team', $player_id, ['teams' => SortForSelection::BY_INDEX], $this->repo);
@@ -299,7 +308,7 @@ class Rules
         $products = $player['products'];
         foreach ($inputs as $input) {
             $team = $teamSelection->peek($input[0]);
-            if(isset($products[$team->index]) && $products[$team->index] !== false)
+            if (isset($products[$team->index]) && $products[$team->index] !== false)
                 throw new \BgaUserException("Team must deploy before developing another product");
         }
         foreach ($inputs as $input) {
@@ -312,7 +321,7 @@ class Rules
                 "productName" => $product->fullName,
             ]);
         }
-        if(count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company']))
+        if (count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company']))
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
         return true;
     }
@@ -327,10 +336,10 @@ class Rules
     {
         $infos = $this->game->loadInfos();
         $player = $this->getPlayerPrivateState($player_id);
-        $maxNbOfDeployment =  $player['initiate'] ? 2 : 1;
-        if(in_array('AGILE_MATURITY_CONTINUOUS_DELIVERY', $player['company']))
+        $maxNbOfDeployment = $player['initiate'] ? 2 : 1;
+        if (in_array('AGILE_MATURITY_CONTINUOUS_DELIVERY', $player['company']))
             $maxNbOfDeployment += 1;
-        if(count($cards) > $maxNbOfDeployment)
+        if (count($cards) > $maxNbOfDeployment)
             throw new \BgaUserException("Cannot deploy more than {$maxNbOfDeployment} product(s)");
         $earningCard = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
         $earnings = CardsData::$details[$earningCard];
@@ -350,21 +359,21 @@ class Rules
                 "earning" => $earning,
             ]);
         }
-        if(count($cards) >= 1 && in_array('AGILE_MATURITY_ENGAGED_USERS', $player['company']))
+        if (count($cards) >= 1 && in_array('AGILE_MATURITY_ENGAGED_USERS', $player['company']))
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
-        if(count($cards) >= 2 && in_array('AGILE_MATURITY_USER_EXPERIENCE', $player['company']))
+        if (count($cards) >= 2 && in_array('AGILE_MATURITY_USER_EXPERIENCE', $player['company']))
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
         return true;
     }
 
     public function chooseForRetrospective($player_id, $card): bool
     {
-        if(count($card) == 0)
+        if (count($card) == 0)
             return false;
         $infos = $this->game->loadInfos();
         $selection = new CardSelection('retrospective choice', $player_id, ['potential' => SortForSelection::BY_USAGE], $this->repo);
         $player = $this->getPlayerPrivateState($player_id);
-        if($this->computeCost($selection->peek($card), $player) > $this->computeFunds($player))
+        if ($this->computeCost($selection->peek($card), $player) > $this->computeFunds($player))
             throw new \BgaUserException("Insufficient Funds");
         $selected = $selection->take($card);
         $cardId = $selected->id;
@@ -395,7 +404,7 @@ class Rules
             $selected = $selection->peek($card);
             $payment += $selected->location === "products" ? 2 : 1;
         }
-        if($payment < $this->computeCost($targetCard, $player))
+        if ($payment < $this->computeCost($targetCard, $player))
             throw new \BgaUserException("Insufficient payment");
         foreach ($cards as $card) {
             $selected = $selection->take($card);
@@ -411,24 +420,26 @@ class Rules
         return true;
     }
 
-    public function computeCost(PlayerCard $card, array $player) {
+    public function computeCost(PlayerCard $card, array $player)
+    {
         $cost = $card->cost;
-        if($player['initiate'])
+        if ($player['initiate'])
             $cost--;
-        if(($card->type == 'AGILE_MATURITY' || $card->type == 'AGILE_VALUE')
+        if (($card->type == 'AGILE_MATURITY' || $card->type == 'AGILE_VALUE')
             && in_array('AGILE_MATURITY_INTERNAL_COACH', $player['company']))
             $cost--;
-        if($card->type == 'PRODUCT_TEAM'
+        if ($card->type == 'PRODUCT_TEAM'
             && in_array('AGILE_MATURITY_PASSIONATE_DEVELOPER', $player['company']))
             $cost--;
         return $cost;
     }
 
-    public function computeFunds(array $player) {
+    public function computeFunds(array $player)
+    {
         $funds = count($player['potential']) - 1;
-        if(in_array('AGILE_MATURITY_DEVOPS', $player['company'])) {
+        if (in_array('AGILE_MATURITY_DEVOPS', $player['company'])) {
             $products = array_filter($player['products'], fn($x) => $x);
-            $funds += 2*count($products);
+            $funds += 2 * count($products);
         }
         return $funds;
     }

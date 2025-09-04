@@ -2,14 +2,16 @@
 
 namespace Bga\Games\AgileAndCo\Tests;
 
+use Bga\Games\AgileAndCo\IDeckAdapter;
+use Bga\Games\AgileAndCo\IGameAdapter;
 use Bga\Games\AgileAndCo\Rules;
 use PHPUnit\Framework\TestCase;
 
 abstract class RulesTestCase extends TestCase
 {
-    protected $deck;
-    protected $game;
-    protected $rules;
+    protected IDeckAdapter $deck;
+    protected IGameAdapter $game;
+    protected Rules $rules;
 
     protected function arrange(array $playerIds): void
     {

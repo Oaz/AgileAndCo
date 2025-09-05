@@ -4,7 +4,7 @@
     const options = [
         {
             label: 'Nothing to dismiss', data: {
-                'activity': 'END_OF_TURN',
+                'activity': 'END_OF_ROUND',
                 'teams': [
                     'PRODUCT_TEAM_ADVERGAME',
                 ],
@@ -22,7 +22,7 @@
         },
         {
             label: 'Must dismiss 1 to limit potential to 6 cards', data: {
-                'activity': 'END_OF_TURN',
+                'activity': 'END_OF_ROUND',
                 'teams': [
                     'PRODUCT_TEAM_ADVERGAME',
                 ],
@@ -43,7 +43,7 @@
         },
         {
             label: 'Must dismiss 2 to limit potential to 6 cards', data: {
-                'activity': 'END_OF_TURN',
+                'activity': 'END_OF_ROUND',
                 'teams': [
                     'PRODUCT_TEAM_ADVERGAME',
                 ],

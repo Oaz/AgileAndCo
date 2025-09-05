@@ -2,26 +2,21 @@
 
 namespace Bga\Games\AgileAndCo\Tests;
 
-class EndOfTurnRulesTest extends RulesTestCase
+class EndOfRoundRulesTest extends RulesTestCase
 {
     /**
      * @dataProvider turnCases
      */
-    public function testMoveToNextTurn(array $playerIds): void
+    public function testMoveToNextRound(array $playerIds): void
     {
         $this->arrange($playerIds);
         $rounds = 48 / count($playerIds);
         for ($round = 1; $round < $rounds; $round++) {
             $this->playRound($playerIds);
-            $activityCards = $this->deck->getCardsInLocation("activities");
-            foreach ($activityCards as $card) {
-                $this->rules->useActivity($card['id'],$card['index']);
-            }
-            $this->checkEndTurn("nextTurn", []);
-            $this->checkAllActivitiesAreAvailableAgain();
+            $this->checkEndRound("nextRound", []);
         }
         $this->playRound($playerIds);
-        $this->checkEndTurn("endGame", []);
+        $this->checkEndRound("endGame", []);
     }
 
     private function playRound(array $playerIds): void
@@ -40,13 +35,13 @@ class EndOfTurnRulesTest extends RulesTestCase
         ];
     }
 
-    public function testMoveToCloseTurnIfSomePlayerHasTooManyCardsInPotential(): void
+    public function testMoveToCloseRoundIfSomePlayerHasTooManyCardsInPotential(): void
     {
         $playerIds = [9, 26, 68, 144];
         $this->arrange($playerIds);
         for ($round = 1; $round < 3; $round++) {
             $this->playRound($playerIds);
-            $this->checkEndTurn("nextTurn", []);
+            $this->checkEndRound("nextRound", []);
         }
         $this->playRound($playerIds);
         $this->addTo('potential', 26, [
@@ -60,20 +55,14 @@ class EndOfTurnRulesTest extends RulesTestCase
             ['PRODUCT_TEAM_MMOG', 12],
             ['AGILE_VALUE_COURAGE', 13]
         ]);
-        $this->checkEndTurn("closeTurn", [26, 68]);
+        $this->checkEndRound("closeRound", [26, 68]);
     }
 
-    private function checkEndTurn($expectedTransition, $expectedOverLimitPlayers): void
+    private function checkEndRound($expectedTransition, $expectedOverLimitPlayers): void
     {
-        list($transition, $overLimitPlayers) = $this->rules->endTurn();
+        list($transition, $overLimitPlayers) = $this->rules->endRound();
         $this->assertEquals($expectedTransition, $transition);
         $this->assertEquals($expectedOverLimitPlayers, $overLimitPlayers);
-    }
-
-    private function checkAllActivitiesAreAvailableAgain()
-    {
-        $usedActivities = $this->deck->getCardsInLocation('activities', playerId: 1);
-        $this->assertEmpty($usedActivities);
     }
 
 }

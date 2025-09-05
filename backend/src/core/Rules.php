@@ -226,22 +226,30 @@ class Rules
         return "nextPlayer";
     }
 
-    public function startTurn(): string
+    public function startRound(): string
+    {
+        $activityCards = $this->cards->getCardsInLocation("activities");
+        foreach ($activityCards as $card) {
+            $this->cards->moveCard($card['id'], "activities", index: $card['index'], playerId: 0);
+        }
+        return "startActivities";
+    }
+
+    public function startActivity(): string
     {
         $this->ongoingActivity->write(['', 0]);
-        return "";
+        return "chooseActivity";
     }
 
     public function goToNextPlayer(): string
     {
-        $this->ongoingActivity->write(['', 0]);
         $currentCount = $this->completedActivitiesCount->read();
         $currentCount++;
         $this->completedActivitiesCount->write($currentCount);
         $infos = $this->game->loadInfos();
         $numberOfPlayers = count($infos->players);
         if ($currentCount % $numberOfPlayers == 0)
-            return "endTurn";
+            return "endRound";
         return "nextActivity";
     }
 
@@ -253,21 +261,17 @@ class Rules
         return 100 * $currentCount / Rules::TOTAL_ACTIVITY_COUNT;
     }
 
-    public function endTurn(): array
+    public function endRound(): array
     {
         $currentCount = $this->completedActivitiesCount->read();
         if ($currentCount == Rules::TOTAL_ACTIVITY_COUNT)
             return ["endGame", []];
-        $activityCards = $this->cards->getCardsInLocation("activities");
-        foreach ($activityCards as $card) {
-            $this->cards->moveCard($card['id'], "activities", index: $card['index'], playerId: 0);
-        }
         $overLimitPlayers = $this->getPlayersOverPotentialLimit();
         if (count($overLimitPlayers) > 0) {
-            $this->ongoingActivity->write(['END_OF_TURN', 0]);
-            return ["closeTurn", $overLimitPlayers];
+            $this->ongoingActivity->write(['END_OF_ROUND', 0]);
+            return ["closeRound", $overLimitPlayers];
         }
-        return ["nextTurn", []];
+        return ["nextRound", []];
     }
 
     private function getPlayersOverPotentialLimit() {

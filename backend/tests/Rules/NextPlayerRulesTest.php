@@ -12,11 +12,11 @@ class NextPlayerRulesTest extends RulesTestCase
         $this->assertEquals(0, $this->rules->completedActivitiesCount->read());
         $this->assertEquals("nextActivity", $this->rules->goToNextPlayer());
         $this->assertEquals(1, $this->rules->completedActivitiesCount->read());
-        $this->assertEquals("endTurn", $this->rules->goToNextPlayer());
+        $this->assertEquals("endRound", $this->rules->goToNextPlayer());
         $this->assertEquals(2, $this->rules->completedActivitiesCount->read());
         $this->assertEquals("nextActivity", $this->rules->goToNextPlayer());
         $this->assertEquals(3, $this->rules->completedActivitiesCount->read());
-        $this->assertEquals("endTurn", $this->rules->goToNextPlayer());
+        $this->assertEquals("endRound", $this->rules->goToNextPlayer());
         $this->assertEquals(4, $this->rules->completedActivitiesCount->read());
     }
 
@@ -32,7 +32,7 @@ class NextPlayerRulesTest extends RulesTestCase
         $this->assertEquals(2, $this->rules->completedActivitiesCount->read());
         $this->assertEquals("nextActivity", $this->rules->goToNextPlayer());
         $this->assertEquals(3, $this->rules->completedActivitiesCount->read());
-        $this->assertEquals("endTurn", $this->rules->goToNextPlayer());
+        $this->assertEquals("endRound", $this->rules->goToNextPlayer());
         $this->assertEquals(4, $this->rules->completedActivitiesCount->read());
         $this->assertEquals("nextActivity", $this->rules->goToNextPlayer());
         $this->assertEquals(5, $this->rules->completedActivitiesCount->read());
@@ -40,7 +40,7 @@ class NextPlayerRulesTest extends RulesTestCase
         $this->assertEquals(6, $this->rules->completedActivitiesCount->read());
         $this->assertEquals("nextActivity", $this->rules->goToNextPlayer());
         $this->assertEquals(7, $this->rules->completedActivitiesCount->read());
-        $this->assertEquals("endTurn", $this->rules->goToNextPlayer());
+        $this->assertEquals("endRound", $this->rules->goToNextPlayer());
         $this->assertEquals(8, $this->rules->completedActivitiesCount->read());
     }
 }

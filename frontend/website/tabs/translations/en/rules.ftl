@@ -12,7 +12,7 @@ goal = Goal of the Game
     The winning player is the one whose company has the most points at the end of the game.
             A company's score is the sum of the points from the cards played during the game.
 
-start-turn = How a Turn Works
+start-round = How a Round Works
     .details =
     The player with the "Game Leader" card chooses an activity, takes the corresponding card, and places it in front of them.
             All players then perform the chosen activity, starting with the player who selected it.
@@ -27,15 +27,15 @@ activities-detail = Each Activity card describes the precise flow of the associa
     .item4 = RETROSPECTIVE. Each player can improve their company by playing an improvement card from their potential. To validate the improvement, the player must discard a number of cards equal to the cost indicated on the card. If they do not have enough cards, they must choose another improvement or refrain. For the initiating player, the cost is reduced by one card. With the exception of product teams, whose number is not limited, it is not possible to play the same improvement twice to cumulate its effects.
     .item5 = COACH. The player who chose this activity—and only them—benefits from a coach and draws an additional card to add to their potential.
 
-end-turn = End of Turn
+end-round = End of Round
     .details =
-    After all chosen activities have been performed, the turn ends. The "Game Leader" card is passed to the next player. Each player must keep a maximum of 6 potential cards in hand; excess cards must be discarded.
+    After all chosen activities have been performed, the round ends. The "Game Leader" card is passed to the next player. Each player must keep a maximum of 6 potential cards in hand; excess cards must be discarded.
 
 end-game = End of Game
     .details =
     The game ends after 48 activities.
             Each player totals their company's points (sum of points from played cards) to determine the winner.
-            The number of turns is adjusted based on the number of players: 12 turns for 4 players, 16 turns for 3 players, 24 turns for 2 players.
+            The number of rounds is adjusted based on the number of players: 12 rounds for 4 players, 16 rounds for 3 players, 24 rounds for 2 players.
 
 addendum1 = Impact of Agile Maturity
     .details =
@@ -46,5 +46,5 @@ addendum1 = Impact of Agile Maturity
 
 addendum2 = Impact of Agile Values
     .details =
-    Each adopted value allows, at the end of the turn, to keep one additional potential card (beyond the maximum of 6).
+    Each adopted value allows, at the end of the round, to keep one additional potential card (beyond the maximum of 6).
             At the end of the game, the score obtained for each value depends on the total number of values adopted by the company: 1 value: 1 point, 2 values: 2 points each (for a total of 4 points), 3 values: 3 points each (for a total of 9 points). And so on.

@@ -1,0 +1,42 @@
+stateDiagram-v2
+    [*] --> gameSetup
+    gameSetup --> startRound
+
+    startRound --> startActivity : startActivities
+
+    startActivity --> playerChooseActivity : chooseActivity
+
+    playerChooseActivity --> prepareConferenceActivity: activityConference
+    playerChooseActivity --> prepareDevelopmentActivity: activityDevelopment
+    playerChooseActivity --> prepareDeploymentActivity: activityDeployment
+    playerChooseActivity --> retrospectiveActivity: activityRetrospective
+    playerChooseActivity --> coachActivity: activityCoach
+
+    prepareConferenceActivity --> conferenceActivity
+    conferenceActivity --> nextPlayer
+
+    prepareDevelopmentActivity --> developmentActivity
+    developmentActivity --> nextPlayer
+
+    prepareDeploymentActivity --> deploymentActivity
+    deploymentActivity --> nextPlayer
+
+    state retrospectiveActivity {
+        [*] --> retrospectiveActivityChoice
+        retrospectiveActivityChoice --> retrospectiveActivityPayment: payment
+        retrospectiveActivityPayment --> [*]
+    }
+    retrospectiveActivity --> nextPlayer
+
+    coachActivity --> nextPlayer
+
+    nextPlayer --> startActivity: nextActivity
+    nextPlayer --> endRound: endRound
+
+    endRound --> gameEnd: endGame
+    endRound --> adjustPotential: closeRound
+    endRound --> startRound: nextRound
+
+    adjustPotential --> startRound: nextRound
+
+    gameEnd --> [*]

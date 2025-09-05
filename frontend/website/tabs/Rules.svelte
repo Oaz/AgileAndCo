@@ -16,10 +16,10 @@
 
 <div class="content">
     <LocalizedSection id="setup" />
-    <LocalizedSection id="start-turn" />
+    <LocalizedSection id="start-round" />
     <LocalizedSection id="activities" />
     <LocalizedList id="activities-detail" />
-    <LocalizedSection id="end-turn" />
+    <LocalizedSection id="end-round" />
     <LocalizedSection id="end-game" />
     <LocalizedSection id="addendum1" />
     <LocalizedSection id="addendum2" />

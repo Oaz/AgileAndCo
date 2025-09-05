@@ -131,9 +131,14 @@ class Game extends \Table
         return $this->rules->getGamePrivateState($player_id);
     }
 
-    public function stStartTurn(): void
+    public function stStartRound(): void
     {
-        $this->gamestate->nextState($this->rules->startTurn());
+        $this->gamestate->nextState($this->rules->startRound());
+    }
+
+    public function stStartActivity(): void
+    {
+        $this->gamestate->nextState($this->rules->startActivity());
     }
 
     public function stNextPlayer(): void
@@ -228,9 +233,9 @@ class Game extends \Table
         $this->gamestate->nextState($this->rules->doCoach());
     }
 
-    public function stEndTurn(): void
+    public function stEndRound(): void
     {
-        list($transition, $overLimitPlayers) = $this->rules->endTurn();
+        list($transition, $overLimitPlayers) = $this->rules->endRound();
         if (count($overLimitPlayers) == 0) {
             $this->gamestate->nextState($transition);
             return;
@@ -243,7 +248,7 @@ class Game extends \Table
     public function actAdjustPotential(string $cards): void
     {
         $player_id = $this->getCurrentPlayerId();
-        $this->gamestate->setPlayerNonMultiactive($player_id, "nextTurn");
+        $this->gamestate->setPlayerNonMultiactive($player_id, "nextRound");
         $this->rules->updateState($player_id);
     }
 

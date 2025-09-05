@@ -64,14 +64,22 @@ $machinestates = [
 
     // Note: ID=2 => your first state
     2 => [
-        "name" => "startTurn",
+        "name" => "startRound",
         "description" => '',
         "type" => "game",
-        "action" => "stStartTurn",
-        "transitions" => ["" => 6]
+        "action" => "stStartRound",
+        "transitions" => ["startActivities" => 3]
     ],
 
-    6 => [
+    3 => [
+        "name" => "startActivity",
+        "description" => '',
+        "type" => "game",
+        "action" => "stStartActivity",
+        "transitions" => ["chooseActivity" => 4]
+    ],
+
+    4 => [
         "name" => "playerChooseActivity",
         "description" => clienttranslate('${actplayer} must choose the next activity'),
         "descriptionmyturn" => clienttranslate('${you} must choose the next activity'),
@@ -106,7 +114,7 @@ $machinestates = [
         "possibleactions" => [
             "actConference",
         ],
-        "transitions" => ["nextPlayer" => 3]
+        "transitions" => ["nextPlayer" => 5]
     ],
 
     20 => [
@@ -126,7 +134,7 @@ $machinestates = [
         "possibleactions" => [
             "actDevelop",
         ],
-        "transitions" => ["nextPlayer" => 3]
+        "transitions" => ["nextPlayer" => 5]
     ],
 
     30 => [
@@ -146,7 +154,7 @@ $machinestates = [
         "possibleactions" => [
             "actDeploy",
         ],
-        "transitions" => ["nextPlayer" => 3]
+        "transitions" => ["nextPlayer" => 5]
     ],
 
     40 => [
@@ -157,7 +165,7 @@ $machinestates = [
         "initialprivate" => 41,
         "action" => "stRetrospective",
         "args" => "argGameState",
-        "transitions" => ["nextPlayer" => 3]
+        "transitions" => ["nextPlayer" => 5]
     ],
 
     41 => [
@@ -187,27 +195,27 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stCoachGivesPotential",
-        "transitions" => ["nextPlayer" => 3]
+        "transitions" => ["nextPlayer" => 5]
     ],
 
-    3 => [
+    5 => [
         "name" => "nextPlayer",
         "description" => '',
         "type" => "game",
         "action" => "stNextPlayer",
         "updateGameProgression" => true,
-        "transitions" => ["nextActivity" => 2, "endTurn" => 4]
+        "transitions" => ["nextActivity" => 3, "endRound" => 6]
     ],
 
-    4 => [
-        "name" => "endTurn",
+    6 => [
+        "name" => "endRound",
         "description" => '',
         "type" => "game",
-        "action" => "stEndTurn",
-        "transitions" => ["endGame" => 99, "closeTurn" => 5, "nextTurn" => 2]
+        "action" => "stEndRound",
+        "transitions" => ["endGame" => 99, "closeRound" => 7, "nextRound" => 2]
     ],
 
-    5 => [
+    7 => [
         "name" => "adjustPotential",
         "description" => clienttranslate('Some players must remove cards from their potential'),
         "descriptionmyturn" => clienttranslate('${you} must remove cards from your potential'),
@@ -216,7 +224,7 @@ $machinestates = [
         "possibleactions" => [
             "actAdjustPotential",
         ],
-        "transitions" => ["nextTurn" => 2]
+        "transitions" => ["nextRound" => 2]
     ],
 
     // Final state.

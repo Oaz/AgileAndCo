@@ -2,9 +2,9 @@ import {Activity} from "./Activity";
 import {_, Text} from "../texts";
 import {BGA} from "../BGA";
 
-export class EndOfTurn extends Activity {
+export class EndOfRound extends Activity {
     constructor(datas) {
-        super(datas, 'END_OF_TURN');
+        super(datas, 'END_OF_ROUND');
         var potentialSize = this.cards_in_zone(3).length;
         var toDismiss = potentialSize > 6 ? potentialSize-6 : 0;
         this.selection_min = toDismiss;

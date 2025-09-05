@@ -12,7 +12,7 @@ goal = But du jeu
     Le joueur gagnant est celui dont l’entreprise possède le plus de points à la fin de la partie.
     Le score d’une entreprise correspond à la somme des points des cartes qui ont été posées durant la partie.
 
-start-turn = Déroulement d'un tour
+start-round = Déroulement d'un tour
     .details =
     Le joueur possédant la carte "Meneur de jeu" choisit une activité, prend la carte correspondante et la pose devant lui.
     Tous les joueurs exécutent ensuite l’activité choisie, en commençant par le joueur qui l’a sélectionnée.
@@ -27,7 +27,7 @@ activities-detail = Chaque carte Activité décrit le déroulement précis de l�
     .item4 = RÉTROSPECTIVE. Chaque joueur peut améliorer son entreprise en posant une carte d’amélioration depuis son potentiel. Pour valider l’amélioration, le joueur doit défausser un nombre de cartes égal au coût indiqué sur la carte. S’il ne dispose pas de suffisamment de cartes, il doit choisir une autre amélioration ou s’abstenir. Pour le joueur initiateur, le coût est réduit d’une carte. A l'exception des équipes produits dont le nombre n'est pas limité, il n'est pas possible de poser deux fois la même amélioration afin d'en cumuler les effets.
     .item5 = COACH. Le joueur ayant choisi cette activité -et lui seul- bénéficie d’un coach et pioche une carte supplémentaire qu’il ajoute à son potentiel.
 
-end-turn = Fin du tour
+end-round = Fin du tour
     .details =
     Après l’exécution de toutes les activités choisies, le tour se termine. La carte "Meneur de jeu" est transférée au joueur suivant. Chaque joueur doit conserver au maximum 6 cartes de potentiel en main ; les cartes excédentaires doivent être défaussées.
 

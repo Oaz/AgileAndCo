@@ -457,8 +457,9 @@ class Rules
             $selected = $selection->peek($card);
             $payment += $selected->location === "products" ? 2 : 1;
         }
-        if ($payment < $this->computeCost($targetCard, $player))
-            throw new \BgaUserException("Insufficient payment");
+        $expectedPayment = $this->computeCost($targetCard, $player);
+        if ($payment < $expectedPayment)
+            throw new \BgaUserException("Insufficient payment {$payment} expected {$expectedPayment}");;
         foreach ($cards as $card) {
             $selected = $selection->take($card);
             $cardId = $selected->id;
@@ -469,7 +470,11 @@ class Rules
                 "cardName" => $selected->fullName,
             ]);
         }
-        $this->cards->moveAllCardsInLocation('retrospective', 'company', playerId: $player_id);
+        $player = $this->getPlayerPrivateState($player_id);
+        $selectedCard = $player['retrospective'][0];
+        $cardTemplate = $this->repo->createCardTemplate($selectedCard);
+        $targetLocation = ($cardTemplate->type === 'PRODUCT_TEAM') ? 'teams' : 'company';
+        $this->cards->moveAllCardsInLocation('retrospective', $targetLocation, playerId: $player_id);
         return true;
     }
 

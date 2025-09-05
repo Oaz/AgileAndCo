@@ -243,16 +243,125 @@ class RetrospectiveRulesTest extends RulesTestCase
 
     public static function retrospectivePayment(): array
     {
+        $cost_1_NoPowers = [9, [['potential', 0]], [], [], [], ['AGILE_MATURITY_AGILE_PRACTITIONER']];
+        $cost_3_NoPowers = [9, [['potential', 0],['potential', 1],['potential', 2]], [], [], [], ['AGILE_MATURITY_CLEAN_CODE']];
+        $cost_4_MinusOneAsInitiator = [26, [['potential', 0], ['potential', 2], ['potential', 3]],
+            [], [], [], ['AGILE_VALUE_FOCUS']
+        ];
+        $cost_3_MinusOneAsInternalCoach = [9, [['potential', 0], ['potential', 2]],
+            [], [],
+            ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_MATURITY_CLEAN_CODE']
+        ];
+        $cost_4_MinusOneAsInitiator_MinusOneAsInternalCoach = [26, [['potential', 0], ['potential', 2]],
+            [], [],
+            ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_FOCUS']
+        ];
+        $cost_3_PaidWithProductAsDevops = [9, [['potential', 1], ['products', 0]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0]],
+            ['AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_CLEAN_CODE']
+        ];
+        $cost_1_PaidWithProductAsDevops = [9, [['products', 0]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0]],
+            ['AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_AGILE_PRACTITIONER']
+        ];
+        $cost_3_MinusOneAsInternalCoach_PaidWithProductAsDevops = [9, [['products', 0]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0]],
+            ['AGILE_MATURITY_INTERNAL_COACH', 'AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_CLEAN_CODE']
+        ];
+        $cost_4_PaidWithTwoProductAsDevops = [9, [['products', 0], ['products', 1]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
+            ['AGILE_MATURITY_DEVOPS'], ['AGILE_VALUE_FOCUS']
+        ];
         return [
-            [9, [['potential', 0]], [], [], [], ['AGILE_MATURITY_AGILE_PRACTITIONER']],
-            [26, [['potential', 0], ['potential', 2]],
-                [], [],
-                ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_FOCUS']
-            ],
-            [9, [['potential', 1], ['products', 0]],
-                [], [['AGILE_MATURITY_TEST_TEAM', 0]],
-                ['AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_CLEAN_CODE']
-            ],
+            $cost_1_NoPowers,
+            $cost_3_NoPowers,
+            $cost_4_MinusOneAsInitiator,
+            $cost_3_MinusOneAsInternalCoach,
+            $cost_4_MinusOneAsInitiator_MinusOneAsInternalCoach,
+            $cost_3_PaidWithProductAsDevops,
+            $cost_1_PaidWithProductAsDevops,
+            $cost_3_MinusOneAsInternalCoach_PaidWithProductAsDevops,
+            $cost_4_PaidWithTwoProductAsDevops
+        ];
+    }
+
+    /**
+ * @dataProvider retrospectivePaymentTeams
+ */
+    public function testPayForRetrospectiveTeams($playerId, $selection, $teams, $products, $powers, $retrospective): void
+    {
+        // Arrange
+        $this->withMultiActivity('ACTIVITY_RETROSPECTIVE', 26, [9, 26, 68, 144]);
+        $this->addTo('products', $playerId, $products);
+        $this->addTo('teams', $playerId, $teams);
+        $this->addTo('company', $playerId, $powers);
+        $this->addTo('retrospective', $playerId, $retrospective);
+        $selected = new FakeSelection($this->rules, $playerId, $selection);
+        $expectedNewPotential = array_diff(
+            $this->rules->repo->listCardIds('potential', playerId: $playerId),
+            $selected->getCardIds()
+        );
+        $expectedNewProducts = array_diff(
+            $this->rules->repo->listCardIds('products', playerId: $playerId),
+            $selected->getCardIds()
+        );
+        $expectedNewTeams = array_merge(
+            $this->rules->repo->listCardIds('teams', playerId: $playerId),
+            $this->rules->repo->listCardIds('retrospective', playerId: $playerId)
+        );
+
+        // Act
+        $result = $this->rules->payForRetrospective($playerId, $selected->incomingJson());
+
+        // Assert
+        $this->assertTrue($result);
+
+        $actualNewPotential = $this->rules->repo->listCardIds('potential', playerId: $playerId);
+        $this->assertEquivalent($expectedNewPotential, $actualNewPotential);
+
+        $actualNewProducts = $this->rules->repo->listCardIds('products', playerId: $playerId);
+        $this->assertEquivalent($expectedNewProducts, $actualNewProducts);
+
+        $actualNewTeams = $this->rules->repo->listCardIds('teams', playerId: $playerId);
+        $this->assertEquivalent($expectedNewTeams, $actualNewTeams);
+
+        $this->assertCount(0, $this->rules->repo->listCardIds('retrospective', playerId: $playerId));
+    }
+
+    public static function retrospectivePaymentTeams(): array
+    {
+        $cost_3_NoPowers = [9, [['potential', 0],['potential', 1],['potential', 2]], [], [], [], ['PRODUCT_TEAM_SOCIAL']];
+        $cost_4_MinusOneAsInitiator = [26, [['potential', 0], ['potential', 2], ['potential', 3]],
+            [], [], [], ['PRODUCT_TEAM_MMOG']
+        ];
+        $cost_3_MinusOneAsPassionateDeveloper = [9, [['potential', 0], ['potential', 2]],
+            [], [],
+            ['AGILE_MATURITY_PASSIONATE_DEVELOPER'], ['PRODUCT_TEAM_SOCIAL']
+        ];
+        $cost_4_MinusOneAsInitiator_MinusOneAsPassionateDeveloper = [26, [['potential', 0], ['potential', 2]],
+            [], [],
+            ['AGILE_MATURITY_PASSIONATE_DEVELOPER'], ['PRODUCT_TEAM_MMOG']
+        ];
+        $cost_3_PaidWithProductAsDevops = [9, [['potential', 1], ['products', 0]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0]],
+            ['AGILE_MATURITY_DEVOPS'], ['PRODUCT_TEAM_SOCIAL']
+        ];
+        $cost_3_MinusOneAsPassionateDeveloper_PaidWithProductAsDevops = [9, [['products', 0]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0]],
+            ['AGILE_MATURITY_PASSIONATE_DEVELOPER', 'AGILE_MATURITY_DEVOPS'], ['PRODUCT_TEAM_SOCIAL']
+        ];
+        $cost_4_PaidWithTwoProductAsDevops = [9, [['products', 0], ['products', 1]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
+            ['AGILE_MATURITY_DEVOPS'], ['PRODUCT_TEAM_MMOG']
+        ];
+        return [
+            $cost_3_NoPowers,
+            $cost_4_MinusOneAsInitiator,
+            $cost_3_MinusOneAsPassionateDeveloper,
+            $cost_4_MinusOneAsInitiator_MinusOneAsPassionateDeveloper,
+            $cost_3_PaidWithProductAsDevops,
+            $cost_3_MinusOneAsPassionateDeveloper_PaidWithProductAsDevops,
+            $cost_4_PaidWithTwoProductAsDevops
         ];
     }
 
@@ -296,20 +405,24 @@ class RetrospectiveRulesTest extends RulesTestCase
 
     public static function retrospectiveNonPayment(): array
     {
+        $cost_1_NoPowers_paid_0 = [9, [], [], [], [], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "Insufficient payment 0 expected 1"];
+        $cost_4_MinusOneAsInternalCoach_paid_1 = [26, [['potential', 2]],
+            [], [],
+            ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_FOCUS'], "Insufficient payment 1 expected 2"
+        ];
+        $cost_3_PaidWithProductAsDevops = [9, [['products', 0]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0]],
+            ['AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_CLEAN_CODE'], "Insufficient payment 2 expected 3"
+        ];
+        $tryToPayWithProductWithoutDevops = [9, [['potential', 1], ['products', 0]],
+            [], [['AGILE_MATURITY_TEST_TEAM', 0]],
+            [], ['AGILE_MATURITY_CLEAN_CODE'], "Invalid retrospective payment - location not allowed"
+        ];
         return [
-            [9, [], [], [], [], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "Insufficient payment"],
-            [26, [['potential', 2]],
-                [], [],
-                ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_FOCUS'], "Insufficient payment"
-            ],
-            [9, [['products', 0]],
-                [], [['AGILE_MATURITY_TEST_TEAM', 0]],
-                ['AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_CLEAN_CODE'], "Insufficient payment"
-            ],
-            [9, [['potential', 1], ['products', 0]],
-                [], [['AGILE_MATURITY_TEST_TEAM', 0]],
-                [], ['AGILE_MATURITY_CLEAN_CODE'], "Invalid retrospective payment - location not allowed"
-            ],
+            $cost_1_NoPowers_paid_0,
+            $cost_4_MinusOneAsInternalCoach_paid_1,
+            $cost_3_PaidWithProductAsDevops,
+            $tryToPayWithProductWithoutDevops,
         ];
     }
 }

@@ -286,6 +286,31 @@ class Rules
         return $overLimitPlayers;
     }
 
+    public function adjustPotential($player_id, $cards): bool
+    {
+        $infos = $this->game->loadInfos();
+        $player = $this->getPlayerPrivateState($player_id);
+        $potentialSize = count($player['potential']);
+        $shouldDiscard = $potentialSize > 6 ?$potentialSize - 6 : 0;;
+        $wantDiscard = count($cards);
+        if ($wantDiscard != $shouldDiscard)
+            throw new \BgaUserException("Should discard {$shouldDiscard} instead of {$wantDiscard}");
+        $selection = new CardSelection('discard', $player_id, [
+                'potential' => SortForSelection::BY_USAGE
+            ], $this->repo);
+        foreach ($cards as $card) {
+            $selected = $selection->take($card);
+            $cardId = $selected->id;
+            $this->cards->playCard($cardId);
+            $this->broadcast('DEBUG: ${player_name} discards ${cardName} id ${cardId}', [
+                "player_name" => $infos->getPlayerName($player_id),
+                "cardId" => $cardId,
+                "cardName" => $selected->fullName,
+            ]);
+        }
+        return true;
+    }
+
 
     public function completeConference($player_id, $cards): bool
     {

@@ -248,8 +248,10 @@ class Game extends \Table
     public function actAdjustPotential(string $cards): void
     {
         $player_id = $this->getCurrentPlayerId();
-        $this->gamestate->setPlayerNonMultiactive($player_id, "nextRound");
-        $this->rules->updateState($player_id);
+        if($this->rules->adjustPotential($player_id, json_decode($cards, true))) {
+            $this->gamestate->setPlayerNonMultiactive($player_id, "nextRound");
+            $this->rules->updateState($player_id);
+        }
     }
 
     /**

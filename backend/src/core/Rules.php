@@ -474,7 +474,7 @@ class Rules
         $selectedCard = $player['retrospective'][0];
         $cardTemplate = $this->repo->createCardTemplate($selectedCard);
         $targetLocation = ($cardTemplate->type === 'PRODUCT_TEAM') ? 'teams' : 'company';
-        $this->cards->moveAllCardsInLocation('retrospective', $targetLocation, playerId: $player_id);
+        $this->repo->moveCardsFromToLocation('retrospective', $targetLocation, playerId: $player_id);
         return true;
     }
 

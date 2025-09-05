@@ -47,6 +47,30 @@
             }
         },
         {
+            label: 'With other developed product', data: {
+                'activity': 'ACTIVITY_DEPLOYMENT',
+                'teams': [
+                    'PRODUCT_TEAM_ADVERGAME',
+                    'PRODUCT_TEAM_EDUCATION',
+                ],
+                'products': [
+                    false,
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                ],
+                'company': [
+                    'AGILE_MATURITY_DEVOPS',
+                    'AGILE_MATURITY_CLEAN_CODE',
+                ],
+                'potential': [
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_OPENNESS',
+                ],
+            }
+        },
+        {
             label: 'Cannot deploy all', data: {
                 'activity': 'ACTIVITY_DEPLOYMENT',
                 'teams': [

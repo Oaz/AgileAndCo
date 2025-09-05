@@ -9,7 +9,7 @@ class CardsRepository
         $this->groups = $groups;
         $this->details = $details;
         $this->deck = $deckAdapter;
-        $cards = array_reduce(array_keys($groups), function($carry, $groupName) use($groups) {
+        $cards = array_reduce(array_keys($groups), function ($carry, $groupName) use ($groups) {
             return array_merge($carry, array_map(
                 fn($index) => new Card(0, $groupName, $groups[$groupName][$index], 0, $groupName, $index),
                 array_keys($groups[$groupName])));
@@ -47,6 +47,8 @@ class CardsRepository
     public function getCardsInLocationSortedByIndexes(string $location, int $playerId): array
     {
         return array_map(function ($card) {
+            if ($card === false)
+                return false;
             return $card->fullName;
         }, $this->loadAndSortByIndexFromLocation($location, $playerId));
     }
@@ -110,7 +112,10 @@ class CardsRepository
 
     public function getSingleCard($location, ?int $index = null, ?int $playerId = null)
     {
-        return array_values($this->loadFromLocation($location, $index, $playerId))[0];
+        $cards = $this->loadAndSortByIndexFromLocation($location, $playerId);
+        if (count($cards) < $index)
+            throw new \Exception("No card found at location '$location', index '$index', player ID '$playerId'");
+        return $cards[$index ?? 0];
     }
 
     public function loadFromLocation(string $location, ?int $index = null, ?int $playerId = null): array
@@ -120,7 +125,7 @@ class CardsRepository
         }, $this->deck->getCardsInLocation($location, $index, $playerId));
     }
 
-    public function createCard(array $data) : PlayerCard
+    public function createCard(array $data): PlayerCard
     {
         $group = $this->groups[$data['type']];
         $card = new Card(
@@ -130,11 +135,12 @@ class CardsRepository
         return $this->createPlayerCard($card);
     }
 
-    public function createCardTemplate(string $fullName) : PlayerCard {
+    public function createCardTemplate(string $fullName): PlayerCard
+    {
         return $this->createPlayerCard($this->cardsReference[$fullName]);
     }
 
-    public function createPlayerCard(Card $card) : PlayerCard
+    public function createPlayerCard(Card $card): PlayerCard
     {
         $details = $this->details[$card->fullName] ?? [];
         $cost = $details['cost'] ?? 0;
@@ -142,20 +148,41 @@ class CardsRepository
         return new PlayerCard($card, $cost, $score);
     }
 
+    public function getCards(string $fullName): array
+    {
+        $cardReference = $this->cardsReference[$fullName];
+        return $this->deck->getCardsOfType($cardReference->type, $cardReference->index);
+    }
+
     public function moveCardsToLocation(array $fullNames, string $location, ?int $playerId = null): void
     {
+        $existingCards = $this->loadFromLocation($location, playerId: $playerId);
+        $nextIndex = count($existingCards);
         $moved = [];
         foreach ($fullNames as $fullName) {
-            $cardReference = $this->cardsReference[$fullName];
-            $deck_cards = $this->deck->getCardsOfType($cardReference->type, $cardReference->index);
+            $deck_cards = $this->getCards($fullName);
             foreach ($deck_cards as $deck_card) {
                 $cardId = $deck_card['id'];
                 if (isset($moved[$cardId]))
                     continue;
-                $this->deck->moveCard($cardId, $location, playerId: $playerId);
+                $this->deck->moveCard($cardId, $location, index: $nextIndex++, playerId: $playerId);
                 $moved[$cardId] = true;
                 break;
             }
+        }
+    }
+
+    public function moveCardsFromToLocation(string $fromLocation, string $toLocation, ?int $playerId = null): void
+    {
+        $cardsToMove = $this->loadFromLocation($fromLocation, playerId: $playerId);
+        $existingCards = $this->loadFromLocation($toLocation, playerId: $playerId);
+        $nextIndex = count($existingCards);
+        $moved = [];
+        foreach ($cardsToMove as $card) {
+            if (isset($moved[$card->id]))
+                continue;
+            $this->deck->moveCard($card->id, $toLocation, index: $nextIndex++, playerId: $playerId);
+            $moved[$card->id] = true;
         }
     }
 

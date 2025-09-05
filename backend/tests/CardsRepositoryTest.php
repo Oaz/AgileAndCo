@@ -49,6 +49,52 @@ class CardsRepositoryTest extends TestCase
         $this->assertEquals(8, $this->repo->getIndex('AGILE_MATURITY', 'DEVOPS'));
     }
 
+    public function testGetCardsInLocationSortedByIndexes()
+    {
+        $this->repo->moveCardsToLocation([
+            'AGILE_MATURITY_DEVOPS', 'PRODUCT_TEAM_EDUCATION', 'PRODUCT_TEAM_SOCIAL',
+            'AGILE_MATURITY_PASSIONATE_DEVELOPER', 'PRODUCT_TEAM_ADVERGAME'], 'potential', 23);
+        $cards = $this->repo->getCardsInLocationSortedByIndexes('potential', 23);
+        $this->assertEquals([
+            'AGILE_MATURITY_DEVOPS', 'PRODUCT_TEAM_EDUCATION', 'PRODUCT_TEAM_SOCIAL',
+            'AGILE_MATURITY_PASSIONATE_DEVELOPER', 'PRODUCT_TEAM_ADVERGAME'], $cards);
+    }
+
+    public function testGetCardsInLocationSortedByIncompleteIndexes()
+    {
+        $deck_cards = $this->repo->getCards('AGILE_MATURITY_DEVOPS');
+        $deck_card = $deck_cards[0];
+        $this->deck->moveCard($deck_card['id'], 'products', 1, 23);
+        $cards = $this->repo->getCardsInLocationSortedByIndexes('products', 23);
+        $this->assertEquals([false, 'AGILE_MATURITY_DEVOPS'], $cards);
+    }
+
+    public function testIndexesAreIncrementedWhenMovingCards()
+    {
+        $this->repo->moveCardsToLocation(
+            ['PRODUCT_TEAM_EDUCATION', 'PRODUCT_TEAM_SOCIAL'], 'teams', 23);
+        $this->repo->moveCardsToLocation(
+            ['PRODUCT_TEAM_MMOG', 'PRODUCT_TEAM_ADVERGAME'], 'teams', 23);
+        $cards = $this->repo->loadFromLocation('teams', playerId: 23);
+        $indexes = array_map(function ($card) {
+            return $card->index;
+        }, $cards);
+        $this->assertEquals([0,1,2,3], $indexes);
+    }
+
+    public function testIndexesAreIncrementedWhenMovingCardsFromLocation()
+    {
+        $this->repo->moveCardsToLocation(
+            ['PRODUCT_TEAM_EDUCATION', 'PRODUCT_TEAM_SOCIAL'], 'teams', 23);
+        $this->repo->moveCardsToLocation(
+            ['PRODUCT_TEAM_MMOG', 'PRODUCT_TEAM_ADVERGAME'], 'somewhere', 23);
+        $this->repo->moveCardsFromToLocation('somewhere', 'teams', 23);
+        $indexes = array_map(function ($card) {
+            return $card->index;
+        }, $this->repo->loadFromLocation('teams', playerId: 23));
+        $this->assertEquals([0,1,2,3], $indexes);
+    }
+
     public function testGetCardsInLocationSortedByUsage()
     {
         $this->repo->moveCardsToLocation([

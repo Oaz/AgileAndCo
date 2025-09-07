@@ -2,6 +2,7 @@
 
 namespace Bga\Games\AgileAndCo\Tests;
 use Bga\Games\AgileAndCo\Rules;
+use Bga\Games\AgileAndCo\ScoreComputer;
 
 class ScoreRulesTest extends RulesTestCase
 {
@@ -11,9 +12,10 @@ class ScoreRulesTest extends RulesTestCase
     public function testScore($expectedScore, $teams, $company, $potential): void
     {
         $this->arrange([]);
+        $computer = new ScoreComputer($this->rules->repo);
         $this->assertEquals(
             $expectedScore,
-            $this->rules->computeScore($teams, $company, $potential)
+            $computer->computeScore($teams, $company, $potential)
         );
     }
 
@@ -82,12 +84,7 @@ class ScoreRulesTest extends RulesTestCase
             [-6, [], ['AGILE_MATURITY_AGILE_SENSEI'], ['AGILE_MATURITY_DETAILED_PLANNING', 'AGILE_MATURITY_APPLICATION_FRAMEWORK']],
         ];
     }
-    private function makeCardList($cardsFullNames): array
-    {
-        return array_map(function($cardFullName) {
-            return $this->rules->repo->createCardTemplate($cardFullName);
-        }, $cardsFullNames);
-    }
+
 }
 
 

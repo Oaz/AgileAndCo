@@ -11,6 +11,7 @@ require_once __DIR__ . '/../src/core/PlayerCard.php';
 require_once __DIR__ . '/../src/core/CardsRepository.php';
 require_once __DIR__ . '/../src/core/CardSelection.php';
 require_once __DIR__ . '/../src/core/Helpers.php';
+require_once __DIR__ . '/../src/core/ScoreComputer.php';
 require_once __DIR__ . '/../src/core/Rules.php';
 
 require_once __DIR__ . '/Fakes/misc.php';

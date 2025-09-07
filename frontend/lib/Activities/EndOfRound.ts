@@ -5,8 +5,12 @@ import {BGA} from "../BGA";
 export class EndOfRound extends Activity {
     constructor(datas) {
         super(datas, 'END_OF_ROUND');
-        var potentialSize = this.cards_in_zone(3).length;
-        var toDismiss = potentialSize > 6 ? potentialSize-6 : 0;
+        var potentialSize = datas.potential.length;
+        var freePotential = 6;
+        if(datas.company.includes('AGILE_MATURITY_AGILE_HR'))
+            freePotential = 10;
+        freePotential += datas.company.filter(cardName => this.details[cardName].kind === 'AGILE_VALUE').length;
+        var toDismiss = potentialSize > freePotential ? potentialSize-freePotential : 0;
         this.selection_min = toDismiss;
         this.selection_max = toDismiss;
         if(toDismiss > 0)

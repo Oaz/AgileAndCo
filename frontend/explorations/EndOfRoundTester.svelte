@@ -3,7 +3,7 @@
 
     const options = [
         {
-            label: 'Nothing to dismiss', data: {
+            label: 'Nothing to discard', data: {
                 'activity': 'END_OF_ROUND',
                 'teams': [
                     'PRODUCT_TEAM_ADVERGAME',
@@ -21,7 +21,7 @@
             }
         },
         {
-            label: 'Must dismiss 1 to limit potential to 6 cards', data: {
+            label: 'Must discard 1 to limit potential to 6 cards', data: {
                 'activity': 'END_OF_ROUND',
                 'teams': [
                     'PRODUCT_TEAM_ADVERGAME',
@@ -42,7 +42,7 @@
             }
         },
         {
-            label: 'Must dismiss 2 to limit potential to 6 cards', data: {
+            label: 'Must discard 2 to limit potential to 6 cards', data: {
                 'activity': 'END_OF_ROUND',
                 'teams': [
                     'PRODUCT_TEAM_ADVERGAME',
@@ -60,6 +60,113 @@
                     'AGILE_VALUE_OPENNESS',
                     'AGILE_MATURITY_AGILE_CERTIFICATION',
                     'AGILE_MATURITY_DEVOPS',
+                ]
+            }
+        },
+        {
+            label: 'Must discard 1 to limit potential to 7 cards', data: {
+                'activity': 'END_OF_ROUND',
+                'teams': [
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
+                ],
+                'company': [
+                    'AGILE_VALUE_COURAGE'
+                ],
+                'potential': [
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_INTERNAL_COACH',
+                    'AGILE_MATURITY_CLEAN_CODE',
+                    'AGILE_VALUE_OPENNESS',
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_DEVOPS',
+                ]
+            }
+        },
+        {
+            label: 'Must discard 2 to limit potential to 8 cards', data: {
+                'activity': 'END_OF_ROUND',
+                'teams': [
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
+                ],
+                'company': [
+                    'AGILE_VALUE_COURAGE',
+                    'AGILE_VALUE_SIMPLICITY'
+                ],
+                'potential': [
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_INTERNAL_COACH',
+                    'AGILE_MATURITY_CLEAN_CODE',
+                    'AGILE_VALUE_OPENNESS',
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_DEVOPS',
+                    'AGILE_MATURITY_AGILE_HR',
+                    'AGILE_MATURITY_PAIR_PROGRAMMING',
+                ]
+            }
+        },
+        {
+            label: 'Must discard 1 to limit potential to 10 cards', data: {
+                'activity': 'END_OF_ROUND',
+                'teams': [
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
+                ],
+                'company': [
+                    'AGILE_MATURITY_AGILE_HR',
+                ],
+                'potential': [
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_INTERNAL_COACH',
+                    'AGILE_MATURITY_CLEAN_CODE',
+                    'AGILE_VALUE_OPENNESS',
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_DEVOPS',
+                    'AGILE_MATURITY_AGILE_HR',
+                    'AGILE_VALUE_SIMPLICITY',
+                    'AGILE_MATURITY_PAIR_PROGRAMMING',
+                ]
+            }
+        },
+        {
+            label: 'Must discard 1 to limit potential to 11 cards', data: {
+                'activity': 'END_OF_ROUND',
+                'teams': [
+                    'PRODUCT_TEAM_ADVERGAME',
+                ],
+                'products': [
+                    false,
+                ],
+                'company': [
+                    'AGILE_MATURITY_AGILE_HR',
+                    'AGILE_VALUE_SIMPLICITY'
+                ],
+                'potential': [
+                    'AGILE_MATURITY_AGILE_PRACTITIONER',
+                    'AGILE_VALUE_FEEDBACK',
+                    'PRODUCT_TEAM_MMOG',
+                    'AGILE_MATURITY_INTERNAL_COACH',
+                    'AGILE_MATURITY_CLEAN_CODE',
+                    'AGILE_VALUE_OPENNESS',
+                    'AGILE_MATURITY_AGILE_CERTIFICATION',
+                    'AGILE_MATURITY_DEVOPS',
+                    'AGILE_MATURITY_AGILE_HR',
+                    'AGILE_VALUE_SIMPLICITY',
+                    'AGILE_MATURITY_PAIR_PROGRAMMING',
+                    'AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP'
                 ]
             }
         }

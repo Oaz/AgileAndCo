@@ -265,11 +265,13 @@ class Rules
             $selected = $selection->take($card);
             $cardId = $selected->id;
             $this->cards->playCard($cardId);
-            $this->broadcast('DEBUG: ${player_name} discards ${cardName} id ${cardId}', [
-                "player_name" => $infos->getPlayerName($player_id),
-                "cardId" => $cardId,
-                "cardName" => $selected->fullName,
-            ]);
+            $this->debug('${player_name} discards ${cardName} id ${cardId}', function() use ($infos, $player_id, $cardId, $selected) {
+                return [
+                    "player_name" => $infos->getPlayerName($player_id),
+                    "cardId" => $cardId,
+                    "cardName" => $selected->fullName,
+                ];
+            });
         }
         return true;
     }
@@ -307,11 +309,13 @@ class Rules
             $selected = $selection->take($card);
             $cardId = $selected->id;
             $this->cards->playCard($cardId);
-            $this->broadcast('DEBUG: ${player_name} discards ${cardName} id ${cardId}', [
-                "player_name" => $infos->getPlayerName($player_id),
-                "cardId" => $cardId,
-                "cardName" => $selected->fullName,
-            ]);
+            $this->debug('${player_name} discards ${cardName} id ${cardId}', function() use ($infos, $player_id, $cardId, $selected) {
+                return [
+                    "player_name" => $infos->getPlayerName($player_id),
+                    "cardId" => $cardId,
+                    "cardName" => $selected->fullName,
+                ];
+            });
         }
         $this->cards->moveAllCardsInLocation('conference', 'potential', playerId: $player_id);
         return true;
@@ -341,11 +345,13 @@ class Rules
             $team = $teamSelection->take($input[0]);
             $product = $productSelection->take($input[1]);
             $this->cards->moveCard($product->id, 'products', $team->index, $player_id);
-            $this->broadcast('DEBUG: ${player_name} develop in team ${teamCard} with potential ${productName}', [
-                "player_name" => $infos->getPlayerName($player_id),
-                "teamCard" => $team->fullName,
-                "productName" => $product->fullName,
-            ]);
+            $this->debug('${player_name} develop in team ${teamCard} with potential ${productName}', function() use ($infos, $player_id, $team, $product) {
+                return [
+                    "player_name" => $infos->getPlayerName($player_id),
+                    "teamCard" => $team->fullName,
+                    "productName" => $product->fullName,
+                ];
+            });
         }
         if (count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company']))
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
@@ -377,13 +383,15 @@ class Rules
             $earning = $earnings[$team->name];
             $this->cards->playCard($cardId);
             $this->cards->pickCardsForLocation($earning, 'deck', 'potential', $player_id);
-            $this->broadcast('DEBUG: ${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', [
-                "player_name" => $infos->getPlayerName($player_id),
-                "cardName" => $product->name,
-                "cardId" => $cardId,
-                "teamType" => $team->name,
-                "earning" => $earning,
-            ]);
+            $this->debug('${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', function() use ($infos, $player_id, $team, $product, $cardId, $earning) {
+                return [
+                    "player_name" => $infos->getPlayerName($player_id),
+                    "cardName" => $product->name,
+                    "cardId" => $cardId,
+                    "teamType" => $team->name,
+                    "earning" => $earning,
+                ];
+            });
         }
         if (count($cards) >= 1 && in_array('AGILE_MATURITY_ENGAGED_USERS', $player['company']))
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
@@ -404,11 +412,13 @@ class Rules
         $selected = $selection->take($card);
         $cardId = $selected->id;
         $this->cards->moveCard($cardId, 'retrospective', playerId: $player_id);
-        $this->broadcast('DEBUG: ${player_name} choose ${cardName} (${cardId}) during retrospective', [
-            "player_name" => $infos->getPlayerName($player_id),
-            "cardName" => $selected->fullName,
-            "cardId" => $cardId,
-        ]);
+        $this->debug('${player_name} choose ${cardName} (${cardId}) during retrospective', function() use ($infos, $player_id, $cardId, $selected) {
+            return [
+                "player_name" => $infos->getPlayerName($player_id),
+                "cardName" => $selected->fullName,
+                "cardId" => $cardId,
+            ];
+        });
         return true;
     }
 
@@ -437,11 +447,13 @@ class Rules
             $selected = $selection->take($card);
             $cardId = $selected->id;
             $this->cards->playCard($cardId);
-            $this->broadcast('DEBUG: ${player_name} pays with ${cardName} id ${cardId}', [
-                "player_name" => $infos->getPlayerName($player_id),
-                "cardId" => $cardId,
-                "cardName" => $selected->fullName,
-            ]);
+            $this->debug('${player_name} pays with ${cardName} id ${cardId}', function() use ($infos, $player_id, $cardId, $selected) {
+                return [
+                    "player_name" => $infos->getPlayerName($player_id),
+                    "cardId" => $cardId,
+                    "cardName" => $selected->fullName,
+                ];
+            });
         }
         $player = $this->getPlayerPrivateState($player_id);
         $selectedCard = $player['retrospective'][0];
@@ -489,6 +501,12 @@ class Rules
         $this->game->notifyPlayer($player_id, 'updateState', '', $this->getGamePrivateState($player_id));
     }
 
+    private bool $isDebugEnabled = true;
 
+    private function debug(string $message, callable $argsCallback): void
+    {
+        if (!$this->isDebugEnabled) return;
+        $this->broadcast('DEBUG: ' . $message, $argsCallback());
+    }
 
 }

@@ -289,9 +289,7 @@ class Rules
     public function adjustPotential($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
-        $player = $this->getPlayerPrivateState($player_id);
-        $potentialSize = count($player['potential']);
-        $shouldDiscard = $potentialSize > 6 ?$potentialSize - 6 : 0;;
+        $shouldDiscard = $this->computeNumberOfDiscardWhenAdjustingPotentialAtEndOfRound($player_id);
         $wantDiscard = count($cards);
         if ($wantDiscard != $shouldDiscard)
             throw new \BgaUserException("Should discard {$shouldDiscard} instead of {$wantDiscard}");
@@ -311,6 +309,16 @@ class Rules
         return true;
     }
 
+    public function computeNumberOfDiscardWhenAdjustingPotentialAtEndOfRound($player_id): int
+    {
+        $player = $this->getPlayerPrivateState($player_id);
+        $potentialSize = count($player['potential']);
+        $maximumPotential = in_array('AGILE_MATURITY_AGILE_HR', $player['company']) ? 10 : 6;
+        $numberOfValues = count(array_filter($player['company'], fn($x) => $this->repo->createCardTemplate($x)->type == 'AGILE_VALUE'));
+        $maximumPotential += $numberOfValues;
+        $shouldDiscard = $potentialSize > $maximumPotential ? $potentialSize - $maximumPotential : 0;
+        return $shouldDiscard;
+    }
 
     public function completeConference($player_id, $cards): bool
     {
@@ -515,6 +523,7 @@ class Rules
     {
         $this->game->notifyPlayer($player_id, 'updateState', '', $this->getGamePrivateState($player_id));
     }
+
 
 
 }

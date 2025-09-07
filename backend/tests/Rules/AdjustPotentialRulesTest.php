@@ -41,6 +41,14 @@ class AdjustPotentialRulesTest extends RulesTestCase
             [9, [], 6, []],
             [9, [['potential', 1]], 7, []],
             [9, [['potential', 1], ['potential', 5]], 8, []],
+            [9, [['potential', 1], ['potential', 2], ['potential', 5], ['potential', 9], ['potential', 10]], 11, []],
+            [9, [], 7, ['AGILE_VALUE_COURAGE']],
+            [9, [['potential', 5]], 8, ['AGILE_VALUE_COURAGE']],
+            [9, [], 8, ['AGILE_VALUE_COURAGE', 'AGILE_VALUE_SIMPLICITY']],
+            [9, [], 10, ['AGILE_MATURITY_AGILE_HR']],
+            [9, [['potential', 5]], 11, ['AGILE_MATURITY_AGILE_HR']],
+            [9, [], 12, ['AGILE_MATURITY_AGILE_HR', 'AGILE_VALUE_COURAGE', 'AGILE_VALUE_SIMPLICITY']],
+            [9, [['potential', 5]], 13, ['AGILE_MATURITY_AGILE_HR', 'AGILE_VALUE_COURAGE', 'AGILE_VALUE_SIMPLICITY']],
         ];
     }
 
@@ -76,6 +84,8 @@ class AdjustPotentialRulesTest extends RulesTestCase
             [9, [], 7, [], "Should discard 1 instead of 0"],
             [9, [], 8, [], "Should discard 2 instead of 0"],
             [9, [['potential', 1]], 8, [], "Should discard 2 instead of 1"],
+            [9, [], 8, ['AGILE_VALUE_COURAGE'], "Should discard 1 instead of 0"],
+            [9, [], 11, ['AGILE_MATURITY_AGILE_HR'], "Should discard 1 instead of 0"],
         ];
     }
 

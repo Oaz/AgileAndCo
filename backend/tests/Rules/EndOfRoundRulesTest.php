@@ -1,16 +1,17 @@
 <?php
 
 namespace Bga\Games\AgileAndCo\Tests;
+use Bga\Games\AgileAndCo\Rules;
 
 class EndOfRoundRulesTest extends RulesTestCase
 {
     /**
-     * @dataProvider turnCases
+     * @dataProvider roundCases
      */
     public function testMoveToNextRound(array $playerIds): void
     {
         $this->arrange($playerIds);
-        $rounds = 48 / count($playerIds);
+        $rounds = Rules::TOTAL_ACTIVITY_COUNT / count($playerIds);
         for ($round = 1; $round < $rounds; $round++) {
             $this->playRound($playerIds);
             $this->checkEndRound("nextRound", []);
@@ -26,7 +27,7 @@ class EndOfRoundRulesTest extends RulesTestCase
         }
     }
 
-    public static function turnCases(): array
+    public static function roundCases(): array
     {
         return [
             [[9, 26]],

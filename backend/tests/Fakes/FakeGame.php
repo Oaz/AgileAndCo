@@ -9,14 +9,15 @@ use Bga\Games\AgileAndCo\IGlobalVariable;
 class FakeGame implements IGameAdapter
 {
     public string $lastMessage = "";
-    
+
     private array $players;
     private array $activePlayers = [];
     private array $globalVariables = [];
+    private array $scores = [];
 
     public function __construct(array $playerIds)
     {
-        $this->players = array_combine($playerIds, array_map(function($id, $no) {
+        $this->players = array_combine($playerIds, array_map(function ($id, $no) {
             return [
                 "player_id" => $id,
                 "player_name" => "player" . chr(65 + $no),
@@ -37,9 +38,9 @@ class FakeGame implements IGameAdapter
 
     public function getActivePlayerId(): int
     {
-        if(count($this->activePlayers) === 0)
+        if (count($this->activePlayers) === 0)
             return 0;
-        if(count($this->activePlayers) === 1)
+        if (count($this->activePlayers) === 1)
             return $this->activePlayers[0];
         throw new \BgaUserException("Should not call getActivePlayerId when multiple active players");
     }
@@ -51,9 +52,9 @@ class FakeGame implements IGameAdapter
 
     public function getActivePlayerName(): string
     {
-        if(count($this->activePlayers) === 0)
+        if (count($this->activePlayers) === 0)
             return "";
-        if(count($this->activePlayers) === 1)
+        if (count($this->activePlayers) === 1)
             return $this->getPlayers()[$this->activePlayers[0]]["player_name"];
         throw new \BgaUserException("Should not call getActivePlayerName when multiple active players");
     }
@@ -61,8 +62,10 @@ class FakeGame implements IGameAdapter
     public function notifyAllPlayers(string $notification, string $message, array $args = []): void
     {
         $formattedMessage = $message;
-        foreach ($args as $key => $value) {
-            $formattedMessage = str_replace('${' . $key . '}', $value, $formattedMessage);
+        if (strlen($formattedMessage) > 0) {
+            foreach ($args as $key => $value) {
+                $formattedMessage = str_replace('${' . $key . '}', $value, $formattedMessage);
+            }
         }
         $this->lastMessage = $formattedMessage;
     }
@@ -81,4 +84,15 @@ class FakeGame implements IGameAdapter
     {
         // TODO: Implement trace() method.
     }
+
+    function getScore($player_id): int
+    {
+        return $this->scores[$player_id] ?? 0;
+    }
+
+    function setScore($player_id, $count): void
+    {
+        $this->scores[$player_id] = $count;
+    }
+
 }

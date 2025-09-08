@@ -15,4 +15,8 @@ interface IGameAdapter
     public function globalVariable(string $name) : IGlobalVariable;
 
     public function trace(string $message): void;
+
+    function getScore($player_id): int;
+
+    function setScore($player_id, $count): void;
 }

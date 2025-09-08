@@ -48,4 +48,12 @@ class GameAdapter implements IGameAdapter
     public function trace(string $message): void {
         $this->game->trace($message);
     }
+
+    function getScore($player_id):int {
+        return $this->game->getUniqueValueFromDB("SELECT `player_score` FROM `player` WHERE `player_id` = '$player_id'");
+    }
+
+    function setScore($player_id, $count):void {
+        $this->game->DbQuery("UPDATE `player` SET `player_score` = '$count' WHERE `player_id` = '$player_id'");
+    }
 }

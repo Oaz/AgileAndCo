@@ -4,6 +4,7 @@ require_once __DIR__ . '/../src/ports/GameInfos.php';
 require_once __DIR__ . '/../src/ports/IDeckAdapter.php';
 require_once __DIR__ . '/../src/ports/IGlobalVariable.php';
 require_once __DIR__ . '/../src/ports/IGameAdapter.php';
+require_once __DIR__ . '/../src/ports/IScoreComputer.php';
 
 require_once __DIR__ . '/../src/core/CardsData.php';
 require_once __DIR__ . '/../src/core/Card.php';

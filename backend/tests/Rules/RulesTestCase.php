@@ -4,6 +4,7 @@ namespace Bga\Games\AgileAndCo\Tests;
 
 use Bga\Games\AgileAndCo\IDeckAdapter;
 use Bga\Games\AgileAndCo\IGameAdapter;
+use Bga\Games\AgileAndCo\IScoreComputer;
 use Bga\Games\AgileAndCo\Rules;
 use PHPUnit\Framework\TestCase;
 
@@ -13,11 +14,11 @@ abstract class RulesTestCase extends TestCase
     protected IGameAdapter $game;
     protected Rules $rules;
 
-    protected function arrange(array $playerIds): void
+    protected function arrange(array $playerIds, IScoreComputer $scoreComputer = null): void
     {
         $this->deck = new FakeDeck();
         $this->game = new FakeGame($playerIds);
-        $this->rules = new Rules($this->deck, $this->game);
+        $this->rules = new Rules($this->deck, $this->game, $scoreComputer);
         $this->rules->initGame($this->game->getPlayers());
         $this->game->globalVariable('ONGOING_ACTIVITY')->write(['', 0]);
 

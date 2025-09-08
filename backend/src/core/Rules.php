@@ -11,8 +11,10 @@ class Rules
     public readonly IGlobalVariable $currentEarnings;
     public readonly IGlobalVariable $completedActivitiesCount;
 
+    private IScoreComputer $scoreComputer;
 
-    public function __construct(IDeckAdapter $cards, IGameAdapter $game)
+
+    public function __construct(IDeckAdapter $cards, IGameAdapter $game, IScoreComputer $scoreComputer = null)
     {
         $this->game = $game;
         $this->cards = $cards;
@@ -20,6 +22,7 @@ class Rules
         $this->ongoingActivity = $this->game->globalVariable('ONGOING_ACTIVITY');
         $this->currentEarnings = $this->game->globalVariable('CURRENT_EARNINGS');
         $this->completedActivitiesCount = $this->game->globalVariable('COMPLETED_ACTIVITIES_COUNT');
+        $this->scoreComputer = $scoreComputer ?? new ScoreComputer($this->repo);
     }
 
     private bool $isDebugEnabled = false;
@@ -56,7 +59,7 @@ class Rules
         $this->game->notifyAllPlayers("message", $message, $args);
     }
 
-    private const TOTAL_ACTIVITY_COUNT = 48;
+    public const TOTAL_ACTIVITY_COUNT = 48;
 
     public function getGameProgression(): int
     {
@@ -125,11 +128,11 @@ class Rules
         $selectedInRetrospective = array_values($this->repo->listCards('retrospective', playerId: $playerId));
         if (count($selectedInRetrospective) > 0)
             $currentActivity = 'ACTIVITY_RETROSPECTIVE_PAYMENT';
-        $scoreComputer = new ScoreComputer($this->repo);
+        $gameIsComplete = $this->getGameProgression() === 100;
         return [
             'id' => $playerId,
             'name' => $infos->players[$playerId]['player_name'],
-            'score' => $scoreComputer->computeScore($teams, $company, $potential),
+            'score' => $this->scoreComputer->computeScore($teams, $company, $potential, $gameIsComplete),
             'activity' => $currentActivity,
             'initiate' => $activityInitiator == $playerId,
             'teams' => $teams,
@@ -172,6 +175,7 @@ class Rules
     public function updateState($player_id): void
     {
         $gameState = $this->getGameState();
+        $this->game->setScore($player_id, $gameState['_private'][$player_id]['score']);
         $this->game->notifyPlayer($player_id, 'updatePrivateState', '', [
             '_private' => $gameState['_private'][$player_id],
         ]);
@@ -216,8 +220,13 @@ class Rules
     public function endRound(): array
     {
         $currentCount = $this->completedActivitiesCount->read();
-        if ($currentCount == Rules::TOTAL_ACTIVITY_COUNT)
+        if ($currentCount == Rules::TOTAL_ACTIVITY_COUNT) {
+            $gameState = $this->getGameState();
+            foreach ($gameState['public']['players'] as $player) {
+                $this->game->setScore($player['id'], $player['score']);
+            }
             return ["endGame", []];
+        }
         $overLimitPlayers = $this->getPlayersOverPotentialLimit();
         if (count($overLimitPlayers) > 0) {
             $this->ongoingActivity->write(['END_OF_ROUND', 0]);

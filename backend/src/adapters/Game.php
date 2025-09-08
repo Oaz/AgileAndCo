@@ -22,7 +22,7 @@ require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
 class Game extends \Table
 {
-    private mixed $rules;
+    private Rules $rules;
 
     /**
      * Your global variables labels:
@@ -162,8 +162,12 @@ class Game extends \Table
 
     public function actConference(string $cards): void
     {
-        $player_id = $this->getCurrentPlayerId();
-        if ($this->rules->completeConference($player_id, json_decode($cards, true))) {
+        $this->actConferencePlayer((int)$this->getCurrentPlayerId(), json_decode($cards, true));
+    }
+
+    public function actConferencePlayer(int $player_id, array $cards): void
+    {
+        if ($this->rules->completeConference($player_id, $cards)) {
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
             $this->rules->updateState($player_id);
         }
@@ -177,8 +181,16 @@ class Game extends \Table
 
     public function actDevelop(string $teams, string $products): void
     {
-        $player_id = $this->getCurrentPlayerId();
-        if ($this->rules->completeDevelopment($player_id, json_decode($teams, true), json_decode($products, true))) {
+        $this->actDevelopPlayer(
+            (int)$this->getCurrentPlayerId(),
+            json_decode($teams, true),
+            json_decode($products, true)
+        );
+    }
+
+    public function actDevelopPlayer(int $player_id, array $teams, array $products): void
+    {
+        if ($this->rules->completeDevelopment($player_id, $teams, $products)) {
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
             $this->rules->updateState($player_id);
         }
@@ -193,8 +205,11 @@ class Game extends \Table
 
     public function actDeploy(string $cards): void
     {
-        $player_id = $this->getCurrentPlayerId();
-        if ($this->rules->completeDeployment($player_id, json_decode($cards, true))) {
+        $this->actDeployPlayer((int)$this->getCurrentPlayerId(), json_decode($cards, true));
+    }
+    public function actDeployPlayer(int $player_id, array $cards): void
+    {
+        if ($this->rules->completeDeployment($player_id, $cards)) {
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextPlayer");
             $this->rules->updateState($player_id);
         }
@@ -208,8 +223,12 @@ class Game extends \Table
 
     public function actRetrospectiveChoice(string $card): void
     {
-        $player_id = $this->getCurrentPlayerId();
-        if ($this->rules->chooseForRetrospective($player_id, json_decode($card, true))) {
+        $this->actRetrospectiveChoicePlayer((int)$this->getCurrentPlayerId(), json_decode($card, true));
+    }
+
+    public function actRetrospectiveChoicePlayer(int $player_id, array $card): void
+    {
+        if ($this->rules->chooseForRetrospective($player_id, $card)) {
             $this->gamestate->nextPrivateState($player_id, "payment");
         } else {
             $this->gamestate->unsetPrivateState($player_id);
@@ -240,15 +259,19 @@ class Game extends \Table
             $this->gamestate->nextState($transition);
             return;
         }
-        $this->gamestate->setPlayersMultiactive($overLimitPlayers,$transition);
+        $this->gamestate->setPlayersMultiactive($overLimitPlayers, $transition);
         $this->gamestate->nextState($transition);
     }
 
 
     public function actAdjustPotential(string $cards): void
     {
-        $player_id = $this->getCurrentPlayerId();
-        if($this->rules->adjustPotential($player_id, json_decode($cards, true))) {
+        $this->actAdjustPotentialPlayer((int)$this->getCurrentPlayerId(), json_decode($cards, true));
+    }
+
+    public function actAdjustPotentialPlayer(int $player_id, array $cards): void
+    {
+        if ($this->rules->adjustPotential($player_id, $cards)) {
             $this->gamestate->setPlayerNonMultiactive($player_id, "nextRound");
             $this->rules->updateState($player_id);
         }
@@ -327,29 +350,34 @@ class Game extends \Table
      * @return void
      * @throws feException if the zombie mode is not supported at this game state.
      */
-    protected function zombieTurn(array $state, int $active_player): void
+    public function zombieTurn(array $state, int $active_player): void
     {
         $state_name = $state["name"];
-
-        if ($state["type"] === "activeplayer") {
-            switch ($state_name) {
-                default:
-                {
-                    $this->gamestate->nextState("zombiePass");
-                    break;
-                }
-            }
-
-            return;
+        $zombie = new Zombie($this->rules);
+        switch ($state_name) {
+            case 'playerChooseActivity':
+                $this->actChooseActivity($zombie->chooseActivity());
+                break;
+            case 'conferenceActivity':
+                $this->actConferencePlayer($active_player, $zombie->discardConference($active_player));
+                break;
+            case 'developmentActivity':
+                $this->actDevelopPlayer($active_player, [], []);
+                break;
+            case 'deploymentActivity':
+                $this->actDeployPlayer($active_player, []);
+                break;
+            case 'retrospectiveActivityChoice':
+                $this->actRetrospectiveChoicePlayer($active_player, []);
+                break;
+            case 'adjustPotential':
+                $this->actAdjustPotentialPlayer($active_player, $zombie->discardPotential($active_player));
+                break;
+            default:
+                throw new \feException("Zombie mode not supported at this game state: \"{$state_name}\".");
         }
 
-        // Make sure player is in a non-blocking status for role turn.
-        if ($state["type"] === "multipleactiveplayer") {
-            $this->gamestate->setPlayerNonMultiactive($active_player, '');
-            return;
-        }
 
-        throw new \feException("Zombie mode not supported at this game state: \"{$state_name}\".");
     }
 
 }

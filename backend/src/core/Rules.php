@@ -358,13 +358,19 @@ class Rules
         }
     }
 
+    public function shouldDiscardForConference(array $player): int
+    {
+        $shouldDiscard = $player['initiate'] ? 4 : 1;
+        if (in_array('AGILE_MATURITY_AGILE_ORGANIZER', $player['company']))
+            $shouldDiscard -= 1;
+        return $shouldDiscard;
+    }
+
     public function completeConference($player_id, $cards): bool
     {
         $infos = $this->game->loadInfos();
         $player = $this->getPlayerPrivateState($player_id);
-        $shouldDiscard = $player['initiate'] ? 4 : 1;
-        if (in_array('AGILE_MATURITY_AGILE_ORGANIZER', $player['company']))
-            $shouldDiscard -= 1;
+        $shouldDiscard = $this->shouldDiscardForConference($player);
         $wantDiscard = count($cards);
         if ($wantDiscard != $shouldDiscard)
             throw new \BgaUserException("Should discard {$shouldDiscard} instead of {$wantDiscard}");

@@ -15,6 +15,7 @@ require_once __DIR__ . '/../src/core/Helpers.php';
 require_once __DIR__ . '/../src/core/ScoreComputer.php';
 require_once __DIR__ . '/../src/core/Text.php';
 require_once __DIR__ . '/../src/core/Rules.php';
+require_once __DIR__ . '/../src/core/Zombie.php';
 
 require_once __DIR__ . '/Fakes/misc.php';
 require_once __DIR__ . '/Fakes/FakeSelection.php';

@@ -11,10 +11,10 @@
 
 $gameinfos = [
     // Name of the game in English (will serve as the basis for translation)
-    'game_name' => "Agile&Co",
+    'game_name' => "Agile&Co.",
 
     // Game publisher (use empty string if there is no publisher)
-    'publisher' => 'Web published',
+    'publisher' => '(Web published)',
 
     // Url of game publisher website
     'publisher_website' => 'https://agile-and-co.mnt.space/',

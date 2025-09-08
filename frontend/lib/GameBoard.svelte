@@ -3,6 +3,7 @@
     import PlayerBoard from "./PlayerBoard.svelte";
     import OtherPlayerBoard from "./OtherPlayerBoard.svelte";
     import {onMount} from "svelte";
+    import {debuglog} from './logger';
 
     let resolveMounted;
     const mounted = new Promise((resolve) => {
@@ -16,14 +17,14 @@
     export let read_only: boolean = true;
     export let player_id: number = undefined;
     $: {
-        console.log(`GAMEBOARD init player=${player_id} read_only=${read_only}`, gamedatas);
+        debuglog(`GAMEBOARD init player=${player_id} read_only=${read_only}`, gamedatas);
     }
 
     let public_data: any = undefined;
 
     export async function update_public(data) {
         await mounted;
-        console.log('GAMEBOARD update_public', data);
+        debuglog('GAMEBOARD update_public', data);
         if (data.active_player == player_id)
             data.central.selection = true;
         public_data = data;
@@ -33,7 +34,7 @@
 
     export async function update_private(data) {
         await mounted;
-        console.log('GAMEBOARD update_private', data);
+        debuglog('GAMEBOARD update_private', data);
         private_data = data;
     }
 

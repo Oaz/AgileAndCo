@@ -11,3 +11,7 @@ function bga_rand($min,$max) : int {
     global $next_bga_rand;
     return $next_bga_rand % ($max+1-$min) + $min;
 }
+
+function clienttranslate(string $text) : string {
+    return $text;
+}

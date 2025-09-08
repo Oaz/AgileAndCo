@@ -24,12 +24,16 @@ define([
 function (dojo, declare, gamegui, counter, frontend) {
     return declare("bgagame.agileandco", ebg.core.gamegui, {
         constructor: function(){
-            console.log('agileandco constructor');
+            this.debug('agileandco constructor');
               
             // Here, you can init the global variables of your user interface
             // Example:
             // this.myGlobalValue = 0;
 
+        },
+
+        debug: function(msg) {
+            frontend.debug(msg);
         },
         
         /*
@@ -46,7 +50,7 @@ function (dojo, declare, gamegui, counter, frontend) {
         */
 
         setup: async function (gamedatas) {
-            console.log("Starting game setup");
+            this.debug("Starting game setup");
             window.gg = this;
             window.ff = frontend;
 
@@ -68,7 +72,7 @@ function (dojo, declare, gamegui, counter, frontend) {
 
             this.playerPanels = {}
             Object.values(gamedatas.players).forEach(player => {
-                console.log(`init player panel for player ${player.id}`);
+                this.debug(`init player panel for player ${player.id}`);
                 const playerPanelContainer = document.createElement('div');
                 this.getPlayerPanelElement(player.id)
                     .insertAdjacentElement('beforeend', playerPanelContainer);
@@ -83,7 +87,7 @@ function (dojo, declare, gamegui, counter, frontend) {
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
 
-            console.log("Ending game setup");
+            this.debug("Ending game setup");
         },
        
 
@@ -94,7 +98,7 @@ function (dojo, declare, gamegui, counter, frontend) {
         //                  You can use this method to perform some user interface changes at this moment.
         //
         onEnteringState: async function (stateName, args) {
-            console.log('Entering state: ' + stateName, args);
+            this.debug('Entering state: ' + stateName, args);
             window.hh = args;
             if(args.args) {
                 await this.notif_updateState(args.args);
@@ -105,14 +109,14 @@ function (dojo, declare, gamegui, counter, frontend) {
         //                 You can use this method to perform some user interface changes at this moment.
         //
         onLeavingState: function (stateName) {
-            console.log('Leaving state: ' + stateName);
+            this.debug('Leaving state: ' + stateName);
         },
 
         // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
         //                        action status bar (ie: the HTML links in the status bar).
         //        
         onUpdateActionButtons: function (stateName, args) {
-            console.log('onUpdateActionButtons: ' + stateName, args);
+            this.debug('onUpdateActionButtons: ' + stateName, args);
         },
 
         ///////////////////////////////////////////////////
@@ -128,31 +132,24 @@ function (dojo, declare, gamegui, counter, frontend) {
         
         */
         setupNotifications: function () {
-            console.log('notifications subscriptions setup');
+            this.debug('notifications subscriptions setup');
             this.bgaSetupPromiseNotifications();
         },
 
         // TODO: from this point and below, you can write your game notifications handling methods
 
         notif_message: async function (args) {
-            console.log('message',args);
+            this.debug('message',args);
         },
 
         notif_updateState: async function (args) {
-            console.log('updateState',args);
+            this.debug('updateState',args);
             await this.gamePlayAreaComponent.update_public(args.public);
             await this.gamePlayAreaComponent.update_private(args._private);
             for (const player_id in this.playerPanels) {
                 await this.playerPanels[player_id].update_public(args.public.players[player_id]);
                 this.scoreCtrl[player_id].setValue(args.public.players[player_id].score);
             }
-        },
-
-        notif_newScores: async function (args) {
-            // await this.gamePlayAreaComponent.newScores(args);
-            // for (const player_id in args.scores) {
-            //     this.scoreCtrl[player_id].toValue(args.scores[player_id]);
-            // }
         },
    });             
 });

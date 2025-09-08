@@ -114,7 +114,7 @@ class CardsRepository
     {
         $cards = $this->loadAndSortByIndexFromLocation($location, $playerId);
         if (count($cards) < $index)
-            throw new \Exception("No card found at location '$location', index '$index', player ID '$playerId'");
+            throw new \BgaUserException("No card found at location '$location', index '$index', player ID '$playerId'");
         return $cards[$index ?? 0];
     }
 

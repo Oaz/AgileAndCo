@@ -21,6 +21,14 @@ class Rules
         $this->currentEarnings = $this->game->globalVariable('CURRENT_EARNINGS');
         $this->completedActivitiesCount = $this->game->globalVariable('COMPLETED_ACTIVITIES_COUNT');
     }
+    private bool $isDebugEnabled = false;
+
+    private function debug(string $message, callable $argsCallback): void
+    {
+        if (!$this->isDebugEnabled)
+            return;
+        $this->game->notifyAllPlayers("message", 'DEBUG: ' . $message, $argsCallback());
+    }
 
     public function initGame($players): void
     {
@@ -67,7 +75,7 @@ class Rules
         }, $this->repo->loadFromLocation('activities')));
 
         $earnings = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
-        return [
+        $data = [
             'public' => [
                 'active_player' => $ongoingActivity == '' ? $this->game->getActivePlayerId() : 0,
                 'central' => [
@@ -75,11 +83,13 @@ class Rules
                     'activities' => Helpers::orderedArrayValues($activities),
                     'earnings' => [$earnings, $ongoingActivity != 'ACTIVITY_DEPLOYMENT'],
                 ],
-                'players' => $publicPlayerGames,
-                'debug' => $this->getDebugInfos($infos, $playerGames)
+                'players' => $publicPlayerGames
             ],
             '_private' => $playerGames,
         ];
+        if ($this->isDebugEnabled)
+            $data['public']['debug'] = $this->getDebugInfos($infos, $playerGames);
+        return $data;
     }
 
     public function getPlayerPrivateState(int $playerId): array
@@ -151,10 +161,10 @@ class Rules
         $player_id = $this->game->getActivePlayerId();
         $this->ongoingActivity->write([$activity, $player_id]);
 
-        $this->broadcast('${player_name} chooses activity ${activity}', [
+        $this->broadcast(Text::get('ACTIVITY_WAS_CHOSEN'), [
             "player_id" => $player_id,
             "player_name" => $this->game->getActivePlayerName(),
-            "activity" => $activity,
+            "activity" => Text::get($activity),
         ]);
         return $transition;
     }
@@ -184,10 +194,12 @@ class Rules
         $player_id = $this->game->getActivePlayerId();
         $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
 
-        $this->broadcast('Coach gives potential to ${player_name}', [
-            "player_id" => $player_id,
-            "player_name" => $this->game->getActivePlayerName(),
-        ]);
+        $playerName = $this->game->getActivePlayerName();
+        $this->debug('Coach gives potential to ${player_name}', function() use ($playerName) {
+            return [
+                "player_name" => $playerName
+            ];
+        });
         return "nextPlayer";
     }
 
@@ -501,12 +513,5 @@ class Rules
         $this->game->notifyPlayer($player_id, 'updateState', '', $this->getGamePrivateState($player_id));
     }
 
-    private bool $isDebugEnabled = true;
-
-    private function debug(string $message, callable $argsCallback): void
-    {
-        if (!$this->isDebugEnabled) return;
-        $this->broadcast('DEBUG: ' . $message, $argsCallback());
-    }
 
 }

@@ -2,6 +2,7 @@ import {mount} from 'svelte';
 import {BGA} from "./BGA";
 import GameBoard from "./GameBoard.svelte";
 import PlayerPanel from "./PlayerPanel.svelte";
+import {debuglog} from './logger';
 
 export function initBgaIntegration(performAction, translate) {
     BGA.setPerformAction(performAction);
@@ -22,4 +23,8 @@ export function createPlayerPanel(target, info) {
     } catch (error) {
         console.error('Error initializing PlayerPanel:', error);
     }
+}
+
+export function debug(msg) {
+    debuglog(msg);
 }

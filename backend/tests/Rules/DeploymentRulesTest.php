@@ -20,7 +20,7 @@ class DeploymentRulesTest extends RulesTestCase
     /**
      * @dataProvider deploymentCompletion
      */
-    public function testCompleteDeployment($currentPlayer, int $gain, $selection, $teams, $products, $powers): void
+    public function testCompleteDeployment($currentPlayer, int $gain, $selection, $teams, $products, $powers, $expectedMessage): void
     {
         // Arrange
         $this->withMultiActivity('ACTIVITY_DEPLOYMENT', 26, [9, 26, 68, 144]);
@@ -44,38 +44,51 @@ class DeploymentRulesTest extends RulesTestCase
 
         $actualNewProducts = $this->rules->repo->listCardIds('products', playerId: $currentPlayer);
         $this->assertEquivalent($expectedNewProducts, $actualNewProducts);
+
+        $this->assertEquals($expectedMessage, $this->game->lastMessage);
     }
 
     public static function deploymentCompletion(): array
     {
         return [
-            [9, 0, [], [], [], []],
-            [9, 2, [['products', 0]], [], [['AGILE_MATURITY_TEST_TEAM', 0]], []],
+            [9, 0, [], [], [], [], ""],
+            [9,
+                2, [['products', 0]], [], [['AGILE_MATURITY_TEST_TEAM', 0]], [],
+                "playerA deploys 1 product(s) and increases potential by 2"
+            ],
             [26, 5,
                 [['products', 0], ['products', 1]],
-                [['PRODUCT_TEAM_MMOG', 1]], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]], []
+                [['PRODUCT_TEAM_MMOG', 1]], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]], [],
+                "playerB deploys 2 product(s) and increases potential by 5"
             ],
             [9, 5,
                 [['products', 0], ['products', 1]],
                 [['PRODUCT_TEAM_MMOG', 1]], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
-                ['AGILE_MATURITY_CONTINUOUS_DELIVERY']
+                ['AGILE_MATURITY_CONTINUOUS_DELIVERY'],
+                "playerA deploys 2 product(s) and increases potential by 5"
             ],
             [26, 8,
                 [['products', 0], ['products', 1], ['products', 2]],
                 [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]],
                 [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1], ['AGILE_MATURITY_TEST_TEAM', 2]],
-                ['AGILE_MATURITY_CONTINUOUS_DELIVERY']
+                ['AGILE_MATURITY_CONTINUOUS_DELIVERY'],
+                "playerB deploys 3 product(s) and increases potential by 8"
             ],
-            [9, 3, [['products', 0]], [], [['AGILE_MATURITY_TEST_TEAM', 0]], ['AGILE_MATURITY_ENGAGED_USERS']],
+            [9,
+                3, [['products', 0]], [], [['AGILE_MATURITY_TEST_TEAM', 0]], ['AGILE_MATURITY_ENGAGED_USERS'],
+                "playerA deploys 1 product(s) and increases potential by 3"
+            ],
             [9, 6,
                 [['products', 0], ['products', 1]],
                 [['PRODUCT_TEAM_MMOG', 1]], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
-                ['AGILE_MATURITY_CONTINUOUS_DELIVERY','AGILE_MATURITY_USER_EXPERIENCE']
+                ['AGILE_MATURITY_CONTINUOUS_DELIVERY','AGILE_MATURITY_USER_EXPERIENCE'],
+                "playerA deploys 2 product(s) and increases potential by 7"
             ],
             [9, 7,
                 [['products', 0], ['products', 1]],
                 [['PRODUCT_TEAM_MMOG', 1]], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
-                ['AGILE_MATURITY_CONTINUOUS_DELIVERY','AGILE_MATURITY_USER_EXPERIENCE','AGILE_MATURITY_ENGAGED_USERS']
+                ['AGILE_MATURITY_CONTINUOUS_DELIVERY','AGILE_MATURITY_USER_EXPERIENCE','AGILE_MATURITY_ENGAGED_USERS'],
+                "playerA deploys 2 product(s) and increases potential by 8"
             ],
         ];
     }

@@ -25,7 +25,7 @@
     export async function update_public(data) {
         await mounted;
         debuglog('GAMEBOARD update_public', data);
-        if (data.active_player == player_id)
+        if (data.active_player && data.active_player == player_id)
             data.central.selection = true;
         public_data = data;
     }

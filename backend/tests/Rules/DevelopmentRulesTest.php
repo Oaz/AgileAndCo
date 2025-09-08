@@ -8,7 +8,7 @@ class DevelopmentRulesTest extends RulesTestCase
     /**
      * @dataProvider developmentCompletion
      */
-    public function testCompleteDevelopment($currentPlayer, $teamSelection, $productSelection, $teams, $products, $powers, $bonus): void
+    public function testCompleteDevelopment($currentPlayer, $teamSelection, $productSelection, $teams, $products, $powers, $bonus, $expectedMessage): void
     {
         // Arrange
         $this->withMultiActivity('ACTIVITY_DEVELOPMENT', 26, [9, 26, 68, 144]);
@@ -33,30 +33,42 @@ class DevelopmentRulesTest extends RulesTestCase
 
         $actualNewProducts = $this->rules->repo->listCardIds('products', playerId: $currentPlayer);
         $this->assertEquivalent($expectedNewProducts, $actualNewProducts);
+
+        $this->assertEquals($expectedMessage, $this->game->lastMessage);
     }
 
     public static function developmentCompletion(): array
     {
         return [
-            [9, [], [], [], [], [], []],
-            [9, [['teams', 0]], [['potential', 0]], [], [], [], []],
-            [9, [['teams', 1]], [['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], [], []],
-            [26, [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], [], []],
+            [9, [], [], [], [], [], [], ""],
+            [9, [['teams', 0]], [['potential', 0]], [], [], [], [], "playerA develops 1 product(s)"],
+            [9, [['teams', 1]], [['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], [], [], "playerA develops 1 product(s)"],
             [26,
-                [['teams', 0], ['teams', 2]], [['potential', 0], ['potential', 3]],
-                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [], [], []
-            ],
-            [9,
                 [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]],
-                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE'], []
+                [['PRODUCT_TEAM_MMOG',1]], [], [], [], "playerB develops 2 product(s)"
             ],
             [26,
                 [['teams', 0], ['teams', 2]], [['potential', 0], ['potential', 3]],
-                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [['AGILE_MATURITY_TEST_TEAM', 1]], [], []
+                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [], [], [], "playerB develops 2 product(s)"
             ],
             [9,
                 [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]],
-                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE', 'AGILE_MATURITY_PAIR_PROGRAMMING'], [21]
+                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE'], [], "playerA develops 2 product(s)"
+            ],
+            [26,
+                [['teams', 0], ['teams', 2]], [['potential', 0], ['potential', 3]],
+                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [['AGILE_MATURITY_TEST_TEAM', 1]], [], [],
+                "playerB develops 2 product(s)"
+            ],
+            [26,
+                [['teams', 0],['teams', 1],['teams', 2]], [['potential', 0],['potential', 2],['potential', 3]],
+                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [], ['AGILE_MATURITY_CLEAN_CODE'], [],
+                "playerB develops 3 product(s)"
+            ],
+            [9,
+                [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]],
+                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE', 'AGILE_MATURITY_PAIR_PROGRAMMING'], [21],
+                "playerA develops 2 product(s) and increases potential by 1"
             ],
         ];
     }

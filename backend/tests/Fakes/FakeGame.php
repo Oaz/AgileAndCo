@@ -8,6 +8,8 @@ use Bga\Games\AgileAndCo\IGlobalVariable;
 
 class FakeGame implements IGameAdapter
 {
+    public string $lastMessage = "";
+    
     private array $players;
     private array $activePlayers = [];
     private array $globalVariables = [];
@@ -58,7 +60,11 @@ class FakeGame implements IGameAdapter
 
     public function notifyAllPlayers(string $notification, string $message, array $args = []): void
     {
-        // TODO: Implement notifyAllPlayers() method.
+        $formattedMessage = $message;
+        foreach ($args as $key => $value) {
+            $formattedMessage = str_replace('${' . $key . '}', $value, $formattedMessage);
+        }
+        $this->lastMessage = $formattedMessage;
     }
 
     public function notifyPlayer(int $player_id, string $notification, string $message, array $args = []): void

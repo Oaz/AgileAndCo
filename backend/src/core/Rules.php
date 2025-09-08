@@ -21,6 +21,7 @@ class Rules
         $this->currentEarnings = $this->game->globalVariable('CURRENT_EARNINGS');
         $this->completedActivitiesCount = $this->game->globalVariable('COMPLETED_ACTIVITIES_COUNT');
     }
+
     private bool $isDebugEnabled = false;
 
     private function debug(string $message, callable $argsCallback): void
@@ -48,6 +49,25 @@ class Rules
         $this->currentEarnings->write(0);
         $this->completedActivitiesCount->write(0);
     }
+
+
+    public function broadcast(string $message, array $args = []): void
+    {
+        $this->game->notifyAllPlayers("message", $message, $args);
+    }
+
+    private const TOTAL_ACTIVITY_COUNT = 48;
+
+    public function getGameProgression(): int
+    {
+        $currentCount = $this->completedActivitiesCount->read();
+        return 100 * $currentCount / Rules::TOTAL_ACTIVITY_COUNT;
+    }
+
+    //#############################
+    // GLOBAL GAME STATE
+    //#############################
+
 
     public function getGameState(): array
     {
@@ -139,69 +159,26 @@ class Rules
         ];
     }
 
-    public function chooseActivity(string $activity): string
+
+    public function getGamePrivateState($player_id): array
     {
-        $activityIndex = $this->repo->getActivityIndex($activity);
-        $selection = $this->repo->loadFromLocation('activities', index: $activityIndex);
-        if (count($selection) === 0)
-            throw new \BgaUserException('Invalid activity choice');
-        $activityCard = array_values($selection)[0];
-
-        $transition = match ($activity) {
-            'ACTIVITY_CONFERENCE' => 'activityConference',
-            'ACTIVITY_DEVELOPMENT' => 'activityDevelopment',
-            'ACTIVITY_DEPLOYMENT' => 'activityDeployment',
-            'ACTIVITY_RETROSPECTIVE' => 'activityRetrospective',
-            'ACTIVITY_COACH' => 'activityCoach',
-            default => throw new \BgaUserException('Invalid activity choice'),
-        };
-
-        $this->useActivity($activityCard->id, $activityIndex);
-
-        $player_id = $this->game->getActivePlayerId();
-        $this->ongoingActivity->write([$activity, $player_id]);
-
-        $this->broadcast(Text::get('ACTIVITY_WAS_CHOSEN'), [
-            "player_id" => $player_id,
-            "player_name" => $this->game->getActivePlayerName(),
-            "activity" => Text::get($activity),
-        ]);
-        return $transition;
+        $gameState = $this->getGameState();
+        return [
+            'public' => $gameState['public'],
+            '_private' => $gameState['_private'][$player_id],
+        ];
     }
 
-    public function useActivity($cardId, $cardIndex)
+    public function updateState($player_id): void
     {
-        $this->cards->moveCard($cardId, "activities", index: $cardIndex, playerId: 1);
+        $this->game->notifyPlayer($player_id, 'updateState', '', $this->getGamePrivateState($player_id));
     }
 
-    public function broadcast(string $message, array $args = []): void
-    {
-        $this->game->notifyAllPlayers("message", $message, $args);
-    }
 
-    public function prepareConference(): void
-    {
-        list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
-        $infos = $this->game->loadInfos();
-        foreach ($infos->players as $player_id => $player) {
-            $n = $activityInitiator == $player_id ? 5 : 2;
-            $this->cards->pickCardsForLocation($n, 'deck', 'conference', $player_id);
-        }
-    }
+    //#############################
+    // ROUND MANAGEMENT : START, NEXT PLAYER, CLOSE & ADJUST POTENTIAL
+    //#############################
 
-    public function doCoach(): string
-    {
-        $player_id = $this->game->getActivePlayerId();
-        $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
-
-        $playerName = $this->game->getActivePlayerName();
-        $this->debug('Coach gives potential to ${player_name}', function() use ($playerName) {
-            return [
-                "player_name" => $playerName
-            ];
-        });
-        return "nextPlayer";
-    }
 
     public function startRound(): string
     {
@@ -230,14 +207,6 @@ class Rules
         return "nextActivity";
     }
 
-    private const TOTAL_ACTIVITY_COUNT = 48;
-
-    public function getGameProgression(): int
-    {
-        $currentCount = $this->completedActivitiesCount->read();
-        return 100 * $currentCount / Rules::TOTAL_ACTIVITY_COUNT;
-    }
-
     public function endRound(): array
     {
         $currentCount = $this->completedActivitiesCount->read();
@@ -251,7 +220,9 @@ class Rules
         return ["nextRound", []];
     }
 
-    private function getPlayersOverPotentialLimit() {
+
+    private function getPlayersOverPotentialLimit()
+    {
         $gameState = $this->getGameState();
         $players = $gameState['public']['players'];
         $overLimitPlayers = [];
@@ -270,14 +241,16 @@ class Rules
         $wantDiscard = count($cards);
         if ($wantDiscard != $shouldDiscard)
             throw new \BgaUserException("Should discard {$shouldDiscard} instead of {$wantDiscard}");
+        if(count($cards) === 0)
+            return true;
         $selection = new CardSelection('discard', $player_id, [
-                'potential' => SortForSelection::BY_USAGE
-            ], $this->repo);
+            'potential' => SortForSelection::BY_USAGE
+        ], $this->repo);
         foreach ($cards as $card) {
             $selected = $selection->take($card);
             $cardId = $selected->id;
             $this->cards->playCard($cardId);
-            $this->debug('${player_name} discards ${cardName} id ${cardId}', function() use ($infos, $player_id, $cardId, $selected) {
+            $this->debug('${player_name} discards ${cardName} id ${cardId}', function () use ($infos, $player_id, $cardId, $selected) {
                 return [
                     "player_name" => $infos->getPlayerName($player_id),
                     "cardId" => $cardId,
@@ -285,6 +258,10 @@ class Rules
                 ];
             });
         }
+        $this->broadcast(Text::get('POTENTIAL_ADJUSTMENT'), [
+            "player_name" => $infos->getPlayerName($player_id),
+            "potential_loss" => $shouldDiscard,
+        ]);
         return true;
     }
 
@@ -297,6 +274,73 @@ class Rules
         $maximumPotential += $numberOfValues;
         $shouldDiscard = $potentialSize > $maximumPotential ? $potentialSize - $maximumPotential : 0;
         return $shouldDiscard;
+    }
+
+    //#############################
+    // ACTIVITY CHOICE
+    //#############################
+
+    public function chooseActivity(string $activity): string
+    {
+        $activityIndex = $this->repo->getActivityIndex($activity);
+        $selection = $this->repo->loadFromLocation('activities', index: $activityIndex);
+        if (count($selection) === 0)
+            throw new \BgaUserException('Invalid activity choice');
+        $activityCard = array_values($selection)[0];
+
+        $transition = match ($activity) {
+            'ACTIVITY_CONFERENCE' => 'activityConference',
+            'ACTIVITY_DEVELOPMENT' => 'activityDevelopment',
+            'ACTIVITY_DEPLOYMENT' => 'activityDeployment',
+            'ACTIVITY_RETROSPECTIVE' => 'activityRetrospective',
+            'ACTIVITY_COACH' => 'activityCoach',
+            default => throw new \BgaUserException('Invalid activity choice'),
+        };
+
+        $this->useActivity($activityCard->id, $activityIndex);
+
+        $player_id = $this->game->getActivePlayerId();
+        $this->ongoingActivity->write([$activity, $player_id]);
+
+        $this->broadcast(Text::get('ACTIVITY_WAS_CHOSEN'), [
+            "player_id" => $player_id,
+            "player_name" => $this->game->getActivePlayerName(),
+            "activity" => Text::get($activity . '_TITLE'),
+        ]);
+        return $transition;
+    }
+
+    public function useActivity($cardId, $cardIndex)
+    {
+        $this->cards->moveCard($cardId, "activities", index: $cardIndex, playerId: 1);
+    }
+
+    //#############################
+    // ACTIVITY: COACH
+    //#############################
+
+    public function doCoach(): string
+    {
+        $player_id = $this->game->getActivePlayerId();
+        $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
+        $this->broadcast(Text::get('ACTIVITY_COACH_IMPACT'), [
+            "player_name" => $this->game->getActivePlayerName(),
+        ]);
+        return "nextPlayer";
+    }
+
+    //#############################
+    // ACTIVITY: CONFERENCE
+    //#############################
+
+    public function prepareConference(): void
+    {
+        list($ongoingActivity, $activityInitiator) = $this->ongoingActivity->read();
+        $infos = $this->game->loadInfos();
+        foreach ($infos->players as $player_id => $player) {
+            $n = $activityInitiator == $player_id ? 5 : 2;
+            $this->cards->pickCardsForLocation($n, 'deck', 'conference', $player_id);
+        }
     }
 
     public function completeConference($player_id, $cards): bool
@@ -321,7 +365,7 @@ class Rules
             $selected = $selection->take($card);
             $cardId = $selected->id;
             $this->cards->playCard($cardId);
-            $this->debug('${player_name} discards ${cardName} id ${cardId}', function() use ($infos, $player_id, $cardId, $selected) {
+            $this->debug('${player_name} discards ${cardName} id ${cardId}', function () use ($infos, $player_id, $cardId, $selected) {
                 return [
                     "player_name" => $infos->getPlayerName($player_id),
                     "cardId" => $cardId,
@@ -329,12 +373,24 @@ class Rules
                 ];
             });
         }
+        $potentialGain = count($player['conference']) - $shouldDiscard;
         $this->cards->moveAllCardsInLocation('conference', 'potential', playerId: $player_id);
+        $this->broadcast(Text::get('ACTIVITY_CONFERENCE_IMPACT'), [
+            "player_name" => $infos->getPlayerName($player_id),
+            "potential_gain" => $potentialGain,
+        ]);
         return true;
     }
 
+
+    //#############################
+    // ACTIVITY: DEVELOPMENT
+    //#############################
+
     public function completeDevelopment($player_id, $teams, $products): bool
     {
+        if (count($teams) === 0)
+            return true;
         if (count($teams) != count($products))
             throw new \BgaUserException("Should have same number of selected teams and products");
         $infos = $this->game->loadInfos();
@@ -357,7 +413,7 @@ class Rules
             $team = $teamSelection->take($input[0]);
             $product = $productSelection->take($input[1]);
             $this->cards->moveCard($product->id, 'products', $team->index, $player_id);
-            $this->debug('${player_name} develop in team ${teamCard} with potential ${productName}', function() use ($infos, $player_id, $team, $product) {
+            $this->debug('${player_name} develop in team ${teamCard} with potential ${productName}', function () use ($infos, $player_id, $team, $product) {
                 return [
                     "player_name" => $infos->getPlayerName($player_id),
                     "teamCard" => $team->fullName,
@@ -365,10 +421,24 @@ class Rules
                 ];
             });
         }
-        if (count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company']))
+        if (count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company'])) {
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
+            $this->broadcast(Text::get('ACTIVITY_DEVELOPMENT_IMPACT_PLUS'), [
+                "player_name" => $infos->getPlayerName($player_id),
+                "product_count" => count($inputs),
+            ]);
+        } else {
+            $this->broadcast(Text::get('ACTIVITY_DEVELOPMENT_IMPACT'), [
+                "player_name" => $infos->getPlayerName($player_id),
+                "product_count" => count($inputs),
+            ]);
+        }
         return true;
     }
+
+    //#############################
+    // ACTIVITY: DEPLOYMENT
+    //#############################
 
     public function prepareDeployment(): void
     {
@@ -378,6 +448,8 @@ class Rules
 
     public function completeDeployment($player_id, $cards): bool
     {
+        if (count($cards) === 0)
+            return true;
         $infos = $this->game->loadInfos();
         $player = $this->getPlayerPrivateState($player_id);
         $maxNbOfDeployment = $player['initiate'] ? 2 : 1;
@@ -387,15 +459,17 @@ class Rules
             throw new \BgaUserException("Cannot deploy more than {$maxNbOfDeployment} product(s)");
         $earningCard = $this->repo->getAll('EARNINGS')[$this->currentEarnings->read()];
         $earnings = CardsData::$details[$earningCard];
+        $totalEarning = 0;
         $selection = new CardSelection('deployment', $player_id, ['products' => SortForSelection::BY_INDEX], $this->repo);
         foreach ($cards as $card) {
             $product = $selection->take($card);
             $cardId = $product->id;
             $team = $this->repo->getSingleCard('teams', $product->index, $player_id);
             $earning = $earnings[$team->name];
+            $totalEarning += $earning;
             $this->cards->playCard($cardId);
             $this->cards->pickCardsForLocation($earning, 'deck', 'potential', $player_id);
-            $this->debug('${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', function() use ($infos, $player_id, $team, $product, $cardId, $earning) {
+            $this->debug('${player_name} deploys ${cardName} (${cardId}) from ${teamType} and earns ${earning}', function () use ($infos, $player_id, $team, $product, $cardId, $earning) {
                 return [
                     "player_name" => $infos->getPlayerName($player_id),
                     "cardName" => $product->name,
@@ -405,12 +479,25 @@ class Rules
                 ];
             });
         }
-        if (count($cards) >= 1 && in_array('AGILE_MATURITY_ENGAGED_USERS', $player['company']))
+        if (count($cards) >= 1 && in_array('AGILE_MATURITY_ENGAGED_USERS', $player['company'])) {
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
-        if (count($cards) >= 2 && in_array('AGILE_MATURITY_USER_EXPERIENCE', $player['company']))
+            $totalEarning += 1;
+        }
+        if (count($cards) >= 2 && in_array('AGILE_MATURITY_USER_EXPERIENCE', $player['company'])) {
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
+            $totalEarning += 2;
+        }
+        $this->broadcast(Text::get('ACTIVITY_DEPLOYMENT_IMPACT'), [
+            "player_name" => $infos->getPlayerName($player_id),
+            "product_count" => count($cards),
+            "earnings" => $totalEarning,
+        ]);
         return true;
     }
+
+    //#############################
+    // ACTIVITY: RETROSPECTIVE
+    //#############################
 
     public function chooseForRetrospective($player_id, $card): bool
     {
@@ -424,7 +511,7 @@ class Rules
         $selected = $selection->take($card);
         $cardId = $selected->id;
         $this->cards->moveCard($cardId, 'retrospective', playerId: $player_id);
-        $this->debug('${player_name} choose ${cardName} (${cardId}) during retrospective', function() use ($infos, $player_id, $cardId, $selected) {
+        $this->debug('${player_name} choose ${cardName} (${cardId}) during retrospective', function () use ($infos, $player_id, $cardId, $selected) {
             return [
                 "player_name" => $infos->getPlayerName($player_id),
                 "cardName" => $selected->fullName,
@@ -459,7 +546,7 @@ class Rules
             $selected = $selection->take($card);
             $cardId = $selected->id;
             $this->cards->playCard($cardId);
-            $this->debug('${player_name} pays with ${cardName} id ${cardId}', function() use ($infos, $player_id, $cardId, $selected) {
+            $this->debug('${player_name} pays with ${cardName} id ${cardId}', function () use ($infos, $player_id, $cardId, $selected) {
                 return [
                     "player_name" => $infos->getPlayerName($player_id),
                     "cardId" => $cardId,
@@ -470,8 +557,25 @@ class Rules
         $player = $this->getPlayerPrivateState($player_id);
         $selectedCard = $player['retrospective'][0];
         $cardTemplate = $this->repo->createCardTemplate($selectedCard);
-        $targetLocation = ($cardTemplate->type === 'PRODUCT_TEAM') ? 'teams' : 'company';
+        if ($cardTemplate->type === 'PRODUCT_TEAM') {
+            $targetLocation = 'teams';
+            $message = 'ACTIVITY_RETROSPECTIVE_IMPACT_TEAM';
+            $improvement = $selectedCard;
+        } else if ($cardTemplate->type === 'AGILE_VALUE') {
+            $targetLocation = 'company';
+            $message = 'ACTIVITY_RETROSPECTIVE_IMPACT_VALUE';
+            $improvement = $selectedCard . '_TITLE';
+        } else {
+            $targetLocation = 'company';
+            $message = 'ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY';
+            $improvement = $selectedCard . '_TITLE';
+        }
         $this->repo->moveCardsFromToLocation('retrospective', $targetLocation, playerId: $player_id);
+        $this->broadcast(Text::get($message), [
+            "player_name" => $infos->getPlayerName($player_id),
+            "payment" => $payment,
+            "improvement" => Text::get($improvement),
+        ]);
         return true;
     }
 
@@ -497,20 +601,6 @@ class Rules
             $funds += 2 * count($products);
         }
         return $funds;
-    }
-
-    public function getGamePrivateState($player_id): array
-    {
-        $gameState = $this->getGameState();
-        return [
-            'public' => $gameState['public'],
-            '_private' => $gameState['_private'][$player_id],
-        ];
-    }
-
-    public function updateState($player_id): void
-    {
-        $this->game->notifyPlayer($player_id, 'updateState', '', $this->getGamePrivateState($player_id));
     }
 
 

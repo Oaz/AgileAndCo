@@ -28,7 +28,7 @@ class ConferenceRulesTest extends RulesTestCase
     /**
      * @dataProvider conferenceCompletion
      */
-    public function testCompleteConference($currentPlayer, $playerSelection, $powers): void
+    public function testCompleteConference($currentPlayer, $playerSelection, $powers, $expectedMessage): void
     {
         // Arrange
         $this->withMultiActivity('ACTIVITY_CONFERENCE', 26, [9,26,68,144]);
@@ -52,19 +52,20 @@ class ConferenceRulesTest extends RulesTestCase
         $expectedNewPotential = array_diff(array_merge($oldPotential,$conference),$selectedIds);
         $actualNewPotential = $this->rules->repo->listCardIds('potential', playerId:$currentPlayer);
         $this->assertEquivalent($expectedNewPotential, $actualNewPotential);
+        $this->assertEquals($expectedMessage, $this->game->lastMessage);
     }
 
     public static function conferenceCompletion(): array
     {
         return [
-            [9, [['conference', 0]], []],
-            [9, [['conference', 1]], []],
-            [26, [['conference', 0],['conference', 1],['conference', 3],['conference', 4]], []],
-            [9, [], ['AGILE_MATURITY_AGILE_ORGANIZER']],
-            [26, [['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER']],
-            [9, [['potential', 0]], ['AGILE_MATURITY_AGILE_PRACTITIONER']],
-            [26, [['potential', 0],['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_PRACTITIONER']],
-            [26, [['potential', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER', 'AGILE_MATURITY_AGILE_PRACTITIONER']],
+            [9, [['conference', 0]], [], "Conference increases playerA potential by 1"],
+            [9, [['conference', 1]], [], "Conference increases playerA potential by 1"],
+            [26, [['conference', 0],['conference', 1],['conference', 3],['conference', 4]], [], "Conference increases playerB potential by 1"],
+            [9, [], ['AGILE_MATURITY_AGILE_ORGANIZER'], "Conference increases playerA potential by 2"],
+            [26, [['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER'], "Conference increases playerB potential by 2"],
+            [9, [['potential', 0]], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "Conference increases playerA potential by 1"],
+            [26, [['potential', 0],['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "Conference increases playerB potential by 1"],
+            [26, [['potential', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER', 'AGILE_MATURITY_AGILE_PRACTITIONER'], "Conference increases playerB potential by 2"],
         ];
     }
 

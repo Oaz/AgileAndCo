@@ -171,7 +171,13 @@ class Rules
 
     public function updateState($player_id): void
     {
-        $this->game->notifyPlayer($player_id, 'updateState', '', $this->getGamePrivateState($player_id));
+        $gameState = $this->getGameState();
+        $this->game->notifyPlayer($player_id, 'updatePrivateState', '', [
+            '_private' => $gameState['_private'][$player_id],
+        ]);
+        $this->game->notifyAllPlayers('updatePublicState', '', [
+            'public' => $gameState['public'],
+        ]);
     }
 
 

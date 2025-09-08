@@ -99,9 +99,9 @@ function (dojo, declare, gamegui, counter, frontend) {
         //
         onEnteringState: async function (stateName, args) {
             this.debug('Entering state: ' + stateName, args);
-            window.hh = args;
             if(args.args) {
-                await this.notif_updateState(args.args);
+                await this.notif_updatePrivateState(args.args);
+                await this.notif_updatePublicState(args.args);
             }
         },
 
@@ -142,14 +142,20 @@ function (dojo, declare, gamegui, counter, frontend) {
             this.debug('message',args);
         },
 
-        notif_updateState: async function (args) {
-            this.debug('updateState',args);
+        notif_updatePublicState: async function (args) {
+            this.debug('updatePublicState',args);
+            if(!args.public) return;
             await this.gamePlayAreaComponent.update_public(args.public);
-            await this.gamePlayAreaComponent.update_private(args._private);
             for (const player_id in this.playerPanels) {
                 await this.playerPanels[player_id].update_public(args.public.players[player_id]);
                 this.scoreCtrl[player_id].setValue(args.public.players[player_id].score);
             }
         },
-   });             
+
+        notif_updatePrivateState: async function (args) {
+            this.debug('updatePrivateState',args);
+            if(!args._private) return;
+            await this.gamePlayAreaComponent.update_private(args._private);
+        },
+   });
 });

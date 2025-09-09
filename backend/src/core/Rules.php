@@ -51,6 +51,8 @@ class Rules
         $this->ongoingActivity->write(['', 0]);
         $this->currentEarnings->write(0);
         $this->completedActivitiesCount->write(0);
+        $stats = new Statistics($this->game);
+        $stats->initialize();
     }
 
 
@@ -316,6 +318,9 @@ class Rules
 
         $player_id = $this->game->getActivePlayerId();
         $this->ongoingActivity->write([$activity, $player_id]);
+
+        $stats = new Statistics($this->game);
+        $stats->addActivity($activity, $player_id);
 
         $this->broadcast(Text::get('ACTIVITY_WAS_CHOSEN'), [
             "player_id" => $player_id,

@@ -14,6 +14,7 @@ class FakeGame implements IGameAdapter
     private array $activePlayers = [];
     private array $globalVariables = [];
     private array $scores = [];
+    public array $stats;
 
     public function __construct(array $playerIds)
     {
@@ -24,6 +25,10 @@ class FakeGame implements IGameAdapter
                 "player_no" => $no,
             ];
         }, $playerIds, array_keys($playerIds)));
+        $this->stats = [
+            'table' => [],
+            'player' => array_combine($playerIds, array_fill(0, count($playerIds), [])),
+        ];
     }
 
     public function getPlayers(): array
@@ -95,4 +100,22 @@ class FakeGame implements IGameAdapter
         $this->scores[$player_id] = $count;
     }
 
+    public function initializeTableStatistic(string $name, int $value) : void
+    {
+        $this->stats['table'][$name] = $value;
+    }
+    public function initializePlayerStatistic(string $name, int $value) : void
+    {
+        foreach ($this->players as $playerId => $player) {
+            $this->stats['player'][$playerId][$name] = $value;
+        }
+    }
+    public function incrementStatistic(string $name, int $delta, ?int $playerId = null) : void
+    {
+        if ($playerId === null) {
+            $this->stats['table'][$name] += $delta;
+        } else {
+            $this->stats['player'][$playerId][$name] += $delta;
+        }
+    }
 }

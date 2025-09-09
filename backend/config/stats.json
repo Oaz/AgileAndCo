@@ -1,1 +1,106 @@
-{}
+{
+  "table": {
+    "activity_count_conference": {
+      "id": 10,
+      "name": "Number of 'Conference' activities",
+      "type": "int"
+    },
+    "activity_count_development": {
+      "id": 11,
+      "name": "Number of 'Development' activities",
+      "type": "int"
+    },
+    "activity_count_deployment": {
+      "id": 12,
+      "name": "Number of 'Deployment' activities",
+      "type": "int"
+    },
+    "activity_count_retrospective": {
+      "id": 13,
+      "name": "Number of 'Retrospective' activities",
+      "type": "int"
+    },
+    "activity_count_coach": {
+      "id": 14,
+      "name": "Number of 'Coach' activities",
+      "type": "int"
+    },
+    "product_development_count": {
+      "id": 15,
+      "name": "Number of developed products",
+      "type": "int"
+    },
+    "product_deployment_count": {
+      "id": 16,
+      "name": "Number of deployed products",
+      "type": "int"
+    },
+    "total_earnings": {
+      "id": 17,
+      "name": "Sum of deployment earnings",
+      "type": "int"
+    },
+    "potential_turnover": {
+      "id": 18,
+      "name": "Number of incoming cards into potential",
+      "type": "int"
+    },
+    "potential_loss": {
+      "id": 19,
+      "name": "Number of losses in potential adjustment",
+      "type": "int"
+    }
+  },
+  "player": {
+    "activity_count_conference": {
+      "id": 110,
+      "name": "Number of initiated 'Conference' activities",
+      "type": "int"
+    },
+    "activity_count_development": {
+      "id": 111,
+      "name": "Number of initiated 'Development' activities",
+      "type": "int"
+    },
+    "activity_count_deployment": {
+      "id": 112,
+      "name": "Number of initiated 'Deployment' activities",
+      "type": "int"
+    },
+    "activity_count_retrospective": {
+      "id": 113,
+      "name": "Number of initiated 'Retrospective' activities",
+      "type": "int"
+    },
+    "activity_count_coach": {
+      "id": 114,
+      "name": "Number of initiated 'Coach' activities",
+      "type": "int"
+    },
+    "product_development_count": {
+      "id": 115,
+      "name": "Number of developed products",
+      "type": "int"
+    },
+    "product_deployment_count": {
+      "id": 116,
+      "name": "Number of deployed products",
+      "type": "int"
+    },
+    "total_earnings": {
+      "id": 117,
+      "name": "Sum of deployment earnings",
+      "type": "int"
+    },
+    "potential_turnover": {
+      "id": 118,
+      "name": "Number of incoming cards into potential",
+      "type": "int"
+    },
+    "potential_loss": {
+      "id": 119,
+      "name": "Number of losses in potential adjustment",
+      "type": "int"
+    }
+  }
+}

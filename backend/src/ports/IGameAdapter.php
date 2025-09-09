@@ -19,4 +19,9 @@ interface IGameAdapter
     function getScore($player_id): int;
 
     function setScore($player_id, $count): void;
+
+    public function initializeTableStatistic(string $name, int $value) : void;
+    public function initializePlayerStatistic(string $name, int $value) : void;
+    public function incrementStatistic(string $name, int $delta, ?int $playerId = null) : void;
+
 }

@@ -56,4 +56,18 @@ class GameAdapter implements IGameAdapter
     function setScore($player_id, $count):void {
         $this->game->DbQuery("UPDATE `player` SET `player_score` = '$count' WHERE `player_id` = '$player_id'");
     }
+
+    public function initializeTableStatistic(string $name, int $value) : void
+    {
+        $this->game->initStat('table', $name, $value);
+    }
+    public function initializePlayerStatistic(string $name, int $value) : void
+    {
+        $this->game->initStat('player', $name, $value);
+    }
+    public function incrementStatistic(string $name, int $delta, ?int $playerId = null) : void
+    {
+        $this->game->incStat($delta, $name, $playerId);
+    }
+
 }

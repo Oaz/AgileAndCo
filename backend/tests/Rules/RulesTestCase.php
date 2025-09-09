@@ -14,6 +14,7 @@ abstract class RulesTestCase extends TestCase
     protected IGameAdapter $game;
     protected Rules $rules;
 
+
     protected function arrange(array $playerIds, IScoreComputer $scoreComputer = null): void
     {
         $this->deck = new FakeDeck();
@@ -33,13 +34,17 @@ abstract class RulesTestCase extends TestCase
     protected function withMonoActivity(string $activity, int $initiator, array $playerIds): void
     {
         $this->arrange($playerIds);
-        $this->rules->ongoingActivity->write([$activity, $initiator]);
-        $this->game->setActivePlayers([$initiator]);
+        $this->startActivity($activity, $initiator, [$initiator]);
     }
 
     protected function withMultiActivity(string $activity, int $initiator, array $playerIds): void
     {
         $this->arrange($playerIds);
+        $this->startActivity($activity, $initiator, $playerIds);
+    }
+
+    public function startActivity(string $activity, int $initiator, array $playerIds): void
+    {
         $this->rules->ongoingActivity->write([$activity, $initiator]);
         $this->game->setActivePlayers($playerIds);
     }

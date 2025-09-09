@@ -413,7 +413,7 @@ class Rules
     // ACTIVITY: DEVELOPMENT
     //#############################
 
-    public function completeDevelopment($player_id, $teams, $products): bool
+    public function completeDevelopment(int $player_id, array $teams, array $products): bool
     {
         if (count($teams) === 0)
             return true;
@@ -447,6 +447,8 @@ class Rules
                 ];
             });
         }
+        $stats = new Statistics($this->game);
+        $stats->addProductDevelopment(count($inputs), $player_id);
         if (count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company'])) {
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
             $this->broadcast(Text::get('ACTIVITY_DEVELOPMENT_IMPACT_PLUS'), [
@@ -472,7 +474,7 @@ class Rules
         $this->currentEarnings->write($index);
     }
 
-    public function completeDeployment($player_id, $cards): bool
+    public function completeDeployment(int $player_id, array $cards): bool
     {
         if (count($cards) === 0)
             return true;
@@ -513,6 +515,9 @@ class Rules
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
             $totalEarning += 2;
         }
+        $stats = new Statistics($this->game);
+        $stats->addProductDeployment(count($cards), $player_id);
+        $stats->addEarnings($totalEarning, $player_id);
         $this->broadcast(Text::get('ACTIVITY_DEPLOYMENT_IMPACT'), [
             "player_name" => $infos->getPlayerName($player_id),
             "product_count" => count($cards),

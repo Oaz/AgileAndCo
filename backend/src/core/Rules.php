@@ -602,6 +602,9 @@ class Rules
             $improvement = $selectedCard . '_TITLE';
         }
         $this->repo->moveCardsFromToLocation('retrospective', $targetLocation, playerId: $player_id);
+        if ($targetLocation === 'company' && in_array('AGILE_MATURITY_FEEDBACK_SESSIONS', $player['company'])) {
+            $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
+        }
         $this->broadcast(Text::get($message), [
             "player_name" => $infos->getPlayerName($player_id),
             "payment" => $payment,

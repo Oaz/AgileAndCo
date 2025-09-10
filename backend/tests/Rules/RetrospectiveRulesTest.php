@@ -301,6 +301,40 @@ class RetrospectiveRulesTest extends RulesTestCase
     }
 
     /**
+     * @dataProvider feedbackSessions
+     */
+    public function testIncreasePotentialWhenImplementingFeedbackSessions($playerId,$selection,$retrospective,$expectedNewPotential): void
+    {
+        // Arrange
+        $this->withMultiActivity('ACTIVITY_RETROSPECTIVE', 26, [9, 26, 68, 144]);
+        $playerId = 9;
+        $this->addTo('company', $playerId, ['AGILE_MATURITY_FEEDBACK_SESSIONS']);
+        $this->addTo('retrospective', $playerId, $retrospective);
+        $oldPotential = $this->rules->repo->listCardIds('potential', playerId: $playerId);
+        $this->assertEquals(4, count($oldPotential));
+        $selected = new FakeSelection($this->rules, $playerId, $selection);
+
+        // Act
+        $result = $this->rules->payForRetrospective($playerId, $selected->incomingJson());
+
+        // Assert
+        $this->assertTrue($result);
+
+        $newPotential = $this->rules->repo->listCardIds('potential', playerId: $playerId);
+        $this->assertEquals($expectedNewPotential, count($newPotential));
+    }
+
+    public static function feedbackSessions(): array
+    {
+        return [
+            [9, [['potential', 0]], ['AGILE_MATURITY_AGILE_PRACTITIONER'], 4],
+            [9, [['potential', 0],['potential', 1],['potential', 2]], ['AGILE_MATURITY_CLEAN_CODE'], 2],
+            [9, [['potential', 0],['potential', 1],['potential', 2],['potential', 3]], ['AGILE_VALUE_FOCUS'], 1],
+            [9, [['potential', 0],['potential', 1],['potential', 2]], ['PRODUCT_TEAM_SOCIAL'], 1],
+        ];
+    }
+
+        /**
  * @dataProvider retrospectivePaymentTeams
  */
     public function testPayForRetrospectiveTeams($playerId, $selection, $teams, $products, $powers, $retrospective, $expectedMessage): void

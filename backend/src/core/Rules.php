@@ -13,6 +13,8 @@ class Rules
 
     private IScoreComputer $scoreComputer;
 
+    public const TOTAL_ACTIVITY_COUNT = 48;
+    public const INITIAL_PLAYER_POTENTIAL = 4;
 
     public function __construct(IDeckAdapter $cards, IGameAdapter $game, IScoreComputer $scoreComputer = null)
     {
@@ -45,14 +47,15 @@ class Rules
             $this->cards->moveCard($startupTeams[$i++]['id'], 'teams', playerId: $player_id);
         }
         $this->cards->shuffle('deck');
+        $stats = new Statistics($this->game);
+        $stats->initialize();
         foreach ($players as $player_id => $player) {
-            $this->cards->pickCardsForLocation(4, 'deck', 'potential', $player_id);
+            $this->cards->pickCardsForLocation(self::INITIAL_PLAYER_POTENTIAL, 'deck', 'potential', $player_id);
+            $stats->addPotentialStream(self::INITIAL_PLAYER_POTENTIAL, $player_id);
         }
         $this->ongoingActivity->write(['', 0]);
         $this->currentEarnings->write(0);
         $this->completedActivitiesCount->write(0);
-        $stats = new Statistics($this->game);
-        $stats->initialize();
     }
 
 
@@ -61,12 +64,10 @@ class Rules
         $this->game->notifyAllPlayers("message", $message, $args);
     }
 
-    public const TOTAL_ACTIVITY_COUNT = 48;
-
     public function getGameProgression(): int
     {
         $currentCount = $this->completedActivitiesCount->read();
-        return 100 * $currentCount / Rules::TOTAL_ACTIVITY_COUNT;
+        return 100 * $currentCount / self::TOTAL_ACTIVITY_COUNT;
     }
 
     //#############################
@@ -222,7 +223,7 @@ class Rules
     public function endRound(): array
     {
         $currentCount = $this->completedActivitiesCount->read();
-        if ($currentCount == Rules::TOTAL_ACTIVITY_COUNT) {
+        if ($currentCount == self::TOTAL_ACTIVITY_COUNT) {
             $gameState = $this->getGameState();
             foreach ($gameState['public']['players'] as $player) {
                 $this->game->setScore($player['id'], $player['score']);

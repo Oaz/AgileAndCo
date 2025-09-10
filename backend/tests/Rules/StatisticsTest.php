@@ -3,6 +3,7 @@
 namespace Bga\Games\AgileAndCo\Tests;
 
 use Bga\Games\AgileAndCo\Statistics;
+use Bga\Games\AgileAndCo\Rules;
 
 class StatisticsTest extends RulesTestCase
 {
@@ -45,9 +46,22 @@ class StatisticsTest extends RulesTestCase
     public function testDevelopmentDeployment(): void
     {
         $scenario = [
-            [ 9 => [[0], 1, 2, 2], 26 => [[0], 1, 2, 3], 68 => [[0], 1, 2, 2], 'all' => [3,6,7] ],
-            [ 9 => [[0], 2, 4, 4], 26 => [[0], 2, 4, 6], 68 => [[0], 2, 4, 4], 'all' => [6,12,14] ],
-            [ 9 => [[0,1], 4, 9, 10], 26 => [[], 2, 4, 6], 68 => [[], 2, 4, 4], 'all' => [8,17,20] ],
+            [
+                9 => [[0], 1, 2, 2+Rules::INITIAL_PLAYER_POTENTIAL],
+                26 => [[0], 1, 2, 3+Rules::INITIAL_PLAYER_POTENTIAL],
+                68 => [[0], 1, 2, 2+Rules::INITIAL_PLAYER_POTENTIAL],
+                'all' => [3,6,7+3*Rules::INITIAL_PLAYER_POTENTIAL] ],
+            [
+                9 => [[0], 2, 4, 4+Rules::INITIAL_PLAYER_POTENTIAL],
+                26 => [[0], 2, 4, 6+Rules::INITIAL_PLAYER_POTENTIAL],
+                68 => [[0], 2, 4, 4+Rules::INITIAL_PLAYER_POTENTIAL],
+                'all' => [6,12,14+3*Rules::INITIAL_PLAYER_POTENTIAL] ],
+            [
+                9 => [[0,1], 4, 9, 10+Rules::INITIAL_PLAYER_POTENTIAL],
+                26 => [[], 2, 4, 6+Rules::INITIAL_PLAYER_POTENTIAL],
+                68 => [[], 2, 4, 4+Rules::INITIAL_PLAYER_POTENTIAL],
+                'all' => [8,17,20+3*Rules::INITIAL_PLAYER_POTENTIAL]
+            ],
         ];
         $playerIds = [9, 26, 68];
         $this->arrange($playerIds);
@@ -106,21 +120,21 @@ class StatisticsTest extends RulesTestCase
         foreach ([9,68] as $playerId) {
             $selection = new FakeSelection($this->rules, $playerId, [['conference', 0]]);
             $this->rules->completeConference($playerId, $selection->incomingJson());
-            $this->checkStats($playerId, 'potential_stream', 1);
+            $this->checkStats($playerId, 'potential_stream', 1+Rules::INITIAL_PLAYER_POTENTIAL);
         }
         $selection = new FakeSelection($this->rules, 26, [['conference', 0],['conference', 1],['conference', 2]]);
         $this->rules->completeConference(26, $selection->incomingJson());
-        $this->checkStats(26, 'potential_stream', 2);
+        $this->checkStats(26, 'potential_stream', 2+Rules::INITIAL_PLAYER_POTENTIAL);
         $stats = $this->game->stats;
-        $this->assertEquals(4, $stats['table']['potential_stream']);
+        $this->assertEquals(4+3*Rules::INITIAL_PLAYER_POTENTIAL, $stats['table']['potential_stream']);
     }
 
     public function testCoach(): void
     {
         $scenario = [
-            [9, 1, 1],
-            [9, 2, 2],
-            [26, 1, 3],
+            [9, 1+Rules::INITIAL_PLAYER_POTENTIAL, 1+3*Rules::INITIAL_PLAYER_POTENTIAL],
+            [9, 2+Rules::INITIAL_PLAYER_POTENTIAL, 2+3*Rules::INITIAL_PLAYER_POTENTIAL],
+            [26, 1+Rules::INITIAL_PLAYER_POTENTIAL, 3+3*Rules::INITIAL_PLAYER_POTENTIAL],
         ];
         $playerIds = [9, 26, 68];
         $this->arrange($playerIds);
@@ -142,10 +156,10 @@ class StatisticsTest extends RulesTestCase
         $playerIds = [9, 26, 68];
         $this->arrange($playerIds);
         $scenario = [
-            [9, 'AGILE_MATURITY_CLEAN_CODE', 1, 1],
-            [68, 'AGILE_MATURITY_CLEAN_CODE', 1, 2],
-            [9, 'PRODUCT_TEAM_SOCIAL', 1, 2],
-            [68, 'AGILE_MATURITY_CLEAN_CODE', 2, 3],
+            [9, 'AGILE_MATURITY_CLEAN_CODE', 1+Rules::INITIAL_PLAYER_POTENTIAL, 1+3*Rules::INITIAL_PLAYER_POTENTIAL],
+            [68, 'AGILE_MATURITY_CLEAN_CODE', 1+Rules::INITIAL_PLAYER_POTENTIAL, 2+3*Rules::INITIAL_PLAYER_POTENTIAL],
+            [9, 'PRODUCT_TEAM_SOCIAL', 1+Rules::INITIAL_PLAYER_POTENTIAL, 2+3*Rules::INITIAL_PLAYER_POTENTIAL],
+            [68, 'AGILE_MATURITY_CLEAN_CODE', 2+Rules::INITIAL_PLAYER_POTENTIAL, 3+3*Rules::INITIAL_PLAYER_POTENTIAL],
         ];
         $this->addTo('company', 9, ['AGILE_MATURITY_FEEDBACK_SESSIONS']);
         $this->addTo('company', 68, ['AGILE_MATURITY_FEEDBACK_SESSIONS']);

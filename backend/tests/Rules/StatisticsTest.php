@@ -168,6 +168,42 @@ class StatisticsTest extends RulesTestCase
         }
     }
 
+
+    public function testAdjustPotential(): void
+    {
+        $playerIds = [9, 26, 68];
+
+        $this->arrange($playerIds);
+        $scenario = [
+            [9, 10, [], 0, 0],
+            [26, 7, [], 0, 0],
+            [68, 6, [], 0, 0],
+            [68, 7, [['potential', 0]], 1, 1],
+            [26, 8, [['potential', 0]], 1, 2],
+            [9, 11, [['potential', 0]], 1, 3],
+            [9, 13, [['potential', 0],['potential', 1],['potential', 2]], 4, 6],
+            [26, 10, [['potential', 0],['potential', 1],['potential', 2]], 4, 9],
+            [68, 9, [['potential', 0],['potential', 1],['potential', 2]], 4, 12],
+        ];
+        $this->addTo('company', 9, ['AGILE_MATURITY_AGILE_HR']);
+        $this->addTo('company', 26, ['AGILE_VALUE_HUMOR']);
+
+        foreach ($scenario as $step) {
+            $playerId = $step[0];
+            $currentPotential = $step[1];
+            $playerSelection = $step[2];
+            $expectedLoss = $step[3];
+            $expectedTableLoss = $step[4];
+            $remainingPotential = count($this->rules->repo->listCardIds('potential', playerId: $playerId));
+            $this->deck->pickCardsForLocation($currentPotential - $remainingPotential, 'deck', 'potential', $playerId);
+            $selection = new FakeSelection($this->rules, $playerId, $playerSelection);
+            $this->rules->adjustPotential($playerId, $selection->incomingJson());
+            $stats = $this->game->stats;
+            $this->assertEquals($expectedLoss, $stats['player'][$playerId]['potential_loss']);
+            $this->assertEquals($expectedTableLoss, $stats['table']['potential_loss']);
+        }
+    }
+
 }
 
 

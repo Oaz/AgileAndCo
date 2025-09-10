@@ -275,6 +275,8 @@ class Rules
                 ];
             });
         }
+        $stats = new Statistics($this->game);
+        $stats->addPotentialLoss($shouldDiscard, $player_id);
         $this->broadcast(Text::get('POTENTIAL_ADJUSTMENT'), [
             "player_name" => $infos->getPlayerName($player_id),
             "potential_loss" => $shouldDiscard,

@@ -45,36 +45,42 @@ class StatisticsTest extends RulesTestCase
     public function testDevelopmentDeployment(): void
     {
         $scenario = [
-            [ 9 => [[0], 1, 2], 26 => [[0], 1, 2], 68 => [[0], 1, 2], 'all' => [3,6] ],
-            [ 9 => [[0], 2, 4], 26 => [[0], 2, 4], 68 => [[0], 2, 4], 'all' => [6,12] ],
-            [ 9 => [[0,1], 4, 9], 26 => [[], 2, 4], 68 => [[], 2, 4], 'all' => [8,17] ],
+            [ 9 => [[0], 1, 2, 2], 26 => [[0], 1, 2, 3], 68 => [[0], 1, 2, 2], 'all' => [3,6,7] ],
+            [ 9 => [[0], 2, 4, 4], 26 => [[0], 2, 4, 6], 68 => [[0], 2, 4, 4], 'all' => [6,12,14] ],
+            [ 9 => [[0,1], 4, 9, 10], 26 => [[], 2, 4, 6], 68 => [[], 2, 4, 4], 'all' => [8,17,20] ],
         ];
         $playerIds = [9, 26, 68];
         $this->arrange($playerIds);
         $this->addTo('teams', 9, [['PRODUCT_TEAM_MMOG',1]]);
+        $this->addTo('company', 26, ['AGILE_MATURITY_ENGAGED_USERS']);
+        $this->addTo('company', 9, ['AGILE_MATURITY_PAIR_PROGRAMMING']);
         foreach ($scenario as $step) {
-            $this->startActivity('ACTIVITY_DEVELOPMENT', 9, $playerIds);
             foreach ($playerIds as $playerId) {
                 $indexes = $step[$playerId][0];
                 $expectedProducts = $step[$playerId][1];
                 $expectedEarnings = $step[$playerId][2];
+                $expectedPotentialStream = $step[$playerId][3];
+                $this->startActivity('ACTIVITY_DEVELOPMENT', 9, $playerIds);
                 $this->rules->completeDevelopment(
                     $playerId,
                     $this->selection($playerId, 'teams', $indexes),
                     $this->selection($playerId, 'potential', $indexes),
                 );
                 $this->checkStats($playerId, 'product_development_count', $expectedProducts);
+                $this->startActivity('ACTIVITY_DEPLOYMENT', 9, $playerIds);
                 $this->rules->completeDeployment(
                     $playerId,
                     $this->selection($playerId, 'products', $indexes),
                 );
                 $this->checkStats($playerId, 'product_deployment_count', $expectedProducts);
                 $this->checkStats($playerId, 'total_earnings', $expectedEarnings);
+                $this->checkStats($playerId, 'potential_stream', $expectedPotentialStream);
             }
             $stats = $this->game->stats;
             $this->assertEquals($step['all'][0], $stats['table']['product_development_count']);
             $this->assertEquals($step['all'][0], $stats['table']['product_deployment_count']);
             $this->assertEquals($step['all'][1], $stats['table']['total_earnings']);
+            $this->assertEquals($step['all'][2], $stats['table']['potential_stream']);
         }
     }
     
@@ -88,6 +94,78 @@ class StatisticsTest extends RulesTestCase
     {
         $stats = $this->game->stats;
         $this->assertEquals($expected, $stats['player'][$playerId][$id]);
+    }
+
+
+    public function testConference(): void
+    {
+        $playerIds = [9, 26, 68];
+        $this->withMultiActivity('ACTIVITY_CONFERENCE', 26, $playerIds);
+        $this->addTo('company', 26, ['AGILE_MATURITY_AGILE_ORGANIZER']);
+        $this->rules->prepareConference();
+        foreach ([9,68] as $playerId) {
+            $selection = new FakeSelection($this->rules, $playerId, [['conference', 0]]);
+            $this->rules->completeConference($playerId, $selection->incomingJson());
+            $this->checkStats($playerId, 'potential_stream', 1);
+        }
+        $selection = new FakeSelection($this->rules, 26, [['conference', 0],['conference', 1],['conference', 2]]);
+        $this->rules->completeConference(26, $selection->incomingJson());
+        $this->checkStats(26, 'potential_stream', 2);
+        $stats = $this->game->stats;
+        $this->assertEquals(4, $stats['table']['potential_stream']);
+    }
+
+    public function testCoach(): void
+    {
+        $scenario = [
+            [9, 1, 1],
+            [9, 2, 2],
+            [26, 1, 3],
+        ];
+        $playerIds = [9, 26, 68];
+        $this->arrange($playerIds);
+        foreach ($scenario as $step) {
+            $playerId = $step[0];
+            $expectedPotentialStream = $step[1];
+            $expectedTablePotentialStream = $step[2];
+            $this->startActivity('ACTIVITY_COACH', $playerId, [$playerId]);
+            $this->rules->doCoach();
+            $this->checkStats($playerId, 'potential_stream', $expectedPotentialStream);
+            $stats = $this->game->stats;
+            $this->assertEquals($expectedTablePotentialStream, $stats['table']['potential_stream']);
+        }
+    }
+
+
+    public function testRetrospective(): void
+    {
+        $playerIds = [9, 26, 68];
+        $this->arrange($playerIds);
+        $scenario = [
+            [9, 'AGILE_MATURITY_CLEAN_CODE', 1, 1],
+            [68, 'AGILE_MATURITY_CLEAN_CODE', 1, 2],
+            [9, 'PRODUCT_TEAM_SOCIAL', 1, 2],
+            [68, 'AGILE_MATURITY_CLEAN_CODE', 2, 3],
+        ];
+        $this->addTo('company', 9, ['AGILE_MATURITY_FEEDBACK_SESSIONS']);
+        $this->addTo('company', 68, ['AGILE_MATURITY_FEEDBACK_SESSIONS']);
+        $this->addTo('potential', 9, ['PRODUCT_TEAM_MMOG','PRODUCT_TEAM_MMOG','PRODUCT_TEAM_MMOG']);
+        $this->addTo('potential', 68, ['PRODUCT_TEAM_MMOG','PRODUCT_TEAM_MMOG','PRODUCT_TEAM_MMOG']);
+
+        foreach ($scenario as $step) {
+            $playerId = $step[0];
+            $retrospective = [$step[1]];
+            $expectedPotentialStream = $step[2];
+            $expectedTablePotentialStream = $step[3];
+            $selected = new FakeSelection($this->rules, $playerId, [['potential', 0],['potential', 1],['potential', 2]]);
+            $this->clear('retrospective', $playerId);
+            $this->addTo('retrospective', $playerId, $retrospective);
+            $this->startActivity('ACTIVITY_RETROSPECTIVE_PAYMENT', 26, $playerIds);
+            $this->rules->payForRetrospective($playerId, $selected->incomingJson());
+            $stats = $this->game->stats;
+            $this->assertEquals($expectedPotentialStream, $stats['player'][$playerId]['potential_stream']);
+            $this->assertEquals($expectedTablePotentialStream, $stats['table']['potential_stream']);
+        }
     }
 
 }

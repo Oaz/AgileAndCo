@@ -40,7 +40,7 @@
       "name": "Sum of deployment earnings",
       "type": "int"
     },
-    "potential_turnover": {
+    "potential_stream": {
       "id": 18,
       "name": "Number of incoming cards into potential",
       "type": "int"
@@ -92,7 +92,7 @@
       "name": "Sum of deployment earnings",
       "type": "int"
     },
-    "potential_turnover": {
+    "potential_stream": {
       "id": 118,
       "name": "Number of incoming cards into potential",
       "type": "int"

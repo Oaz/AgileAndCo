@@ -15,7 +15,7 @@ class Statistics
         "product_development_count",
         "product_deployment_count",
         "total_earnings",
-        "potential_turnover",
+        "potential_stream",
         "potential_loss"
     ];
 
@@ -57,9 +57,9 @@ class Statistics
         $this->game->incrementStatistic("total_earnings", $earnings, $playerId);
         $this->game->incrementStatistic("total_earnings", $earnings);
     }
-    public function addPotentialTurnover(int $turnover, int $playerId): void {
-        $this->game->incrementStatistic("potential_turnover", $turnover, $playerId);
-        $this->game->incrementStatistic("potential_turnover", $turnover);
+    public function addPotentialStream(int $incoming, int $playerId): void {
+        $this->game->incrementStatistic("potential_stream", $incoming, $playerId);
+        $this->game->incrementStatistic("potential_stream", $incoming);
     }
     public function addPotentialLoss(int $loss, int $playerId): void {
         $this->game->incrementStatistic("potential_loss", $loss, $playerId);

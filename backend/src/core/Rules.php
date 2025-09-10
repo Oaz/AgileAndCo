@@ -343,6 +343,8 @@ class Rules
     {
         $player_id = $this->game->getActivePlayerId();
         $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
+        $stats = new Statistics($this->game);
+        $stats->addPotentialStream(1, $player_id);
         $this->broadcast(Text::get('ACTIVITY_COACH_IMPACT'), [
             "player_name" => $this->game->getActivePlayerName(),
         ]);
@@ -401,6 +403,8 @@ class Rules
         }
         $potentialGain = count($player['conference']) - $shouldDiscard;
         $this->cards->moveAllCardsInLocation('conference', 'potential', playerId: $player_id);
+        $stats = new Statistics($this->game);
+        $stats->addPotentialStream($potentialGain, $player_id);
         $this->broadcast(Text::get('ACTIVITY_CONFERENCE_IMPACT'), [
             "player_name" => $infos->getPlayerName($player_id),
             "potential_gain" => $potentialGain,
@@ -451,6 +455,7 @@ class Rules
         $stats->addProductDevelopment(count($inputs), $player_id);
         if (count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company'])) {
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
+            $stats->addPotentialStream(1, $player_id);
             $this->broadcast(Text::get('ACTIVITY_DEVELOPMENT_IMPACT_PLUS'), [
                 "player_name" => $infos->getPlayerName($player_id),
                 "product_count" => count($inputs),
@@ -507,6 +512,7 @@ class Rules
                 ];
             });
         }
+        $deploymentEarning = $totalEarning;
         if (count($cards) >= 1 && in_array('AGILE_MATURITY_ENGAGED_USERS', $player['company'])) {
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
             $totalEarning += 1;
@@ -517,7 +523,8 @@ class Rules
         }
         $stats = new Statistics($this->game);
         $stats->addProductDeployment(count($cards), $player_id);
-        $stats->addEarnings($totalEarning, $player_id);
+        $stats->addEarnings($deploymentEarning, $player_id);
+        $stats->addPotentialStream($totalEarning, $player_id);
         $this->broadcast(Text::get('ACTIVITY_DEPLOYMENT_IMPACT'), [
             "player_name" => $infos->getPlayerName($player_id),
             "product_count" => count($cards),
@@ -604,6 +611,8 @@ class Rules
         $this->repo->moveCardsFromToLocation('retrospective', $targetLocation, playerId: $player_id);
         if ($targetLocation === 'company' && in_array('AGILE_MATURITY_FEEDBACK_SESSIONS', $player['company'])) {
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
+            $stats = new Statistics($this->game);
+            $stats->addPotentialStream(1, $player_id);
         }
         $this->broadcast(Text::get($message), [
             "player_name" => $infos->getPlayerName($player_id),

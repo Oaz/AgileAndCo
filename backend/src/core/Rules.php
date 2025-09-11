@@ -245,7 +245,8 @@ class Rules
         $players = $gameState['public']['players'];
         $overLimitPlayers = [];
         foreach ($players as $player) {
-            if ($player['potentialSize'] > 6) {
+            $shouldDiscard = $this->computeNumberOfDiscardWhenAdjustingPotentialAtEndOfRound($player['id']);
+            if ($shouldDiscard > 0) {
                 $overLimitPlayers[] = $player['id'];
             }
         }

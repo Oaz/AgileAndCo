@@ -45,17 +45,10 @@ class EndOfRoundRulesTest extends RulesTestCase
             $this->checkEndRound("nextRound", []);
         }
         $this->playRound($playerIds);
-        $this->addTo('potential', 26, [
-            ['AGILE_MATURITY_TEST_TEAM', 20],
-            ['AGILE_MATURITY_USER_EXPERIENCE', 21],
-            ['PRODUCT_TEAM_MMOG', 22]
-        ]);
-        $this->addTo('potential', 68, [
-            ['AGILE_MATURITY_TEST_TEAM', 10],
-            ['AGILE_MATURITY_USER_EXPERIENCE', 11],
-            ['PRODUCT_TEAM_MMOG', 12],
-            ['AGILE_VALUE_COURAGE', 13]
-        ]);
+        $this->deck->pickCardsForLocation(3, 'deck', 'potential', 26);
+        $this->deck->pickCardsForLocation(3, 'deck', 'potential', 68);
+        $this->addTo('company', 144, ['AGILE_MATURITY_AGILE_HR']);
+        $this->deck->pickCardsForLocation(4, 'deck', 'potential', 144);
         $this->checkEndRound("closeRound", [26, 68]);
     }
 

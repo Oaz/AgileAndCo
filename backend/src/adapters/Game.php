@@ -101,24 +101,7 @@ class Game extends \Table
         $this->reattributeColorsBasedOnPreferences($players, $gameinfos["player_colors"]);
         $this->reloadPlayersBasicInfos();
 
-        // Init global values with their initial values.
-
-        // Dummy content.
-        $this->setGameStateInitialValue("my_first_global_variable", 0);
-
-        // Init game statistics.
-        //
-        // NOTE: statistics used in this file must be defined in your `stats.inc.php` file.
-
-        // Dummy content.
-        // $this->initStat("table", "table_teststat1", 0);
-        // $this->initStat("player", "player_teststat1", 0);
-
-        // TODO: Setup the initial game situation here.
         $this->rules->initGame($players);
-
-        // Activate first player once everything has been initialized and ready.
-        $this->activeNextPlayer();
     }
 
     public function argGameState(): array
@@ -133,6 +116,7 @@ class Game extends \Table
 
     public function stStartRound(): void
     {
+        $this->activeNextPlayer();
         $this->gamestate->nextState($this->rules->startRound());
     }
 

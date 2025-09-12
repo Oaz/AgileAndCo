@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     import Rules from "./tabs/Rules.svelte";
     import Tutorial from "./tabs/Tutorial.svelte";
     import Material from "./tabs/Material.svelte";
+    import Online from "./tabs/Online.svelte";
     import enTranslations from './tabs/translations/en/tabs.ftl?raw';
     import frTranslations from './tabs/translations/fr/tabs.ftl?raw';
     import {initTranslations} from "./tabs/translations";
@@ -63,7 +64,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         home: Home,
         material: Material,
         rules: Rules,
-        tutorial: Tutorial
+        tutorial: Tutorial,
+        online: Online,
     }).map(([key, component]) => ({
         key,
         label: fluentContext.localize(`${key}-tab`),

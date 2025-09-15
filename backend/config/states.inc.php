@@ -81,8 +81,8 @@ $machinestates = [
 
     4 => [
         "name" => "playerChooseActivity",
-        "description" => clienttranslate('${actplayer} must choose the next activity'),
-        "descriptionmyturn" => clienttranslate('${you} must choose the next activity'),
+        "description" => clienttranslate('${actplayer} is choosing the next activity'),
+        "descriptionmyturn" => clienttranslate('${you} choose the next activity'),
         "type" => "activeplayer",
         "args" => "argGameState",
         "possibleactions" => [

@@ -69,12 +69,11 @@ function (dojo, declare, gamegui, counter, frontend) {
 
         setup: async function (gamedatas) {
             this.debug("Starting game setup");
-            window.gg = this;
-            window.ff = frontend;
 
             frontend.initBgaIntegration(
                 (action, args) => this.bgaPerformAction(action, args),
-                (text) => _(text)
+                (text) => _(text),
+                this
             )
 
             const gamePlayAreaContainer = document.createElement('div');

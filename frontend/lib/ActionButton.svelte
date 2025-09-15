@@ -18,12 +18,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <script lang="ts">
     import {Action} from "./Action";
+    import {BGA} from "./BGA";
 
     export let action: Action;
-
+    let externalButtons = BGA.useActionButton();
+    
+    $: if (action.enabled && externalButtons) {
+        BGA.defineActionButton(action.action_text, action.can_act, function () {
+            action.do_act();
+        });
+    }
 </script>
 
-{#if action.enabled}
+{#if action.enabled && !externalButtons}
     <button on:click={function (){
         action.do_act();
     }} class="action {action.can_act ? '' : 'inactive'}">

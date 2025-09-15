@@ -22,9 +22,10 @@ import GameBoard from "./GameBoard.svelte";
 import PlayerPanel from "./PlayerPanel.svelte";
 import {debuglog} from './logger';
 
-export function initBgaIntegration(performAction, translate) {
+export function initBgaIntegration(performAction, translate, host) {
     BGA.setPerformAction(performAction);
     BGA.setTranslate(translate);
+    BGA.setHost(host);
 }
 
 export function createGameBoard(target, info) {

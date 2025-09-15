@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 export class BGA {
     private static _translate: any = x => x;
     private static _performAction: any;
+    private static _host: any = null;
 
     public static setTranslate(translate) {
         this._translate = translate;
@@ -34,6 +35,21 @@ export class BGA {
 
     public static performAction(action: string, args) {
         return this._performAction(action, args);
+    }
+
+    public static setHost(host) {
+        this._host = host;
+    }
+
+    public static useActionButton() : boolean {
+        return this._host !== null && this._host !== undefined;
+    }
+
+    public static defineActionButton(text: string, enabled:boolean, callback: () => void) {
+        this._host.statusBar.removeActionButtons();
+        this._host.statusBar.addActionButton(text, callback, {
+            disabled: !enabled,
+        });
     }
 }
 

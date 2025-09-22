@@ -75,14 +75,14 @@ class ConferenceRulesTest extends RulesTestCase
     public static function conferenceCompletion(): array
     {
         return [
-            [9, [['conference', 0]], [], "Conference increases playerA potential by 1"],
-            [9, [['conference', 1]], [], "Conference increases playerA potential by 1"],
-            [26, [['conference', 0],['conference', 1],['conference', 3],['conference', 4]], [], "Conference increases playerB potential by 1"],
-            [9, [], ['AGILE_MATURITY_AGILE_ORGANIZER'], "Conference increases playerA potential by 2"],
-            [26, [['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER'], "Conference increases playerB potential by 2"],
-            [9, [['potential', 0]], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "Conference increases playerA potential by 1"],
-            [26, [['potential', 0],['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "Conference increases playerB potential by 1"],
-            [26, [['potential', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER', 'AGILE_MATURITY_AGILE_PRACTITIONER'], "Conference increases playerB potential by 2"],
+            [9, [['conference', 0]], [], "ACTIVITY_CONFERENCE_IMPACT playerA 1"],
+            [9, [['conference', 1]], [], "ACTIVITY_CONFERENCE_IMPACT playerA 1"],
+            [26, [['conference', 0],['conference', 1],['conference', 3],['conference', 4]], [], "ACTIVITY_CONFERENCE_IMPACT playerB 1"],
+            [9, [], ['AGILE_MATURITY_AGILE_ORGANIZER'], "ACTIVITY_CONFERENCE_IMPACT playerA 2"],
+            [26, [['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER'], "ACTIVITY_CONFERENCE_IMPACT playerB 2"],
+            [9, [['potential', 0]], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "ACTIVITY_CONFERENCE_IMPACT playerA 1"],
+            [26, [['potential', 0],['conference', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_PRACTITIONER'], "ACTIVITY_CONFERENCE_IMPACT playerB 1"],
+            [26, [['potential', 1],['conference', 3],['conference', 4]], ['AGILE_MATURITY_AGILE_ORGANIZER', 'AGILE_MATURITY_AGILE_PRACTITIONER'], "ACTIVITY_CONFERENCE_IMPACT playerB 2"],
         ];
     }
 

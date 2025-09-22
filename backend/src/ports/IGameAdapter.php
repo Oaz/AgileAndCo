@@ -21,6 +21,7 @@ namespace Bga\Games\AgileAndCo;
 
 interface IGameAdapter
 {
+    public function getText(string $messageId): string;
     public function loadInfos(): GameInfos;
     public function getActivePlayerId(): int;
     public function getActivePlayerName(): string;

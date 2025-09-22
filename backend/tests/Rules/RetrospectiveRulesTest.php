@@ -264,45 +264,45 @@ class RetrospectiveRulesTest extends RulesTestCase
     {
         $cost_1_NoPowers = [
             9, [['potential', 0]], [], [], [], ['AGILE_MATURITY_AGILE_PRACTITIONER'],
-            "playerA pays 1 and gets Agile Practitioner"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY playerA 1 AGILE_MATURITY_AGILE_PRACTITIONER_TITLE"
         ];
         $cost_3_NoPowers = [
             9, [['potential', 0],['potential', 1],['potential', 2]], [], [], [], ['AGILE_MATURITY_CLEAN_CODE'],
-            "playerA pays 3 and gets Clean Code"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY playerA 3 AGILE_MATURITY_CLEAN_CODE_TITLE"
         ];
         $cost_4_MinusOneAsInitiator = [26, [['potential', 0], ['potential', 2], ['potential', 3]],
             [], [], [], ['AGILE_VALUE_FOCUS'],
-            "playerB pays 3 and adopts Focus value"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_VALUE playerB 3 AGILE_VALUE_FOCUS_TITLE"
         ];
         $cost_3_MinusOneAsInternalCoach = [9, [['potential', 0], ['potential', 2]],
             [], [],
             ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_MATURITY_CLEAN_CODE'],
-            "playerA pays 2 and gets Clean Code"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY playerA 2 AGILE_MATURITY_CLEAN_CODE_TITLE"
         ];
         $cost_4_MinusOneAsInitiator_MinusOneAsInternalCoach = [26, [['potential', 0], ['potential', 2]],
             [], [],
             ['AGILE_MATURITY_INTERNAL_COACH'], ['AGILE_VALUE_FOCUS'],
-            "playerB pays 2 and adopts Focus value"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_VALUE playerB 2 AGILE_VALUE_FOCUS_TITLE"
         ];
         $cost_3_PaidWithProductAsDevops = [9, [['potential', 1], ['products', 0]],
             [], [['AGILE_MATURITY_TEST_TEAM', 0]],
             ['AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_CLEAN_CODE'],
-            "playerA pays 3 and gets Clean Code"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY playerA 3 AGILE_MATURITY_CLEAN_CODE_TITLE"
         ];
         $cost_1_PaidWithProductAsDevops = [9, [['products', 0]],
             [], [['AGILE_MATURITY_TEST_TEAM', 0]],
             ['AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_AGILE_PRACTITIONER'],
-            "playerA pays 2 and gets Agile Practitioner"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY playerA 2 AGILE_MATURITY_AGILE_PRACTITIONER_TITLE"
         ];
         $cost_3_MinusOneAsInternalCoach_PaidWithProductAsDevops = [9, [['products', 0]],
             [], [['AGILE_MATURITY_TEST_TEAM', 0]],
             ['AGILE_MATURITY_INTERNAL_COACH', 'AGILE_MATURITY_DEVOPS'], ['AGILE_MATURITY_CLEAN_CODE'],
-            "playerA pays 2 and gets Clean Code"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY playerA 2 AGILE_MATURITY_CLEAN_CODE_TITLE"
         ];
         $cost_4_PaidWithTwoProductAsDevops = [9, [['products', 0], ['products', 1]],
             [], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
             ['AGILE_MATURITY_DEVOPS'], ['AGILE_VALUE_FOCUS'],
-            "playerA pays 4 and adopts Focus value"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_VALUE playerA 4 AGILE_VALUE_FOCUS_TITLE"
         ];
         return [
             $cost_1_NoPowers,
@@ -400,36 +400,36 @@ class RetrospectiveRulesTest extends RulesTestCase
     {
         $cost_3_NoPowers = [
             9, [['potential', 0],['potential', 1],['potential', 2]], [], [], [], ['PRODUCT_TEAM_SOCIAL'],
-            "playerA pays 3 and hires a new Social games team"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_TEAM playerA 3 PRODUCT_TEAM_SOCIAL"
         ];
         $cost_4_MinusOneAsInitiator = [26, [['potential', 0], ['potential', 2], ['potential', 3]],
             [], [], [], ['PRODUCT_TEAM_MMOG'],
-            "playerB pays 3 and hires a new Massively multiplayer online games team"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_TEAM playerB 3 PRODUCT_TEAM_MMOG"
         ];
         $cost_3_MinusOneAsPassionateDeveloper = [9, [['potential', 0], ['potential', 2]],
             [], [],
             ['AGILE_MATURITY_PASSIONATE_DEVELOPER'], ['PRODUCT_TEAM_SOCIAL'],
-            "playerA pays 2 and hires a new Social games team"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_TEAM playerA 2 PRODUCT_TEAM_SOCIAL"
         ];
         $cost_4_MinusOneAsInitiator_MinusOneAsPassionateDeveloper = [26, [['potential', 0], ['potential', 2]],
             [], [],
             ['AGILE_MATURITY_PASSIONATE_DEVELOPER'], ['PRODUCT_TEAM_MMOG'],
-            "playerB pays 2 and hires a new Massively multiplayer online games team"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_TEAM playerB 2 PRODUCT_TEAM_MMOG"
         ];
         $cost_3_PaidWithProductAsDevops = [9, [['potential', 1], ['products', 0]],
             [], [['AGILE_MATURITY_TEST_TEAM', 0]],
             ['AGILE_MATURITY_DEVOPS'], ['PRODUCT_TEAM_SOCIAL'],
-            "playerA pays 3 and hires a new Social games team"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_TEAM playerA 3 PRODUCT_TEAM_SOCIAL"
         ];
         $cost_3_MinusOneAsPassionateDeveloper_PaidWithProductAsDevops = [9, [['products', 0]],
             [], [['AGILE_MATURITY_TEST_TEAM', 0]],
             ['AGILE_MATURITY_PASSIONATE_DEVELOPER', 'AGILE_MATURITY_DEVOPS'], ['PRODUCT_TEAM_SOCIAL'],
-            "playerA pays 2 and hires a new Social games team"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_TEAM playerA 2 PRODUCT_TEAM_SOCIAL"
         ];
         $cost_4_PaidWithTwoProductAsDevops = [9, [['products', 0], ['products', 1]],
             [], [['AGILE_MATURITY_TEST_TEAM', 0], ['AGILE_MATURITY_TEST_TEAM', 1]],
             ['AGILE_MATURITY_DEVOPS'], ['PRODUCT_TEAM_MMOG'],
-            "playerA pays 4 and hires a new Massively multiplayer online games team"
+            "ACTIVITY_RETROSPECTIVE_IMPACT_TEAM playerA 4 PRODUCT_TEAM_MMOG"
         ];
         return [
             $cost_3_NoPowers,

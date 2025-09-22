@@ -296,7 +296,7 @@ class Rules
         }
         $stats = new Statistics($this->game);
         $stats->addPotentialLoss($shouldDiscard, $player_id);
-        $this->broadcast(Text::get('POTENTIAL_ADJUSTMENT'), [
+        $this->broadcast($this->game->getText('POTENTIAL_ADJUSTMENT'), [
             "player_name" => $infos->getPlayerName($player_id),
             "potential_loss" => $shouldDiscard,
         ]);
@@ -343,10 +343,10 @@ class Rules
         $stats = new Statistics($this->game);
         $stats->addActivity($activity, $player_id);
 
-        $this->broadcast(Text::get('ACTIVITY_WAS_CHOSEN'), [
+        $this->broadcast($this->game->getText('ACTIVITY_WAS_CHOSEN'), [
             "player_id" => $player_id,
             "player_name" => $this->game->getActivePlayerName(),
-            "activity" => Text::get($activity . '_TITLE'),
+            "activity" => $this->game->getText($activity . '_TITLE'),
         ]);
         return $transition;
     }
@@ -366,7 +366,7 @@ class Rules
         $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
         $stats = new Statistics($this->game);
         $stats->addPotentialStream(1, $player_id);
-        $this->broadcast(Text::get('ACTIVITY_COACH_IMPACT'), [
+        $this->broadcast($this->game->getText('ACTIVITY_COACH_IMPACT'), [
             "player_name" => $this->game->getActivePlayerName(),
         ]);
         return "nextPlayer";
@@ -426,7 +426,7 @@ class Rules
         $this->cards->moveAllCardsInLocation('conference', 'potential', playerId: $player_id);
         $stats = new Statistics($this->game);
         $stats->addPotentialStream($potentialGain, $player_id);
-        $this->broadcast(Text::get('ACTIVITY_CONFERENCE_IMPACT'), [
+        $this->broadcast($this->game->getText('ACTIVITY_CONFERENCE_IMPACT'), [
             "player_name" => $infos->getPlayerName($player_id),
             "potential_gain" => $potentialGain,
         ]);
@@ -477,12 +477,12 @@ class Rules
         if (count($teams) >= 2 && in_array('AGILE_MATURITY_PAIR_PROGRAMMING', $player['company'])) {
             $this->cards->pickCardsForLocation(1, 'deck', 'potential', $player_id);
             $stats->addPotentialStream(1, $player_id);
-            $this->broadcast(Text::get('ACTIVITY_DEVELOPMENT_IMPACT_PLUS'), [
+            $this->broadcast($this->game->getText('ACTIVITY_DEVELOPMENT_IMPACT_PLUS'), [
                 "player_name" => $infos->getPlayerName($player_id),
                 "product_count" => count($inputs),
             ]);
         } else {
-            $this->broadcast(Text::get('ACTIVITY_DEVELOPMENT_IMPACT'), [
+            $this->broadcast($this->game->getText('ACTIVITY_DEVELOPMENT_IMPACT'), [
                 "player_name" => $infos->getPlayerName($player_id),
                 "product_count" => count($inputs),
             ]);
@@ -546,7 +546,7 @@ class Rules
         $stats->addProductDeployment(count($cards), $player_id);
         $stats->addEarnings($deploymentEarning, $player_id);
         $stats->addPotentialStream($totalEarning, $player_id);
-        $this->broadcast(Text::get('ACTIVITY_DEPLOYMENT_IMPACT'), [
+        $this->broadcast($this->game->getText('ACTIVITY_DEPLOYMENT_IMPACT'), [
             "player_name" => $infos->getPlayerName($player_id),
             "product_count" => count($cards),
             "earnings" => $totalEarning,
@@ -635,10 +635,10 @@ class Rules
             $stats = new Statistics($this->game);
             $stats->addPotentialStream(1, $player_id);
         }
-        $this->broadcast(Text::get($message), [
+        $this->broadcast($this->game->getText($message), [
             "player_name" => $infos->getPlayerName($player_id),
             "payment" => $payment,
-            "improvement" => Text::get($improvement),
+            "improvement" => $this->game->getText($improvement),
         ]);
         return true;
     }

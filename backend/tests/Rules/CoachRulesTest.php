@@ -38,7 +38,7 @@ class CoachRulesTest extends RulesTestCase
             array_merge($before['_private'][26]['potential'], [$nextPicks[0]]),
             $after['_private'][26]['potential']
         );
-        $this->assertEquals("Coach increases playerB potential by 1", $this->game->lastMessage);
+        $this->assertEquals("ACTIVITY_COACH_IMPACT playerB", $this->game->lastMessage);
     }
 }
 

@@ -58,16 +58,16 @@ class AdjustPotentialRulesTest extends RulesTestCase
             [9, [], 4, [], ""],
             [9, [], 5, [], ""],
             [9, [], 6, [], ""],
-            [9, [['potential', 1]], 7, [], "playerA loses 1 potential"],
-            [9, [['potential', 1], ['potential', 5]], 8, [], "playerA loses 2 potential"],
-            [9, [['potential', 1], ['potential', 2], ['potential', 5], ['potential', 9], ['potential', 10]], 11, [], "playerA loses 5 potential"],
+            [9, [['potential', 1]], 7, [], "POTENTIAL_ADJUSTMENT playerA 1"],
+            [9, [['potential', 1], ['potential', 5]], 8, [], "POTENTIAL_ADJUSTMENT playerA 2"],
+            [9, [['potential', 1], ['potential', 2], ['potential', 5], ['potential', 9], ['potential', 10]], 11, [], "POTENTIAL_ADJUSTMENT playerA 5"],
             [9, [], 7, ['AGILE_VALUE_COURAGE'], ""],
-            [9, [['potential', 5]], 8, ['AGILE_VALUE_COURAGE'], "playerA loses 1 potential"],
+            [9, [['potential', 5]], 8, ['AGILE_VALUE_COURAGE'], "POTENTIAL_ADJUSTMENT playerA 1"],
             [9, [], 8, ['AGILE_VALUE_COURAGE', 'AGILE_VALUE_SIMPLICITY'], ""],
             [9, [], 10, ['AGILE_MATURITY_AGILE_HR'], ""],
-            [9, [['potential', 5]], 11, ['AGILE_MATURITY_AGILE_HR'], "playerA loses 1 potential"],
+            [9, [['potential', 5]], 11, ['AGILE_MATURITY_AGILE_HR'], "POTENTIAL_ADJUSTMENT playerA 1"],
             [9, [], 12, ['AGILE_MATURITY_AGILE_HR', 'AGILE_VALUE_COURAGE', 'AGILE_VALUE_SIMPLICITY'], ""],
-            [9, [['potential', 5]], 13, ['AGILE_MATURITY_AGILE_HR', 'AGILE_VALUE_COURAGE', 'AGILE_VALUE_SIMPLICITY'], "playerA loses 1 potential"],
+            [9, [['potential', 5]], 13, ['AGILE_MATURITY_AGILE_HR', 'AGILE_VALUE_COURAGE', 'AGILE_VALUE_SIMPLICITY'], "POTENTIAL_ADJUSTMENT playerA 1"],
         ];
     }
 

@@ -58,34 +58,34 @@ class DevelopmentRulesTest extends RulesTestCase
     {
         return [
             [9, [], [], [], [], [], [], ""],
-            [9, [['teams', 0]], [['potential', 0]], [], [], [], [], "playerA develops 1 product(s)"],
-            [9, [['teams', 1]], [['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], [], [], "playerA develops 1 product(s)"],
+            [9, [['teams', 0]], [['potential', 0]], [], [], [], [], "ACTIVITY_DEVELOPMENT_IMPACT playerA 1"],
+            [9, [['teams', 1]], [['potential', 3]], [['PRODUCT_TEAM_MMOG',1]], [], [], [], "ACTIVITY_DEVELOPMENT_IMPACT playerA 1"],
             [26,
                 [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]],
-                [['PRODUCT_TEAM_MMOG',1]], [], [], [], "playerB develops 2 product(s)"
+                [['PRODUCT_TEAM_MMOG',1]], [], [], [], "ACTIVITY_DEVELOPMENT_IMPACT playerB 2"
             ],
             [26,
                 [['teams', 0], ['teams', 2]], [['potential', 0], ['potential', 3]],
-                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [], [], [], "playerB develops 2 product(s)"
+                [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [], [], [], "ACTIVITY_DEVELOPMENT_IMPACT playerB 2"
             ],
             [9,
                 [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]],
-                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE'], [], "playerA develops 2 product(s)"
+                [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE'], [], "ACTIVITY_DEVELOPMENT_IMPACT playerA 2"
             ],
             [26,
                 [['teams', 0], ['teams', 2]], [['potential', 0], ['potential', 3]],
                 [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [['AGILE_MATURITY_TEST_TEAM', 1]], [], [],
-                "playerB develops 2 product(s)"
+                "ACTIVITY_DEVELOPMENT_IMPACT playerB 2"
             ],
             [26,
                 [['teams', 0],['teams', 1],['teams', 2]], [['potential', 0],['potential', 2],['potential', 3]],
                 [['PRODUCT_TEAM_MMOG', 1], ['PRODUCT_TEAM_MMOG', 2]], [], ['AGILE_MATURITY_CLEAN_CODE'], [],
-                "playerB develops 3 product(s)"
+                "ACTIVITY_DEVELOPMENT_IMPACT playerB 3"
             ],
             [9,
                 [['teams', 0],['teams', 1]], [['potential', 0],['potential', 3]],
                 [['PRODUCT_TEAM_MMOG',1]], [], ['AGILE_MATURITY_CLEAN_CODE', 'AGILE_MATURITY_PAIR_PROGRAMMING'], [21],
-                "playerA develops 2 product(s) and increases potential by 1"
+                "ACTIVITY_DEVELOPMENT_IMPACT_PLUS playerA 2"
             ],
         ];
     }

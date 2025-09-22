@@ -135,4 +135,32 @@ class FakeGame implements IGameAdapter
             $this->stats['player'][$playerId][$name] += $delta;
         }
     }
+
+    public function getText(string $messageId): string
+    {
+        switch ($messageId) {
+            case 'ACTIVITY_WAS_CHOSEN' :
+                return 'ACTIVITY_WAS_CHOSEN ${player_name} ${activity}';
+            case 'POTENTIAL_ADJUSTMENT' :
+                return 'POTENTIAL_ADJUSTMENT ${player_name} ${potential_loss}';
+            case 'ACTIVITY_DEVELOPMENT_IMPACT' :
+                return 'ACTIVITY_DEVELOPMENT_IMPACT ${player_name} ${product_count}';
+            case 'ACTIVITY_DEVELOPMENT_IMPACT_PLUS' :
+                return 'ACTIVITY_DEVELOPMENT_IMPACT_PLUS ${player_name} ${product_count}';
+            case 'ACTIVITY_DEPLOYMENT_IMPACT' :
+                return 'ACTIVITY_DEPLOYMENT_IMPACT ${player_name} ${product_count} ${earnings}';
+            case 'ACTIVITY_CONFERENCE_IMPACT' :
+                return 'ACTIVITY_CONFERENCE_IMPACT ${player_name} ${potential_gain}';
+            case 'ACTIVITY_COACH_IMPACT' :
+                return 'ACTIVITY_COACH_IMPACT ${player_name}';
+            case 'ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY' :
+                return 'ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY ${player_name} ${payment} ${improvement}';
+            case 'ACTIVITY_RETROSPECTIVE_IMPACT_VALUE' :
+                return 'ACTIVITY_RETROSPECTIVE_IMPACT_VALUE ${player_name} ${payment} ${improvement}';
+            case 'ACTIVITY_RETROSPECTIVE_IMPACT_TEAM' :
+                return 'ACTIVITY_RETROSPECTIVE_IMPACT_TEAM ${player_name} ${payment} ${improvement}';
+            default:
+                return $messageId;
+        }
+    }
 }

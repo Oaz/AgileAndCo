@@ -362,4 +362,102 @@ class Game extends \Table
 
     }
 
+    public function getText(string $messageId): string
+    {
+        switch ($messageId) {
+            case 'ACTIVITY_WAS_CHOSEN' :
+                return clienttranslate('${player_name} chooses activity "${activity}"');
+            case 'POTENTIAL_ADJUSTMENT' :
+                return clienttranslate('${player_name} loses ${potential_loss} potential');
+            case 'ACTIVITY_DEVELOPMENT_TITLE' :
+                return clienttranslate('Development');
+            case 'ACTIVITY_DEVELOPMENT_IMPACT' :
+                return clienttranslate('${player_name} develops ${product_count} product(s)');
+            case 'ACTIVITY_DEVELOPMENT_IMPACT_PLUS' :
+                return clienttranslate('${player_name} develops ${product_count} product(s) and increases potential by 1');
+            case 'ACTIVITY_DEPLOYMENT_TITLE' :
+                return clienttranslate('Deployment');
+            case 'ACTIVITY_DEPLOYMENT_IMPACT' :
+                return clienttranslate('${player_name} deploys ${product_count} product(s) and increases potential by ${earnings}');
+            case 'ACTIVITY_CONFERENCE_TITLE' :
+                return clienttranslate('Conference');
+            case 'ACTIVITY_CONFERENCE_IMPACT' :
+                return clienttranslate('Conference increases ${player_name} potential by ${potential_gain}');
+            case 'ACTIVITY_COACH_TITLE' :
+                return clienttranslate('Coach');
+            case 'ACTIVITY_COACH_IMPACT' :
+                return clienttranslate('Coach increases ${player_name} potential by 1');
+            case 'ACTIVITY_RETROSPECTIVE_TITLE' :
+                return clienttranslate('Retrospective');
+            case 'ACTIVITY_RETROSPECTIVE_IMPACT_MATURITY' :
+                return clienttranslate('${player_name} pays ${payment} and gets ${improvement}');
+            case 'ACTIVITY_RETROSPECTIVE_IMPACT_VALUE' :
+                return clienttranslate('${player_name} pays ${payment} and adopts ${improvement} value');
+            case 'ACTIVITY_RETROSPECTIVE_IMPACT_TEAM' :
+                return clienttranslate('${player_name} pays ${payment} and hires a new ${improvement} team');
+            case "PRODUCT_TEAM_ADVERGAME" :
+                return clienttranslate('Advertising games');
+            case "PRODUCT_TEAM_EDUCATION" :
+                return clienttranslate('Educational games');
+            case "PRODUCT_TEAM_SOCIAL" :
+                return clienttranslate('Social games');
+            case "PRODUCT_TEAM_MMOG" :
+                return clienttranslate('Massively multiplayer online games');
+            case "AGILE_MATURITY_PASSIONATE_DEVELOPER_TITLE" :
+                return clienttranslate('Passionate Developer');
+            case "AGILE_MATURITY_AGILE_PRACTITIONER_TITLE" :
+                return clienttranslate('Agile Practitioner');
+            case "AGILE_MATURITY_USER_EXPERIENCE_TITLE" :
+                return clienttranslate('User Experience');
+            case "AGILE_MATURITY_PAIR_PROGRAMMING_TITLE" :
+                return clienttranslate('Pair Programming');
+            case "AGILE_MATURITY_AGILE_ORGANIZER_TITLE" :
+                return clienttranslate('Agile Organizer');
+            case "AGILE_MATURITY_FEEDBACK_SESSIONS_TITLE" :
+                return clienttranslate('Feedback Sessions');
+            case "AGILE_MATURITY_CLEAN_CODE_TITLE" :
+                return clienttranslate('Clean Code');
+            case "AGILE_MATURITY_CONTINUOUS_DELIVERY_TITLE" :
+                return clienttranslate('Continuous Delivery');
+            case "AGILE_MATURITY_DEVOPS_TITLE" :
+                return clienttranslate('DevOps');
+            case "AGILE_MATURITY_AGILE_HR_TITLE" :
+                return clienttranslate('Agile HR');
+            case "AGILE_MATURITY_ENGAGED_USERS_TITLE" :
+                return clienttranslate('Engaged Users');
+            case "AGILE_MATURITY_INTERNAL_COACH_TITLE" :
+                return clienttranslate('Internal Coach');
+            case "AGILE_MATURITY_DETAILED_PLANNING_TITLE" :
+                return clienttranslate('Detailed Planning');
+            case "AGILE_MATURITY_TEST_TEAM_TITLE" :
+                return clienttranslate('Test Team');
+            case "AGILE_MATURITY_APPLICATION_FRAMEWORK_TITLE" :
+                return clienttranslate('Application Framework');
+            case "AGILE_MATURITY_AGILE_CERTIFICATION_TITLE" :
+                return clienttranslate('Agile Certification');
+            case "AGILE_MATURITY_SOFTWARE_CRAFTSMANSHIP_TITLE" :
+                return clienttranslate('Software Craftsmanship');
+            case "AGILE_MATURITY_AGILE_SENSEI_TITLE" :
+                return clienttranslate('Agile Sensei');
+            case "AGILE_MATURITY_PRODUCT_VISION_TITLE" :
+                return clienttranslate('Product Vision');
+            case "AGILE_VALUE_HUMOR_TITLE" :
+                return clienttranslate('Humor');
+            case "AGILE_VALUE_FEEDBACK_TITLE" :
+                return clienttranslate('Feedback');
+            case "AGILE_VALUE_SIMPLICITY_TITLE" :
+                return clienttranslate('Simplicity');
+            case "AGILE_VALUE_FOCUS_TITLE" :
+                return clienttranslate('Focus');
+            case "AGILE_VALUE_OPENNESS_TITLE" :
+                return clienttranslate('Openness');
+            case "AGILE_VALUE_COURAGE_TITLE" :
+                return clienttranslate('Courage');
+            case "AGILE_VALUE_RESPECT_TITLE" :
+                return clienttranslate('Respect');
+            default:
+                return $messageId;
+        }
+    }
+
 }

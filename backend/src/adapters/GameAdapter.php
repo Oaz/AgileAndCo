@@ -28,6 +28,11 @@ class GameAdapter implements IGameAdapter
         $this->game = $game;
     }
 
+    public function getText(string $messageId): string
+    {
+        return $this->game->getText($messageId);
+    }
+
     public function loadInfos(): GameInfos
     {
         $infos = new GameInfos(

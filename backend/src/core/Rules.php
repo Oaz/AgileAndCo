@@ -347,6 +347,7 @@ class Rules
             "player_id" => $player_id,
             "player_name" => $this->game->getActivePlayerName(),
             "activity" => $this->game->getText($activity . '_TITLE'),
+            'i18n' => ['activity'],
         ]);
         return $transition;
     }
@@ -639,6 +640,7 @@ class Rules
             "player_name" => $infos->getPlayerName($player_id),
             "payment" => $payment,
             "improvement" => $this->game->getText($improvement),
+            'i18n' => ['improvement'],
         ]);
         return true;
     }

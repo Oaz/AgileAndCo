@@ -86,6 +86,8 @@ class FakeGame implements IGameAdapter
         $formattedMessage = $message;
         if (strlen($formattedMessage) > 0) {
             foreach ($args as $key => $value) {
+                if($key == 'i18n')
+                    continue;
                 $formattedMessage = str_replace('${' . $key . '}', $value, $formattedMessage);
             }
         }

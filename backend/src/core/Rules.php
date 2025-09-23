@@ -82,10 +82,15 @@ class Rules
         $this->game->notifyAllPlayers("message", $message, $args);
     }
 
+    public function getTotalActivityCount(): int
+    {
+        return $this->totalActivityCount->readState(48);
+    }
+
     public function getGameProgression(): int
     {
         $currentCount = $this->completedActivitiesCount->read();
-        return 100 * $currentCount / $this->totalActivityCount->readState();
+        return 100 * $currentCount / $this->getTotalActivityCount();
     }
 
     //#############################
@@ -241,7 +246,7 @@ class Rules
     public function endRound(): array
     {
         $currentCount = $this->completedActivitiesCount->read();
-        if ($currentCount == $this->totalActivityCount->readState()) {
+        if ($currentCount == $this->getTotalActivityCount()) {
             $gameState = $this->getGameState();
             foreach ($gameState['public']['players'] as $player) {
                 $this->game->setScore($player['id'], $player['score']);

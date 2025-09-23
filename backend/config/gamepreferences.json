@@ -1,1 +1,29 @@
-{}
+{
+  "100": {
+    "name": "Card Size",
+    "needReload": false,
+    "values": {
+      "1": {
+        "name": "Smaller",
+        "cssPref": "card-zoom-xs"
+      },
+      "2": {
+        "name": "Small",
+        "cssPref": "card-zoom-s"
+      },
+      "3": {
+        "name": "Standard",
+        "cssPref": "card-zoom-m"
+      },
+      "4": {
+        "name": "Big",
+        "cssPref": "card-zoom-l"
+      },
+      "5": {
+        "name": "Bigger",
+        "cssPref": "card-zoom-xl"
+      }
+    },
+    "default": 3
+  }
+}

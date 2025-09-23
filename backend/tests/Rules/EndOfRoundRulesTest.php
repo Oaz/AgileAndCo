@@ -28,7 +28,7 @@ class EndOfRoundRulesTest extends RulesTestCase
     public function testMoveToNextRound(array $playerIds): void
     {
         $this->arrange($playerIds);
-        $rounds = $this->rules->totalActivityCount->readState() / count($playerIds);
+        $rounds = $this->rules->getTotalActivityCount() / count($playerIds);
         for ($round = 1; $round < $rounds; $round++) {
             $this->playRound($playerIds);
             $this->checkEndRound("nextRound", []);

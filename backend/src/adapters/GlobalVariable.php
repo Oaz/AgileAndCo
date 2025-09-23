@@ -29,8 +29,8 @@ class GlobalVariable implements IGlobalVariable
         $this->name = $name;
     }
 
-    public function readState() : mixed {
-        return $this->game->getGameStateValue($this->name);
+    public function readState(int $defaultValue) : int|string {
+        return $this->game->getGameStateValue($this->name, $defaultValue);
     }
 
     public function read() : mixed {

@@ -44,9 +44,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 </script>
 
 {#if builder[kind]}
-    <svelte:component this={builder[kind]} {...props}/>
+    <div class="deck-card">
+        <svelte:component this={builder[kind]} {...props}/>
+    </div>
 {:else}
     <p>Component with key "{key}" not found.</p>
 {/if}
+
+<style>
+    .deck-card {
+        zoom: var(--deck-card-zoom, 1);
+    }
+
+    :global(html.card-zoom-xs) .deck-card {
+        --deck-card-zoom: 0.6;
+    }
+
+    :global(html.card-zoom-s) .deck-card {
+        --deck-card-zoom: 0.8;
+    }
+
+    :global(html.card-zoom-m) .deck-card {
+        --deck-card-zoom: 1;
+    }
+
+    :global(html.card-zoom-l) .deck-card {
+        --deck-card-zoom: 1.2;
+    }
+
+    :global(html.card-zoom-xl) .deck-card {
+        --deck-card-zoom: 1.4;
+    }
+</style>
 
 

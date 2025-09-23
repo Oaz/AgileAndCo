@@ -22,9 +22,9 @@ use Bga\Games\AgileAndCo\IGlobalVariable;
 class FakeGlobalVariable implements IGlobalVariable
 {
     private mixed $value = 0;
-    public function readState() : mixed
+    public function readState(int $defaultValue) : int|string
     {
-        return $this->value;
+        return $defaultValue;
     }
 
     public function read(): mixed

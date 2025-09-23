@@ -21,7 +21,8 @@ namespace Bga\Games\AgileAndCo;
 
 interface IGlobalVariable
 {
-    public function readState() : mixed ;
+    public function readState(int $defaultValue) : int|string ;
+
     public function read() : mixed ;
 
     public function write(mixed $value) : void;

@@ -36,10 +36,10 @@ abstract class RulesTestCase extends TestCase
     {
         $this->deck = new FakeDeck();
         $this->game = new FakeGame($playerIds);
+        $this->game->globalVariable('game_length')->write(48);
         $this->rules = new Rules($this->deck, $this->game, $scoreComputer);
         $this->rules->initGame($this->game->getPlayers());
         $this->game->globalVariable('ONGOING_ACTIVITY')->write(['', 0]);
-
     }
 
     protected function assertEquivalent(array $a, array $b) : void {

@@ -41,8 +41,9 @@ class Game extends \Table
     {
         parent::__construct();
 
-        $this->initGameStateLabels([]);
-
+        $this->initGameStateLabels([
+            "game_length" => 101
+        ]);
         $deckAdapter = new DeckAdapter($this->getNew("module.common.deck"));
         $gameAdapter = new GameAdapter($this);
         $this->rules = new Rules($deckAdapter, $gameAdapter);

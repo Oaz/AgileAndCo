@@ -22,6 +22,11 @@ use Bga\Games\AgileAndCo\IGlobalVariable;
 class FakeGlobalVariable implements IGlobalVariable
 {
     private mixed $value = 0;
+    public function readState() : mixed
+    {
+        return $this->value;
+    }
+
     public function read(): mixed
     {
         return $this->value;

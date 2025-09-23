@@ -34,8 +34,10 @@ end-round = End of Round
 end-game = End of Game
     .details =
     The game ends after 48 activities.
-            Each player totals their company's points (sum of points from played cards) to determine the winner.
-            The number of rounds is adjusted based on the number of players: 12 rounds for 4 players, 16 rounds for 3 players, 24 rounds for 2 players.
+    Each player totals their company's points (sum of points from played cards) to determine the winner.
+    The number of rounds is adjusted based on the number of players: 12 rounds for 4 players, 16 rounds for 3 players, 24 rounds for 2 players.
+
+    When there is not enough time for a full game, shorter games can be played in 36 activities (9 rounds for 4 players, 12 rounds for 3 players, 18 rounds for 2 players) or 24 activities (6 rounds for 4 players, 8 rounds for 3 players, 12 rounds for 2 players).
 
 addendum1 = Impact of Agile Maturity
     .details =

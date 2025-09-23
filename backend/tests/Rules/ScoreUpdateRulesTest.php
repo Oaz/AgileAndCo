@@ -37,7 +37,7 @@ class ScoreUpdateRulesTest extends RulesTestCase
     {
         $scoreComputer = new FakeScoreComputer();
         $this->arrange($playerIds, $scoreComputer);
-        $rounds = Rules::TOTAL_ACTIVITY_COUNT / count($playerIds);
+        $rounds = $this->rules->totalActivityCount->readState() / count($playerIds);
         for ($round = 1; $round < $rounds; $round++) {
             $scoreComputer->round = $round;
             $this->playRound($playerIds);

@@ -1,1 +1,17 @@
-{}
+{
+  "101": {
+    "name": "Game Length",
+    "values": {
+      "48": {
+        "name": "48 activities"
+      },
+      "36": {
+        "name": "36 activities"
+      },
+      "24": {
+        "name": "24 activities"
+      }
+    },
+    "default": 48
+  }
+}

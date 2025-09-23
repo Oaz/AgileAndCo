@@ -27,10 +27,10 @@ class Rules
     public readonly IGlobalVariable $ongoingActivity;
     public readonly IGlobalVariable $currentEarnings;
     public readonly IGlobalVariable $completedActivitiesCount;
+    public readonly IGlobalVariable $totalActivityCount;
 
     private IScoreComputer $scoreComputer;
 
-    public const TOTAL_ACTIVITY_COUNT = 48;
     public const INITIAL_PLAYER_POTENTIAL = 4;
 
     public function __construct(IDeckAdapter $cards, IGameAdapter $game, IScoreComputer $scoreComputer = null)
@@ -38,6 +38,7 @@ class Rules
         $this->game = $game;
         $this->cards = $cards;
         $this->repo = new CardsRepository(CardsData::$groups, CardsData::$details, $cards);
+        $this->totalActivityCount = $this->game->globalVariable("game_length");
         $this->ongoingActivity = $this->game->globalVariable('ONGOING_ACTIVITY');
         $this->currentEarnings = $this->game->globalVariable('CURRENT_EARNINGS');
         $this->completedActivitiesCount = $this->game->globalVariable('COMPLETED_ACTIVITIES_COUNT');
@@ -84,7 +85,7 @@ class Rules
     public function getGameProgression(): int
     {
         $currentCount = $this->completedActivitiesCount->read();
-        return 100 * $currentCount / self::TOTAL_ACTIVITY_COUNT;
+        return 100 * $currentCount / $this->totalActivityCount->readState();
     }
 
     //#############################
@@ -240,7 +241,7 @@ class Rules
     public function endRound(): array
     {
         $currentCount = $this->completedActivitiesCount->read();
-        if ($currentCount == self::TOTAL_ACTIVITY_COUNT) {
+        if ($currentCount == $this->totalActivityCount->readState()) {
             $gameState = $this->getGameState();
             foreach ($gameState['public']['players'] as $player) {
                 $this->game->setScore($player['id'], $player['score']);

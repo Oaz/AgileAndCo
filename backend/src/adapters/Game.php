@@ -460,4 +460,90 @@ class Game extends \Table
         }
     }
 
+    public function otherText(): void
+    {
+        // This function is a hack to declare translation strings that are only used in the frontend
+        // because the technology used in the frontend makes it difficult for the BGA system to detect
+        // the translation strings
+        $x = clienttranslate('My Company');
+        $x = clienttranslate('My Potential');
+        $x = clienttranslate('Confirm activity selection');
+        $x = clienttranslate('You must select one activity');
+        $x = clienttranslate('Confirm discarding %s card(s)');
+        $x = clienttranslate('You must discard %s card(s)');
+        $x = clienttranslate('Confirm development of %s product(s)');
+        $x = clienttranslate('You cannot develop more than %s product(s)');
+        $x = clienttranslate('Numbers of selected teams and discarded potential must match');
+        $x = clienttranslate('Confirm deployment of %s product(s)');
+        $x = clienttranslate('Cannot deploy more than %s product(s)');
+        $x = clienttranslate('Confirm selection of %s improvement');
+        $x = clienttranslate('Cannot select more than one improvement');
+        $x = clienttranslate('Confirm payment of improvement');
+        $x = clienttranslate('You must select cards corresponding to the cost');
+        $x = clienttranslate('Cost');
+        $x = clienttranslate('Score');
+        $x = clienttranslate('When this card changes hands, players must have a maximum of six cards in hand.');
+        $x = clienttranslate('Any additional cards are discarded.');
+        $x = clienttranslate('Benefit');
+        $x = clienttranslate('Bonus');
+        $x = clienttranslate('Earnings');
+        $x = clienttranslate('Activity');
+        $x = clienttranslate('Each player can develop a product');
+        $x = clienttranslate('The activity initiator can develop one additional product');
+        $x = clienttranslate('Each player can deploy a product');
+        $x = clienttranslate('The activity initiator can deploy one additional product');
+        $x = clienttranslate('Each player can set up a team or an improvement action');
+        $x = clienttranslate('The activity initiator pays one less card');
+        $x = clienttranslate('Each player draws two cards and keeps one');
+        $x = clienttranslate('The activity initiator draws five cards instead of two');
+        $x = clienttranslate('The coach\'s intervention is limited to the activity initiator');
+        $x = clienttranslate('The activity initiator draws one card and keeps it');
+        $x = clienttranslate('Product Team');
+        $x = clienttranslate('Agile Maturity');
+        $x = clienttranslate('Your involvement in the developer community facilitates recruitment.');
+        $x = clienttranslate('You pay one less card to form a product team.');
+        $x = clienttranslate('Your involvement in the agile community allows you to make the most of peer-to-peer meetings.');
+        $x = clienttranslate('You can discard cards from your hand instead of drawn cards.');
+        $x = clienttranslate('You pay particular attention to user business needs.');
+        $x = clienttranslate('You receive an extra card when deploying at least two products.');
+        $x = clienttranslate('Systematic pair programming improves communication among your developers.');
+        $x = clienttranslate('You draw a card when developing at least two products.');
+        $x = clienttranslate('You organize meetings among agile practitioners to enhance exchanges.');
+        $x = clienttranslate('You keep one extra card among the drawn cards.');
+        $x = clienttranslate('You learn more about yourself by analyzing the impact of your decisions.');
+        $x = clienttranslate('You draw a card after implementing an improvement action.');
+        $x = clienttranslate('Attention to code quality allows you to code faster and better.');
+        $x = clienttranslate('You develop an additional product.');
+        $x = clienttranslate('Your product is always ready to be delivered.');
+        $x = clienttranslate('You deploy an additional product.');
+        $x = clienttranslate('Removing barriers between teams streamlines the product lifecycle.');
+        $x = clienttranslate('You can pay with yet-to-be-deployed products, each valued at 2 cards.');
+        $x = clienttranslate('The agility of your internal organization increases your capacity for action.');
+        $x = clienttranslate('You can hold up to 10 cards when changing the game leader.');
+        $x = clienttranslate('You involve your users in product development.');
+        $x = clienttranslate('You receive an extra card during deployment.');
+        $x = clienttranslate('A coach is always available to improve your teams.');
+        $x = clienttranslate('You pay one less card to carry out an improvement action.');
+        $x = clienttranslate('Detailed planning allows you to predict the future with precision.');
+        $x = clienttranslate('An independent test team ensures products always meet expectations.');
+        $x = clienttranslate('Using an application framework boosts your development productivity.');
+        $x = clienttranslate('Certifying your teams ensures adoption of agile values, principles, and practices.');
+        $x = clienttranslate('This card is automatically added to your company if it\'s in your hand at the end of the game.');
+        $x = clienttranslate('Your developers are driven by unyielding professionalism.');
+        $x = clienttranslate('Each product team earns you two additional points at the end of the game.');
+        $x = clienttranslate('You have mastered the art of advancing your teams.');
+        $x = clienttranslate('Each value or improvement action earns you one additional point at the end of the game.');
+        $x = clienttranslate('Your strategy is underpinned by a clear vision of your products.');
+        $x = clienttranslate('Your final score is increased by 30%.');
+        $x = clienttranslate('Agile Value');
+        $x = clienttranslate('Each adopted value grants the right to keep an additional card at the beginning of a turn.');
+        $x = clienttranslate('Is humor an agile value? Some think so.');
+        $x = clienttranslate('Feedback is one of the values emphasized by Extreme Programming.');
+        $x = clienttranslate('Simplicity is one of the values emphasized by Extreme Programming.');
+        $x = clienttranslate('Focus is one of the values emphasized by Scrum.');
+        $x = clienttranslate('Openness is one of the values emphasized by Scrum.');
+        $x = clienttranslate('Courage is a value shared by Scrum and Extreme Programming.');
+        $x = clienttranslate('Respect is a value shared by Scrum and Extreme Programming.');
+    }
+
 }

@@ -23,19 +23,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     import {Localized, Overlay} from "@nubolab-ffwd/svelte-fluent";
     import {initTranslations} from "./translations";
     import SiteButton from "../../shared/SiteButton.svelte";
+    import enImage from './450px-PLAYONLINE_ENGLISH_2025.png';
+    import frImage from './450px-PLAYONLINE_FRENCH_2025.png';
+    import ImageButton from "../../shared/ImageButton.svelte";
 
     export let language: string;
     initTranslations(language, {
         en: enTranslations,
         fr: frTranslations
     });
+    let playButton = language === "fr" ? frImage : enImage;
 </script>
 
 <div class="content">
-    <p><Localized id="summary"/></p>
-    <SiteButton id="dev-version" action={() => {
-        window.open(`https://studio.boardgamearena.com/gamepanel?game=agileandco`, '_blank');
-    }} />
+    <p>
+        <Localized id="summary"/>
+    </p>
+    <p>
+        <SiteButton id="players-group" action={() => {
+        window.open(`https://boardgamearena.com/group?id=19001842`, '_blank');
+    }}/>
+    </p>
+    <ImageButton id="prod-version" image={playButton} action={() => {
+        window.open(`https://boardgamearena.com/gamepanel?game=agileandco`, '_blank');
+    }}/>
 </div>
 
 <style>

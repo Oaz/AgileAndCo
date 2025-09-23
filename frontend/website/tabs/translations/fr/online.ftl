@@ -1,6 +1,8 @@
 summary =
-    Une verison de jeu en ligne est en cours de développement sur Board Game Arena et n'est pas encore disponible.
+    Une version de jeu en ligne est disponible sur Board Game Arena.
 
-    Pour l'instant, if vous avez un compte développeur sur BGA studio, vous pouvez essayer la version en cours de développement.
+    Pour l'instant, elle n'est disponible qu'en version 'Alpha'. Par conséquent, vous devez rejoindre le groupe 'Agileandco players' pour y avoir accès.
 
 dev-version = Essayer le jeu sur BGA studio
+players-group = Rejoindre le groupe 'Agileandco players' sur BGA
+prod-version = Jouer sur BGA

@@ -19,10 +19,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <script lang="ts">
     import DeckCard from '../lib/Cards/DeckCard.svelte';
     import SelectableTester from './SelectableTester.svelte';
+    let isPictureCardBack = false;
+
+    function toggleCardBackClass(isChecked: boolean): void {
+        const htmlElement = document.documentElement; // Gets the <html> element
+        if (isChecked) {
+            htmlElement.classList.add('card-back-picture');
+            htmlElement.classList.remove('card-back-neutral');
+        } else {
+            htmlElement.classList.add('card-back-neutral');
+            htmlElement.classList.remove('card-back-picture');
+        }
+    }
+
+    $: toggleCardBackClass(isPictureCardBack);
 
 </script>
 
 <div>
+    <div class="checkbox-container">
+        <label>
+            <input type="checkbox" bind:checked={isPictureCardBack} />
+            picture card back
+        </label>
+    </div>
+
     <div id="content">
         <SelectableTester selectedInteraction = "ACTIVE">
             <DeckCard key="PRODUCT_TEAM_ADVERGAME" />

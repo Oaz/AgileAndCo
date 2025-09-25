@@ -17,17 +17,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <script lang="ts">
+    import cardBack from '../images/back.svg';
     export let interaction: 'NEUTRAL' | 'ACTIVE' | 'FROZEN' = 'NEUTRAL';
     export let hidden : boolean = false;
     export let selected : boolean = false;
     export let borderSize = "5px";
     export let borderColor = "red";
     export let backColor = "gray";
-    export let backPattern = "";
+    export let backPattern = cardBack;
+    let backPatternUrl = `url(${backPattern})`;
 
     $: borderStyle = selected ? borderColor : "transparent";
-
-    $: backStyle = backPattern ? `url(${backPattern})` : backColor;
 
     function toggleSelection() {
         if (isActive()) {
@@ -82,8 +82,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         height: calc(100% - 4px);
         transform: translate(-50%, -50%);
         background-color: var(--back-color);
-        background-image: var(--back-pattern);
+        background-image: var(--back-style);
         background-size: cover;
+    }
+
+    :global(html.card-back-neutral) .back {
+        --back-style: var(--back-color);
+    }
+
+    :global(html.card-back-picture) .back {
+        --back-style: var(--back-pattern);
     }
 </style>
 
@@ -97,7 +105,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --border-size: {borderSize};
     --border-color: {borderStyle};
     --back-color: {backColor};
-    --back-pattern: {backStyle};
+    --back-pattern: {backPatternUrl};
   "
 >
     <div class="content">

@@ -25,5 +25,21 @@
       }
     },
     "default": 3
+  },
+  "101": {
+    "name": "Card Back",
+    "needReload": false,
+    "values": {
+      "1": {
+        "name": "Neutral",
+        "cssPref": "card-back-neutral"
+      },
+      "2": {
+        "name": "Picture",
+        "cssPref": "card-back-picture"
+      }
+    },
+    "default": 2
   }
+
 }

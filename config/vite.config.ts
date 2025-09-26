@@ -41,6 +41,7 @@ const build = (() => {
             return {
                 outDir: path.resolve(__dirname, '../local/standalone'),
                 minify: false,
+                assetsInlineLimit: 20 * 1024,
                 lib: {
                     entry: path.resolve(__dirname, '../frontend/explorations/main.ts'),
                     fileName: (format: any) => 'demo_agileandco.js',

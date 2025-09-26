@@ -66,6 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         top: 2mm;
         left: 2mm;
         width: 15mm;
+        height: 15mm;
     }
 
     :global(.earnings) .value {

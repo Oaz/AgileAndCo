@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <script>
+    import {onMount} from 'svelte';
+
     import advergameLogo from '../../images/ADVERGAME.svg';
     import educationLogo from '../../images/EDUCATION.svg';
     import socialLogo from '../../images/SOCIAL.svg';
@@ -30,22 +32,65 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     import leaderLogo from '../../images/LEADER.svg';
 
     const logos = {
-        ADVERGAME: advergameLogo,
-        EDUCATION: educationLogo,
-        SOCIAL: socialLogo,
-        MMOG: mmogLogo,
-        RETROSPECTIVE: retrospectiveLogo,
-        CONFERENCE: conferenceLogo,
-        DEPLOYMENT: deploymentLogo,
-        DEVELOPMENT: developmentLogo,
-        COACH: coachLogo,
-        THEEND: theendLogo,
-        LEADER: leaderLogo,
+        ADVERGAME: '--image-advergame-logo',
+        EDUCATION: '--image-education-logo',
+        SOCIAL: '--image-social-logo',
+        MMOG: '--image-mmog-logo',
+        RETROSPECTIVE: '--image-retrospective-logo',
+        CONFERENCE: '--image-conference-logo',
+        DEPLOYMENT: '--image-deployment-logo',
+        DEVELOPMENT: '--image-development-logo',
+        COACH: '--image-coach-logo',
+        THEEND: '--image-theend-logo',
+        LEADER: '--image-leader-logo',
     };
 
+    function getAsBase64(content) {
+        if (content.startsWith('data:image/svg+xml;base64,'))
+            return content;
+        if (!content.startsWith('data:image/svg+xml,'))
+            return content;
+        const prefix = 'data:image/svg+xml,';
+        const svgContent = decodeURIComponent(content.substring(prefix.length));
+        const base64Content = btoa(svgContent);
+        return 'data:image/svg+xml;base64,' + base64Content;
+    }
+    function add(name, content) {
+        const root = document.documentElement;
+        if (root.style.getPropertyValue(name))
+            return;
+        let url = getAsBase64(content);
+        root.style.setProperty(name, `url(${url})`);
+    }
+
+    onMount(() => {
+        add('--image-advergame-logo', advergameLogo);
+        add('--image-education-logo', educationLogo);
+        add('--image-social-logo', socialLogo);
+        add('--image-mmog-logo', mmogLogo);
+        add('--image-retrospective-logo', retrospectiveLogo);
+        add('--image-conference-logo', conferenceLogo);
+        add('--image-deployment-logo', deploymentLogo);
+        add('--image-development-logo', developmentLogo);
+        add('--image-coach-logo', coachLogo);
+        add('--image-theend-logo', theendLogo);
+        add('--image-leader-logo', leaderLogo);
+    });
+
     export let key;
-    const logoUrl = logos[key];
+    const logoVariable = logos[key];
 
 </script>
 
-<img class="logo" src={logoUrl} alt="Logo" />
+<style>
+    .logo {
+        background-image: var(--logo-placeholder);
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<div class="logo" style="--logo-placeholder: var({logoVariable})">
+</div>

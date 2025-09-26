@@ -63,27 +63,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         'AGILE_VALUE_RESPECT':2,
     }
 
-    const cards = Object.entries(quantities).flatMap(([cardType, quantity]) =>
+    const allCards
+        = Object.entries(quantities).flatMap(([cardType, quantity]) =>
         Array(quantity).fill(cardType)
     );
 
     const cardsByPage = 10;
 
+    const cardPages = [];
+    for (let i = 0; i < allCards.length; i += cardsByPage) {
+        cardPages.push(allCards.slice(i, i + cardsByPage));
+    }
+
 </script>
 
-{#each cards as card, index}
-    <DeckCard key={card} />
-    {#if (index + 1) % cardsByPage === 0 && index < cards.length}
-        <DeckPrintFooter />
-    {/if}
+{#each cardPages as page, pageIndex}
+    <div class="card-container">
+        {#each page as card}
+            <DeckCard key={card} />
+        {/each}
+    </div>
+    <DeckPrintFooter />
 {/each}
-<DeckPrintFooter />
+
 
 <style>
-    :global(.card) {
-        margin: 1mm;
-        display: inline-block;
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
+
+    :global(.deck-card) {
+        flex: 0 0 20%; /* 5 cards per row */
+        box-sizing: border-box;
+        padding: 1mm;
+    }
+
 
     @page {
         size: landscape;

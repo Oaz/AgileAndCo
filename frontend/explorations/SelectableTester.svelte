@@ -18,14 +18,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <script lang="ts">
     import Selectable from "../lib/Selectable.svelte";
-    import cardBack from '../images/back.svg';
 
     export let hidden = false;
     export let selected = false;
     let borderSize = "5px";
     let borderColor = "red";
     let backColor = "gray";
-    let backPattern = cardBack;
+    let backPattern = "";
 
     const interactions = [
         { value: 'NEUTRAL', label: "Neutral" },

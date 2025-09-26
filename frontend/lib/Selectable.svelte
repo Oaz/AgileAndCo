@@ -17,15 +17,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <script lang="ts">
+    import {addImageinRootCss} from './images';
+
     import cardBack from '../images/back.svg';
+    import {onMount} from "svelte";
     export let interaction: 'NEUTRAL' | 'ACTIVE' | 'FROZEN' = 'NEUTRAL';
     export let hidden : boolean = false;
     export let selected : boolean = false;
     export let borderSize = "5px";
     export let borderColor = "red";
     export let backColor = "gray";
-    export let backPattern = cardBack;
-    let backPatternUrl = `url(${backPattern})`;
+    export let backPattern = null;
+    let backPatternUrl = backPattern ? `url(${backPattern})` : null;
+
+
+    onMount(() => {
+        addImageinRootCss('--image-card-back', cardBack);
+    });
 
     $: borderStyle = selected ? borderColor : "transparent";
 
@@ -91,7 +99,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     :global(html.card-back-picture) .back {
-        --back-style: var(--back-pattern);
+        --back-style: var(--custom-back-pattern, var(--image-card-back));
     }
 </style>
 
@@ -105,7 +113,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     --border-size: {borderSize};
     --border-color: {borderStyle};
     --back-color: {backColor};
-    --back-pattern: {backPatternUrl};
+    {backPatternUrl ? `--custom-back-pattern: ${backPatternUrl};` : ''}
   "
 >
     <div class="content">

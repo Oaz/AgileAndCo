@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <script>
     import {onMount} from 'svelte';
+    import {addImageinRootCss} from '../images';
 
     import advergameLogo from '../../images/ADVERGAME.svg';
     import educationLogo from '../../images/EDUCATION.svg';
@@ -45,36 +46,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         LEADER: '--image-leader-logo',
     };
 
-    function getAsBase64(content) {
-        if (content.startsWith('data:image/svg+xml;base64,'))
-            return content;
-        if (!content.startsWith('data:image/svg+xml,'))
-            return content;
-        const prefix = 'data:image/svg+xml,';
-        const svgContent = decodeURIComponent(content.substring(prefix.length));
-        const base64Content = btoa(svgContent);
-        return 'data:image/svg+xml;base64,' + base64Content;
-    }
-    function add(name, content) {
-        const root = document.documentElement;
-        if (root.style.getPropertyValue(name))
-            return;
-        let url = getAsBase64(content);
-        root.style.setProperty(name, `url(${url})`);
-    }
-
     onMount(() => {
-        add('--image-advergame-logo', advergameLogo);
-        add('--image-education-logo', educationLogo);
-        add('--image-social-logo', socialLogo);
-        add('--image-mmog-logo', mmogLogo);
-        add('--image-retrospective-logo', retrospectiveLogo);
-        add('--image-conference-logo', conferenceLogo);
-        add('--image-deployment-logo', deploymentLogo);
-        add('--image-development-logo', developmentLogo);
-        add('--image-coach-logo', coachLogo);
-        add('--image-theend-logo', theendLogo);
-        add('--image-leader-logo', leaderLogo);
+        addImageinRootCss('--image-advergame-logo', advergameLogo);
+        addImageinRootCss('--image-education-logo', educationLogo);
+        addImageinRootCss('--image-social-logo', socialLogo);
+        addImageinRootCss('--image-mmog-logo', mmogLogo);
+        addImageinRootCss('--image-retrospective-logo', retrospectiveLogo);
+        addImageinRootCss('--image-conference-logo', conferenceLogo);
+        addImageinRootCss('--image-deployment-logo', deploymentLogo);
+        addImageinRootCss('--image-development-logo', developmentLogo);
+        addImageinRootCss('--image-coach-logo', coachLogo);
+        addImageinRootCss('--image-theend-logo', theendLogo);
+        addImageinRootCss('--image-leader-logo', leaderLogo);
     });
 
     export let key;

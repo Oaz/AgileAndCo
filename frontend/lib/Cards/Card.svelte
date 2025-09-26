@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         border: none !important;
     }
 
-    .container {
+    .card-container {
         border-radius: 2mm;
         background-color: white;
         position: absolute;
@@ -62,7 +62,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <div class="card {cardType}">
     <slot name="header"></slot>
-    <div class="container">
+    <div class="card-container">
         <slot/>
     </div>
     <slot name="footer"></slot>

@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         background-color: #565656;
     }
 
-    :global(.earnings) :global(.container) {
+    :global(.earnings) :global(.card-container) {
         height: 67mm;
     }
 

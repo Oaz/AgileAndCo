@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         background-color: #8a8062;
     }
 
-    :global(.leader) :global(.container) {
+    :global(.leader) :global(.card-container) {
         height: 67mm;
     }
 

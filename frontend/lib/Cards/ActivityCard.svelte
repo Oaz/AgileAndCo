@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         background-color: #987c29;
     }
 
-    :global(.activity) :global(.container) {
+    :global(.activity) :global(.card-container) {
         height: 67mm;
     }
 

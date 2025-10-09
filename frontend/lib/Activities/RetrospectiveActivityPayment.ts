@@ -41,9 +41,10 @@ export class RetrospectiveActivityPayment extends RetrospectiveActivity {
 
     public get can_act() {
         const payment = 2 * this.undeployed + this.other;
-        return payment === this.price
-            || (payment === this.price + 1 && this.undeployed > 1)
-            || (payment === 0 && this.price < 0);
+        const isFree = payment === 0 && this.price < 0;
+        const exactPayment = payment === this.price;
+        const overPayment = payment === this.price + 1 && this.undeployed > 0;
+        return exactPayment || overPayment || isFree;
     }
 
     public get action_text(): string {
